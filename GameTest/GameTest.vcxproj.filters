@@ -1,0 +1,71 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="App\app.cpp">
+      <Filter>ChallengeAPI</Filter>
+    </ClCompile>
+    <ClCompile Include="GameTest.cpp">
+      <Filter>ChallengeAPI</Filter>
+    </ClCompile>
+    <ClCompile Include="App\main.cpp">
+      <Filter>ChallengeAPI</Filter>
+    </ClCompile>
+    <ClCompile Include="App\SimpleController.cpp">
+      <Filter>ChallengeAPI</Filter>
+    </ClCompile>
+    <ClCompile Include="App\SimpleSound.cpp">
+      <Filter>ChallengeAPI</Filter>
+    </ClCompile>
+    <ClCompile Include="App\SimpleSprite.cpp">
+      <Filter>ChallengeAPI</Filter>
+    </ClCompile>
+    <ClCompile Include="App\TextureLoader.cpp">
+      <Filter>ChallengeAPI</Filter>
+    </ClCompile>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>VisualStudioRelated</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="App\app.h">
+      <Filter>ChallengeAPI</Filter>
+    </ClInclude>
+    <ClInclude Include="App\AppSettings.h">
+      <Filter>ChallengeAPI</Filter>
+    </ClInclude>
+    <ClInclude Include="App\main.h">
+      <Filter>ChallengeAPI</Filter>
+    </ClInclude>
+    <ClInclude Include="App\SimpleController.h">
+      <Filter>ChallengeAPI</Filter>
+    </ClInclude>
+    <ClInclude Include="App\SimpleSound.h">
+      <Filter>ChallengeAPI</Filter>
+    </ClInclude>
+    <ClInclude Include="App\SimpleSprite.h">
+      <Filter>ChallengeAPI</Filter>
+    </ClInclude>
+    <ClInclude Include="App\TextureLoader.h">
+      <Filter>ChallengeAPI</Filter>
+    </ClInclude>
+    <ClInclude Include="stdafx.h">
+      <Filter>VisualStudioRelated</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>VisualStudioRelated</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="ChallengeAPI">
+      <UniqueIdentifier>{247c844f-f2d1-415f-8421-cc912486261b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="VisualStudioRelated">
+      <UniqueIdentifier>{7e3f45b2-6fd5-4156-afab-517b5ada6a0a}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="ReadMe.txt">
+      <Filter>ChallengeAPI</Filter>
+    </Text>
+  </ItemGroup>
+</Project>
