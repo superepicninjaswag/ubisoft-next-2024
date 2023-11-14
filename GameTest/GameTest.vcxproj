@@ -23,7 +23,7 @@
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>GameTest</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
-    <ProjectName>Game</ProjectName>
+    <ProjectName>GameTest</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -184,6 +184,20 @@
     <ClInclude Include="App\SimpleSound.h" />
     <ClInclude Include="App\SimpleSprite.h" />
     <ClInclude Include="App\TextureLoader.h" />
+    <ClInclude Include="src\Components\Components.h" />
+    <ClInclude Include="src\Components\MeshComponent.h" />
+    <ClInclude Include="src\Components\MeshResourceComponent.h" />
+    <ClInclude Include="src\Components\TransformComponent.h" />
+    <ClInclude Include="src\ECS\ECS.h" />
+    <ClInclude Include="src\ECS\IDManager.h" />
+    <ClInclude Include="src\ECS\Pool.h" />
+    <ClInclude Include="src\Rendering\Geometry.h" />
+    <ClInclude Include="src\Rendering\Renderer.h" />
+    <ClInclude Include="src\Rendering\Rendering.h" />
+    <ClInclude Include="src\Systems\MeshResourceObjLoader.h" />
+    <ClInclude Include="src\Systems\Systems.h" />
+    <ClInclude Include="src\Util\GameMath.h" />
+    <ClInclude Include="src\Util\GetModelNumber.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
@@ -194,7 +208,19 @@
     <ClCompile Include="App\SimpleSound.cpp" />
     <ClCompile Include="App\SimpleSprite.cpp" />
     <ClCompile Include="App\TextureLoader.cpp" />
-    <ClCompile Include="GameTest.cpp" />
+    <ClCompile Include="src\Components\MeshComponent.cpp" />
+    <ClCompile Include="src\Components\TransformComponent.cpp" />
+    <ClCompile Include="src\ECS\ECS.cpp" />
+    <ClCompile Include="src\ECS\IDManager.cpp" />
+    <ClCompile Include="src\GameTest.cpp" />
+    <ClCompile Include="src\Physics\RotateX.cpp" />
+    <ClCompile Include="src\Physics\RotateZ.cpp" />
+    <ClCompile Include="src\Rendering\Geometry.cpp" />
+    <ClCompile Include="src\Rendering\Renderer.cpp" />
+    <ClCompile Include="src\Rendering\Rendering.cpp" />
+    <ClCompile Include="src\Systems\MeshResourceObjLoader.cpp" />
+    <ClCompile Include="src\Util\GameMath.cpp" />
+    <ClCompile Include="src\Util\GetModelNumber.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
