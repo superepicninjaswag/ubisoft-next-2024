@@ -21,14 +21,16 @@ Renderer g_renderer;
 // Called before first update. Do any initial setup here.
 void Init()
 {
+	/*
 	AllocConsole();
 	freopen("CONOUT$", "w", stdout);
 	freopen("CONOUT$", "w", stderr);
+	*/
 
 	g_renderer.Init();
 	MeshResourceObjLoader(g_ecs);
 
-	int limit = 64;
+	int limit = 8;
 	for (int i = 0; i < limit; i++)
 	{
 		for (int j = 0; j < limit; j++)

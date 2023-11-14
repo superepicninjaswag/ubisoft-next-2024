@@ -99,6 +99,6 @@ void Renderer::Render(Pool<MeshComponent> &meshes, Pool<TransformComponent> &tra
     std::sort(facesToRender.begin(), facesToRender.end());
     for(auto f : facesToRender)
     {
-        drawFilledTriangle(f, f.colour);
+        drawTriangle(f, f.colour);
     }
 }
