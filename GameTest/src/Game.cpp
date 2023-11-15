@@ -7,7 +7,6 @@
 #include <math.h>
 
 #include "./ECS/ECS.h"
-#include "./Rendering/Rendering.h"
 #include "./Rendering/Renderer.h"
 
 #include "Systems/Systems.h"
@@ -30,7 +29,7 @@ void Init()
 	g_renderer.Init();
 	MeshResourceObjLoader(g_ecs);
 
-	int limit = 8;
+	int limit = 64;
 	for (int i = 0; i < limit; i++)
 	{
 		for (int j = 0; j < limit; j++)
@@ -39,9 +38,9 @@ void Init()
 			Pool<MeshComponent>& meshes = g_ecs.GetMeshes();
 			meshes.Add(newEntity, GetModelNumber(g_ecs.GetMeshResources(), "cube"));
 			g_ecs.GetTransforms().Add(newEntity);
-			g_ecs.GetTransforms().Get(newEntity)->v.x = 3 * (i - limit / 2);
-			g_ecs.GetTransforms().Get(newEntity)->v.y = 3 * (j - limit / 2);
-			g_ecs.GetTransforms().Get(newEntity)->v.z = 25;
+			g_ecs.GetTransforms().Get(newEntity)->v.x = 4 * (i - limit / 2);
+			g_ecs.GetTransforms().Get(newEntity)->v.y = 4 * (j - limit / 2);
+			g_ecs.GetTransforms().Get(newEntity)->v.z = 200;
 		}
 	}
 }
@@ -53,22 +52,6 @@ void Update(float deltaTime)
 {
 	// Set up rotation matrices
 	g_renderer.theta += 0.001f * deltaTime;
-
-	// Rotation Z
-	g_renderer.matRotZ(0, 0) = cosf(g_renderer.theta);
-	g_renderer.matRotZ(0, 1) = sinf(g_renderer.theta);
-	g_renderer.matRotZ(1, 0) = -sinf(g_renderer.theta);
-	g_renderer.matRotZ(1, 1) = cosf(g_renderer.theta);
-	g_renderer.matRotZ(2, 2) = 1;
-	g_renderer.matRotZ(3, 3) = 1;
-
-	// Rotation X
-	g_renderer.matRotX(0, 0) = 1;
-	g_renderer.matRotX(1, 1) = cosf(g_renderer.theta * 0.5f);
-	g_renderer.matRotX(1, 2) = sinf(g_renderer.theta * 0.5f);
-	g_renderer.matRotX(2, 1) = -sinf(g_renderer.theta * 0.5f);
-	g_renderer.matRotX(2, 2) = cosf(g_renderer.theta * 0.5f);
-	g_renderer.matRotX(3, 3) = 1;
 }
 
 

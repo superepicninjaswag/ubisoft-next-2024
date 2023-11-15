@@ -2,8 +2,6 @@
 
 #include "Renderer.h"
 
-Matrix4x4 g_projectionMatrix;
-
 Renderer::Renderer() {}
 
 void Renderer::Init()
@@ -13,12 +11,7 @@ void Renderer::Init()
     lightDirection.z = -1.0f;
     lightDirection.Normalize();
 
-    g_projectionMatrix(0, 0) = aspectRatio * fovRad;
-    g_projectionMatrix(1, 1) = fovRad;
-    g_projectionMatrix(2, 2) = zFar / (zFar - zNear);
-    g_projectionMatrix(3, 2) = (-zFar * zNear) / (zFar - zNear);
-    g_projectionMatrix(2, 3) = 1.0f;
-    g_projectionMatrix(3, 3) = 0.0f;
+    (*this).setProjectMatrix(fovDeg, aspectRatio, zNear, zFar);
 
     camera.x = 0.0f;
     camera.y = 0.0f;
@@ -31,37 +24,39 @@ void Renderer::Render(Pool<MeshComponent> &meshes, Pool<TransformComponent> &tra
     for (int i = 0; i < meshes.Size(); i++)
     {
         int meshResourceId = meshes._dense[i].meshResourceId;
+        int entityId = meshes.MirrorIdToEntityId(i);
+        
+        Matrix4x4 worldMatrix, rX, rY, rZ, translation;
+        
+        // Rotation matrices
+        rX.rotationX(theta);
+        rY.rotationY(theta * 0.5f);
+        rZ.rotationZ(theta * 0.25f);
+
+        // Translation matrix
+        Vec3 position = transforms.Get(entityId)->v;
+        translation.translation(position.x, position.y, position.z);
+
+        // World matrix
+        worldMatrix.identity();
+        worldMatrix = worldMatrix * rX * rY * rZ * translation;
+
         for(auto f : meshResources.Get(meshResourceId)->faces)
         {
-            // Rotate
-            Face faceRotatedZ, faceRotatedZX;
-
-            // Rotate in Z-Axis
-            faceRotatedZ = f;
-            faceRotatedZ.points[0] = matRotZ * f.points[0];
-            faceRotatedZ.points[1] = matRotZ * f.points[1];
-            faceRotatedZ.points[2] = matRotZ * f.points[2];
-
-            // Rotate in X-Axis
-            faceRotatedZX.points[0] = matRotX * faceRotatedZ.points[0];
-            faceRotatedZX.points[1] = matRotX * faceRotatedZ.points[1];
-            faceRotatedZX.points[2] = matRotX * faceRotatedZ.points[2];
-
-            // Translate face away from camera
-            int entityId = meshes.MirrorIdToEntityId(i);
-            Face faceTranslated = faceRotatedZX;
-            faceTranslated.points[0] = faceTranslated.points[0] + transforms.Get(entityId)->v;
-            faceTranslated.points[1] = faceTranslated.points[1] + transforms.Get(entityId)->v;
-            faceTranslated.points[2] = faceTranslated.points[2] + transforms.Get(entityId)->v;
+            Face faceTransformed;
+            for (int i = 0; i < 3; i++)
+            {
+                faceTransformed.points[i] = worldMatrix * f.points[i];
+            }
 
             // Calculate face normal
-            Vec3 line1 = faceTranslated.points[1] - faceTranslated.points[0];
-            Vec3 line2 = faceTranslated.points[2] - faceTranslated.points[0];
+            Vec3 line1 = faceTransformed.points[1] - faceTransformed.points[0];
+            Vec3 line2 = faceTransformed.points[2] - faceTransformed.points[0];
             Vec3 normal = line1.CrossProduct(line2);
             normal.Normalize();
 
             // Normal projection onto line from camera to face
-            float faceNormalProjectionOntoCameraRay =  normal * (faceTranslated.points[0] - camera);
+            float faceNormalProjectionOntoCameraRay =  normal * (faceTransformed.points[0] - camera);
 
             /*
             If the projection of the face normal is negative (relative
@@ -75,22 +70,25 @@ void Renderer::Render(Pool<MeshComponent> &meshes, Pool<TransformComponent> &tra
 
                 // Project the face into screen space
                 Face faceProjected;
-                faceProjected.points[0] = g_projectionMatrix*faceTranslated.points[0];
-                faceProjected.points[1] = g_projectionMatrix*faceTranslated.points[1];
-                faceProjected.points[2] = g_projectionMatrix*faceTranslated.points[2];
+                for (int i = 0; i < 3; i++)
+                {
+                    faceProjected.points[i] = projectionMatrix * faceTransformed.points[i];
+                    faceProjected.points[i] = faceProjected.points[i] * (1 / faceProjected.points[i].w);
+                }
 
                 // Scale from normalized to screen size
-                faceProjected.points[0].x = (faceProjected.points[0].x + 1) * 0.5 * (float) SCREEN_WIDTH;
-                faceProjected.points[1].x = (faceProjected.points[1].x + 1) * 0.5 * (float) SCREEN_WIDTH;
-                faceProjected.points[2].x = (faceProjected.points[2].x + 1) * 0.5 * (float) SCREEN_WIDTH;
-                faceProjected.points[0].y = (faceProjected.points[0].y + 1) * 0.5 * (float) SCREEN_HEIGHT;
-                faceProjected.points[1].y = (faceProjected.points[1].y + 1) * 0.5 * (float) SCREEN_HEIGHT;
-                faceProjected.points[2].y = (faceProjected.points[2].y + 1) * 0.5 * (float) SCREEN_HEIGHT;
+                for (int i = 0; i < 3; i++)
+                {
+                    faceProjected.points[i].x = (faceProjected.points[i].x + 1) * 0.5 * SCREEN_WIDTH;
+                    faceProjected.points[i].y = (faceProjected.points[i].y + 1) * 0.5 * SCREEN_HEIGHT;
+                }
 
-                faceProjected.colour.r *= dp;
-                faceProjected.colour.g *= dp;
-                faceProjected.colour.b *= dp;
+                // Apply lighting
+                faceProjected.colour.r = dp / 2 + faceProjected.colour.r / 2;
+                faceProjected.colour.g = dp / 2 + faceProjected.colour.g / 2;
+                faceProjected.colour.b = dp / 2 + faceProjected.colour.b / 2;
 
+                // Add to render queue
                 facesToRender.push_back(faceProjected);
             }
         }
@@ -101,4 +99,16 @@ void Renderer::Render(Pool<MeshComponent> &meshes, Pool<TransformComponent> &tra
     {
         drawTriangle(f, f.colour);
     }
+}
+
+void Renderer::setProjectMatrix(float fovDeg, float aspectRatio, float zNear, float zFar)
+{
+    float pi = 3.14159265358979323846264338327950288419716939937510;
+    float fovRad = 1.0f / tanf(fovDeg * 0.5f / 180.0f * pi);
+    projectionMatrix(0, 0) = aspectRatio * fovRad;
+    projectionMatrix(1, 1) = fovRad;
+    projectionMatrix(2, 2) = zFar / (zFar - zNear);
+    projectionMatrix(3, 2) = (-zFar * zNear) / (zFar - zNear);
+    projectionMatrix(2, 3) = 1.0f;
+    projectionMatrix(3, 3) = 0.0f;
 }
