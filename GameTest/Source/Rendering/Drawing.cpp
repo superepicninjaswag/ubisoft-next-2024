@@ -45,12 +45,11 @@ void drawFilledTriangle(const Face &triangle, const Colour c) {
     App::DrawLine(top.x, top.y, bot.x, bot.y, c.r, c.g, c.b);
 
     float heightBotTop = top.y - bot.y + 1;
-    float epsilon = 1;
     // Draw bottom half of triangle
     float heightBotMid = mid.y - bot.y;
     if (heightBotMid > 0)
     {
-        for (float y = bot.y; y <= mid.y + epsilon; y = y + 1.0f)
+        for (float y = bot.y; y <= mid.y; y = y + 1.0f)
         {
             float coverageBotTop = (y - bot.y)/heightBotTop;
             float coverageBotMid = (y - bot.y)/heightBotMid;
@@ -63,7 +62,7 @@ void drawFilledTriangle(const Face &triangle, const Colour c) {
             Vec3 pointBotTop = bot * (1 - coverageBotTop) + top * coverageBotTop;
             Vec3 pointBotMid = bot * (1 - coverageBotMid) + mid * coverageBotMid;
 
-            App::DrawLine(floorf(pointBotMid.x), y, ceilf(pointBotTop.x), y, c.r, c.g, c.b);
+            App::DrawLine(floorf(pointBotMid.x) + 0.5f, y, ceilf(pointBotTop.x) - 0.5f, y, c.r, c.g, c.b);
         }
     }
 
@@ -71,7 +70,7 @@ void drawFilledTriangle(const Face &triangle, const Colour c) {
     float heightMidTop = top.y - mid.y;
     if (heightMidTop > 0)
     {
-        for (float y = mid.y; y <= top.y + epsilon; y = y + 1.0f)
+        for (float y = mid.y; y <= top.y; y = y + 1.0f)
         {
             float coverageBotTop = (y - bot.y)/heightBotTop;
             float coverageMidTop = (y - mid.y)/heightMidTop;
@@ -84,7 +83,7 @@ void drawFilledTriangle(const Face &triangle, const Colour c) {
             Vec3 pointBotTop = bot * (1 - coverageBotTop) + top * coverageBotTop;
             Vec3 pointMidTop = mid * (1 - coverageMidTop) + top * coverageMidTop;
 
-            App::DrawLine(floorf(pointMidTop.x), y, ceilf(pointBotTop.x), y, c.r, c.g, c.b);
+            App::DrawLine(floorf(pointMidTop.x) + 0.5f, y, ceilf(pointBotTop.x) - 0.5f, y, c.r, c.g, c.b);
         }
     }
 }

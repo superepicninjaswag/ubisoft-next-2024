@@ -2,9 +2,6 @@
 // GameTest.cpp
 //------------------------------------------------------------------------
 #include "stdafx.h"
-#include "..\App\app.h"
-#include <windows.h> 
-#include <math.h>
 
 #include "./ECS/ECS.h"
 #include "./Rendering/Renderer.h"
@@ -20,7 +17,7 @@ Renderer g_renderer;
 // Called before first update. Do any initial setup here.
 void Init()
 {
-	/*
+	/*	If I needed a console for debugging with print lines
 	AllocConsole();
 	freopen("CONOUT$", "w", stdout);
 	freopen("CONOUT$", "w", stderr);
@@ -29,18 +26,19 @@ void Init()
 	g_renderer.Init();
 	MeshResourceObjLoader(g_ecs);
 
-	int limit = 64;
+	int limit = 1;
+	float gap = 4.0f;
 	for (int i = 0; i < limit; i++)
 	{
 		for (int j = 0; j < limit; j++)
 		{
 			int newEntity = g_ecs.GetIDs().CreateId();
 			Pool<MeshComponent>& meshes = g_ecs.GetMeshes();
-			meshes.Add(newEntity, GetModelNumber(g_ecs.GetMeshResources(), "cube"));
+			meshes.Add(newEntity, GetModelNumber(g_ecs.GetMeshResources(), "monkey"));
 			g_ecs.GetTransforms().Add(newEntity);
-			g_ecs.GetTransforms().Get(newEntity)->v.x = 4 * (i - limit / 2);
-			g_ecs.GetTransforms().Get(newEntity)->v.y = 4 * (j - limit / 2);
-			g_ecs.GetTransforms().Get(newEntity)->v.z = 200;
+			g_ecs.GetTransforms().Get(newEntity)->v.x = gap*(i - (limit / 2.0f) + 0.5f);
+			g_ecs.GetTransforms().Get(newEntity)->v.y = gap*(j - (limit / 2.0f) + 0.5f);
+			g_ecs.GetTransforms().Get(newEntity)->v.z = 10.0f;
 		}
 	}
 }
@@ -50,8 +48,29 @@ void Init()
 // This will be called at no greater frequency than the value of APP_MAX_FRAME_RATE
 void Update(float deltaTime)
 {
+	// Convert deltaTime from ms to seconds
+	deltaTime = deltaTime * 1.0f / 1000.0f;
+
 	// Set up rotation matrices
-	g_renderer.theta += 0.001f * deltaTime;
+	g_renderer.theta += 1.0f * deltaTime;
+
+	// Move camera
+	if (App::IsKeyPressed('W'))
+	{
+		g_renderer.camera.y += 5.0f * deltaTime;
+	}
+	if (App::IsKeyPressed('S'))
+	{
+		g_renderer.camera.y -= 5.0f * deltaTime;
+	}
+	if (App::IsKeyPressed('A'))
+	{
+		g_renderer.camera.x -= 5.0f * deltaTime;
+	}
+	if (App::IsKeyPressed('D'))
+	{
+		g_renderer.camera.x += 5.0f * deltaTime;
+	}
 }
 
 
@@ -59,15 +78,13 @@ void Update(float deltaTime)
 // See App.h 
 void Render()
 {
-	// RENDER ALL THINGS THAT NEED RENDERING
-	// TODO: Have each object that is rendered set the colour
-
 	Pool<MeshComponent>& meshes = g_ecs.GetMeshes();
 	Pool<MeshResourceComponent>& meshResources = g_ecs.GetMeshResources();
 	Pool<TransformComponent>& transforms = g_ecs.GetTransforms();
 
 	g_renderer.Render(meshes, transforms, meshResources);
 }
+
 //------------------------------------------------------------------------
 // Add your shutdown code here. Called when the APP_QUIT_KEY is pressed.
 // Just before the app exits.

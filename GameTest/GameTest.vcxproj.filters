@@ -4,7 +4,7 @@
     <ClCompile Include="App\app.cpp">
       <Filter>ChallengeAPI</Filter>
     </ClCompile>
-    <ClCompile Include="src\Game.cpp">
+    <ClCompile Include="Source\Game.cpp">
       <Filter>ChallengeAPI</Filter>
     </ClCompile>
     <ClCompile Include="App\main.cpp">
@@ -22,21 +22,19 @@
     <ClCompile Include="App\TextureLoader.cpp">
       <Filter>ChallengeAPI</Filter>
     </ClCompile>
-    <ClCompile Include="stdafx.cpp">
+    <ClCompile Include="Include\stdafx.cpp">
       <Filter>VisualStudioRelated</Filter>
     </ClCompile>
-    <ClCompile Include="src\ECS\ECS.cpp" />
-    <ClCompile Include="src\ECS\IDManager.cpp" />
-    <ClCompile Include="src\Physics\RotateX.cpp" />
-    <ClCompile Include="src\Physics\RotateZ.cpp" />
-    <ClCompile Include="src\Rendering\Geometry.cpp" />
-    <ClCompile Include="src\Rendering\Renderer.cpp" />
-    <ClCompile Include="src\Rendering\Drawing.cpp" />
-    <ClCompile Include="src\Systems\MeshResourceObjLoader.cpp" />
-    <ClCompile Include="src\Util\GameMath.cpp" />
-    <ClCompile Include="src\Util\GetModelNumber.cpp" />
-    <ClCompile Include="src\Components\MeshComponent.cpp" />
-    <ClCompile Include="src\Components\TransformComponent.cpp" />
+    <ClCompile Include="Source\ECS\ECS.cpp" />
+    <ClCompile Include="Source\ECS\IDManager.cpp" />
+    <ClCompile Include="Source\Rendering\Geometry.cpp" />
+    <ClCompile Include="Source\Rendering\Renderer.cpp" />
+    <ClCompile Include="Source\Rendering\Drawing.cpp" />
+    <ClCompile Include="Source\Systems\MeshResourceObjLoader.cpp" />
+    <ClCompile Include="Source\Util\GameMath.cpp" />
+    <ClCompile Include="Source\Util\GetModelNumber.cpp" />
+    <ClCompile Include="Source\Components\MeshComponent.cpp" />
+    <ClCompile Include="Source\Components\TransformComponent.cpp" />
     <ClCompile Include="App\DirectSound.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -61,26 +59,26 @@
     <ClInclude Include="App\TextureLoader.h">
       <Filter>ChallengeAPI</Filter>
     </ClInclude>
-    <ClInclude Include="stdafx.h">
+    <ClInclude Include="Include\stdafx.h">
       <Filter>VisualStudioRelated</Filter>
     </ClInclude>
-    <ClInclude Include="targetver.h">
+    <ClInclude Include="Include\targetver.h">
       <Filter>VisualStudioRelated</Filter>
     </ClInclude>
-    <ClInclude Include="src\ECS\ECS.h" />
-    <ClInclude Include="src\ECS\IDManager.h" />
-    <ClInclude Include="src\ECS\Pool.h" />
-    <ClInclude Include="src\Rendering\Geometry.h" />
-    <ClInclude Include="src\Rendering\Renderer.h" />
-    <ClInclude Include="src\Rendering\Drawing.h" />
-    <ClInclude Include="src\Systems\MeshResourceObjLoader.h" />
-    <ClInclude Include="src\Systems\Systems.h" />
-    <ClInclude Include="src\Util\GameMath.h" />
-    <ClInclude Include="src\Util\GetModelNumber.h" />
-    <ClInclude Include="src\Components\Components.h" />
-    <ClInclude Include="src\Components\MeshComponent.h" />
-    <ClInclude Include="src\Components\MeshResourceComponent.h" />
-    <ClInclude Include="src\Components\TransformComponent.h" />
+    <ClInclude Include="Source\ECS\ECS.h" />
+    <ClInclude Include="Source\ECS\IDManager.h" />
+    <ClInclude Include="Source\ECS\Pool.h" />
+    <ClInclude Include="Source\Rendering\Geometry.h" />
+    <ClInclude Include="Source\Rendering\Renderer.h" />
+    <ClInclude Include="Source\Rendering\Drawing.h" />
+    <ClInclude Include="Source\Systems\MeshResourceObjLoader.h" />
+    <ClInclude Include="Source\Systems\Systems.h" />
+    <ClInclude Include="Source\Util\GameMath.h" />
+    <ClInclude Include="Source\Util\GetModelNumber.h" />
+    <ClInclude Include="Source\Components\Components.h" />
+    <ClInclude Include="Source\Components\MeshComponent.h" />
+    <ClInclude Include="Source\Components\MeshResourceComponent.h" />
+    <ClInclude Include="Source\Components\TransformComponent.h" />
     <ClInclude Include="App\DirectSound.h" />
     <ClInclude Include="App\mydirectsound.h" />
   </ItemGroup>
@@ -91,10 +89,5 @@
     <Filter Include="VisualStudioRelated">
       <UniqueIdentifier>{7e3f45b2-6fd5-4156-afab-517b5ada6a0a}</UniqueIdentifier>
     </Filter>
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="ReadMe.txt">
-      <Filter>ChallengeAPI</Filter>
-    </Text>
   </ItemGroup>
 </Project>
