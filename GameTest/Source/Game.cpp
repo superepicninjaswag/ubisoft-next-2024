@@ -52,24 +52,41 @@ void Update(float deltaTime)
 	deltaTime = deltaTime * 1.0f / 1000.0f;
 
 	// Set up rotation matrices
-	g_renderer.theta += 1.0f * deltaTime;
+	//g_renderer.theta += 1.0f * deltaTime;
 
 	// Move camera
+	float speed = 8.0f;
 	if (App::IsKeyPressed('W'))
 	{
-		g_renderer.camera.y += 5.0f * deltaTime;
+		g_renderer.camera = g_renderer.camera + g_renderer.cameraLookDirection * deltaTime * speed;
 	}
 	if (App::IsKeyPressed('S'))
 	{
-		g_renderer.camera.y -= 5.0f * deltaTime;
+		g_renderer.camera = g_renderer.camera - g_renderer.cameraLookDirection * deltaTime * speed;
 	}
 	if (App::IsKeyPressed('A'))
 	{
-		g_renderer.camera.x -= 5.0f * deltaTime;
+		g_renderer.camera = g_renderer.camera - g_renderer.right * deltaTime * speed;
 	}
 	if (App::IsKeyPressed('D'))
 	{
-		g_renderer.camera.x += 5.0f * deltaTime;
+		g_renderer.camera = g_renderer.camera + g_renderer.right * deltaTime * speed;
+	}
+	if (App::IsKeyPressed(VK_SPACE))
+	{
+		g_renderer.camera.y += 5.0f * deltaTime;
+	}
+	if (App::IsKeyPressed(VK_SHIFT))
+	{
+		g_renderer.camera.y -= 5.0f * deltaTime;
+	}
+	if (App::IsKeyPressed(VK_LEFT))
+	{
+		g_renderer.yaw += 2.0f * deltaTime;
+	}
+	if (App::IsKeyPressed(VK_RIGHT))
+	{
+		g_renderer.yaw -= 2.0f * deltaTime;
 	}
 }
 

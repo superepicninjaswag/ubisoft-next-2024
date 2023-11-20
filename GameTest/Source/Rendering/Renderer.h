@@ -17,15 +17,20 @@ private:
     float zNear = 0.1f;
     float aspectRatio = SCREEN_HEIGHT / SCREEN_WIDTH;
 
-    // Camera
-    Vec3 cameraLookDirection = Vec3(0.0f, 0.0f, 1.0f);
-    Vec3 up = Vec3(0.0f, 1.0f, 0.0f);
+    
 
     // Lighting
     Vec3 lightDirection = Vec3(0.0f, 0.0f, -1.0f);
 
 public:
+    // Camera
+    Vec3 cameraLookDirection = Vec3(0.0f, 0.0f, 1.0f);
+    Vec3 up = Vec3(0.0f, 1.0f, 0.0f);
+    Vec3 right;
     Vec3 camera = Vec3(0.0f, 0.0f, 0.0f);
+    float yaw = 0.0f;
+
+
     float theta = 0;
     Matrix4x4 projectionMatrix;
     Matrix4x4 viewportMatrix;

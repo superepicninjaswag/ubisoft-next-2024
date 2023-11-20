@@ -60,9 +60,6 @@ void Renderer::Render(Pool<MeshComponent> &meshes, Pool<TransformComponent> &tra
             */
             if (faceNormalProjectionOntoCameraRay < 0.0f)
             {
-                // Illumination
-                float dp = normal * lightDirection;
-
                 // Project the face from world space to camera space
                 Face faceCamera;
                 for (int i = 0; i < 3; i++)
@@ -85,7 +82,8 @@ void Renderer::Render(Pool<MeshComponent> &meshes, Pool<TransformComponent> &tra
                     faceProjected.points[i].y = (faceProjected.points[i].y + 1) * 0.5 * SCREEN_HEIGHT;
                 }
 
-                // Apply lighting
+                // Lighting
+                float dp = normal * lightDirection;
                 faceProjected.colour.r = (dp + dp) / 3 + faceProjected.colour.r / 3;
                 faceProjected.colour.g = (dp + dp) / 3 + faceProjected.colour.g / 3;
                 faceProjected.colour.b = (dp + dp) / 3 + faceProjected.colour.b / 3;
@@ -127,14 +125,19 @@ void Renderer::setViewportMatrix()
 
 void Renderer::setCameraMatrices()
 {
-    Vec3 cameraTarget = camera + cameraLookDirection;
+    Vec3 cameraTarget = Vec3(0.0f, 0.0f, 1.0f);
+    Matrix4x4 cameraRotation;
+    cameraRotation.rotationY(yaw);
+    cameraLookDirection = cameraRotation * cameraTarget;
+    cameraTarget = camera + cameraLookDirection;
+
     Vec3 forward = cameraTarget - camera;
     forward.Normalize();
 
     up = up - (forward * (up * forward));
     up.Normalize();
 
-    Vec3 right = up.CrossProduct(forward);
+    right = up.CrossProduct(forward);
 
     cameraMatrix(0, 0) = right.x;    cameraMatrix(0, 1) = right.y;    cameraMatrix(0, 2) = right.z;    cameraMatrix(0, 3) = 0.0f;
     cameraMatrix(1, 0) = up.x;       cameraMatrix(1, 1) = up.y;       cameraMatrix(1, 2) = up.z;       cameraMatrix(1, 3) = 0.0f;
