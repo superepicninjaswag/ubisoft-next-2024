@@ -4,21 +4,16 @@
 
 Renderer::Renderer() {}
 
+char textBuffer[64];
+
 void Renderer::Init()
 {
     facesToRender.reserve(defaultBufferSize);
     lightDirection.Normalize();
     setProjectionMatrix();
-
-    for (int i = 0; i < threadCount; i++)
-    {
-        threads.emplace_back(&Renderer::calculateFace, this, i);
-        facesProcessedByThread.emplace_back();
-        facesProcessedByThread[i].reserve(defaultBufferSize/threadCount);
-    }
 }
 
-void Renderer::Render(Pool<MeshComponent> &meshes, Pool<TransformComponent> &transforms, Pool<MeshResourceComponent> &meshResources)
+void Renderer::Render(Pool<MeshComponent>& meshes, Pool<TransformComponent>& transforms, Pool<MeshResourceComponent>& meshResources)
 {
     // Camera matrices
     setCameraMatrices();
@@ -29,7 +24,7 @@ void Renderer::Render(Pool<MeshComponent> &meshes, Pool<TransformComponent> &tra
     {
         int meshResourceId = meshes._dense[i].meshResourceId;
         int entityId = meshes.MirrorIdToEntityId(i);
-        
+
         Matrix4x4 rX, rY, rZ, translationMatrix;
 
         rX.rotationX(theta);
@@ -41,7 +36,7 @@ void Renderer::Render(Pool<MeshComponent> &meshes, Pool<TransformComponent> &tra
 
         worldMatrix = rX * rY * rZ * translationMatrix;
 
-        for(auto &f : meshResources.Get(meshResourceId)->faces)
+        for (auto& f : meshResources.Get(meshResourceId)->faces)
         {
             Face faceTransformed;
             for (int i = 0; i < 3; i++)
@@ -56,7 +51,7 @@ void Renderer::Render(Pool<MeshComponent> &meshes, Pool<TransformComponent> &tra
             normal.Normalize();
 
             // Normal projection onto line from camera to face
-            float faceNormalProjectionOntoCameraRay =  normal * (faceTransformed.points[0] - camera);
+            float faceNormalProjectionOntoCameraRay = normal * (faceTransformed.points[0] - camera);
 
             /*
             If the projection of the face normal is negative (relative
@@ -92,29 +87,21 @@ void Renderer::Render(Pool<MeshComponent> &meshes, Pool<TransformComponent> &tra
         }
     }
 
+    // Painter's algorithm
+    auto start = std::chrono::high_resolution_clock::now();
     std::sort(facesToRender.begin(), facesToRender.end());
-    for(auto &f : facesToRender)
+    auto end = std::chrono::high_resolution_clock::now();
+    auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
+    for (auto& f : facesToRender)
     {
-        drawFilledTriangle(f, f.colour);
+        drawTriangle(f, f.colour);
     }
+
+    // I don't want faces from previous frames to linger in the buffer
     facesToRender.clear();
-}
 
-void Renderer::calculateFace(int threadID)
-{
-    while (!gameOver)
-    {
-        break;
-    }
-}
-
-void Renderer::shutdown()
-{
-    gameOver = true;
-    for (int i = 0; i < threadCount; i++)
-    {
-        threads[i].join();
-    }
+    sprintf(textBuffer, "%ld", duration.count());
+    App::Print(10, 55, textBuffer, 1.0f, 0.0f, 1.0f, GLUT_BITMAP_HELVETICA_10);
 }
 
 void Renderer::setProjectionMatrix()

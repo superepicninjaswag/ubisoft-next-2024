@@ -26,7 +26,7 @@ void Init()
 	g_renderer.Init();
 	MeshResourceObjLoader(g_ecs);
 
-	int limit = 1;
+	int limit = 16;
 	float gap = 4.0f;
 	for (int i = 0; i < limit; i++)
 	{
@@ -38,7 +38,7 @@ void Init()
 			g_ecs.GetTransforms().Add(newEntity);
 			g_ecs.GetTransforms().Get(newEntity)->v.x = gap*(i - (limit / 2.0f) + 0.5f);
 			g_ecs.GetTransforms().Get(newEntity)->v.y = gap*(j - (limit / 2.0f) + 0.5f);
-			g_ecs.GetTransforms().Get(newEntity)->v.z = 10.0f;
+			g_ecs.GetTransforms().Get(newEntity)->v.z = 20.0f;
 		}
 	}
 }
@@ -108,6 +108,5 @@ void Render()
 //------------------------------------------------------------------------
 void Shutdown()
 {
-	g_renderer.shutdown();
 	return;
 }
