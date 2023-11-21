@@ -12,7 +12,7 @@ void Renderer::Init()
 
     for (int i = 0; i < threadCount; i++)
     {
-        threads.emplace_back(&Renderer::calculateFace, this);
+        threads.emplace_back(&Renderer::calculateFace, this, i);
         facesProcessedByThread.emplace_back();
         facesProcessedByThread[i].reserve(defaultBufferSize/threadCount);
     }
@@ -20,7 +20,7 @@ void Renderer::Init()
 
 void Renderer::Render(Pool<MeshComponent> &meshes, Pool<TransformComponent> &transforms, Pool<MeshResourceComponent> &meshResources)
 {
-    // Camera matrix
+    // Camera matrices
     setCameraMatrices();
     cameraAndProjectionMatrix = inverseCameraMatrix * projectionMatrix;
 
@@ -30,20 +30,16 @@ void Renderer::Render(Pool<MeshComponent> &meshes, Pool<TransformComponent> &tra
         int meshResourceId = meshes._dense[i].meshResourceId;
         int entityId = meshes.MirrorIdToEntityId(i);
         
-        Matrix4x4 worldMatrix, rX, rY, rZ, translation;
-        
-        // Rotation matrices
+        Matrix4x4 rX, rY, rZ, translationMatrix;
+
         rX.rotationX(theta);
         rY.rotationY(theta * 0.5f);
         rZ.rotationZ(theta * 0.25f);
 
-        // Translation matrix
         Vec3 position = transforms.Get(entityId)->v;
-        translation.translation(position.x, position.y, position.z);
+        translationMatrix.translation(position.x, position.y, position.z);
 
-        // World matrix
-        worldMatrix.identity();
-        worldMatrix = worldMatrix * rX * rY * rZ * translation;
+        worldMatrix = rX * rY * rZ * translationMatrix;
 
         for(auto &f : meshResources.Get(meshResourceId)->faces)
         {
@@ -104,7 +100,7 @@ void Renderer::Render(Pool<MeshComponent> &meshes, Pool<TransformComponent> &tra
     facesToRender.clear();
 }
 
-void Renderer::calculateFace()
+void Renderer::calculateFace(int threadID)
 {
     while (!gameOver)
     {

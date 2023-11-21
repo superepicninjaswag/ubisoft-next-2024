@@ -21,10 +21,12 @@ private:
     Vec3 lightDirection = Vec3(0.0f, 0.0f, -1.0f);
 
     // Multithreading
-    bool gameOver;
+    bool gameOver = false;
     int threadCountHint = std::thread::hardware_concurrency();  // This does not necessarily reflect a suitable number of threads to create
     int threadCount = (threadCountHint > 4) ? threadCountHint : 4;
     std::vector<std::thread> threads;
+
+    std::mutex face;
 
     // Face buffers
     int defaultBufferSize = 1000000;
@@ -41,15 +43,16 @@ public:
 
 
     float theta = 0;
+    Matrix4x4 cameraAndProjectionMatrix;
     Matrix4x4 projectionMatrix;
     Matrix4x4 cameraMatrix;
     Matrix4x4 inverseCameraMatrix;
-    Matrix4x4 cameraAndProjectionMatrix;
+    Matrix4x4 worldMatrix;
 
     Renderer();
     void Init();
     void Render(Pool<MeshComponent> &meshes, Pool<TransformComponent> &transforms, Pool<MeshResourceComponent> &meshResources);
-    void calculateFace();
+    void calculateFace(int threadID);
     void shutdown();
     void setProjectionMatrix();
     void setCameraMatrices();
