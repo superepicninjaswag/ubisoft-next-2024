@@ -24,6 +24,11 @@ private:
     int defaultBufferSize = 1000000;
     std::vector<Face> facesToRender;
 
+    // Multi-threading
+    int minThreadCount = 4;
+    int threadCountHint = std::thread::hardware_concurrency();
+    int threadCount = (threadCountHint > minThreadCount) ? threadCountHint : minThreadCount;
+
 public:
     // Camera
     Vec3 cameraLookDirection = Vec3(0.0f, 0.0f, 1.0f);
