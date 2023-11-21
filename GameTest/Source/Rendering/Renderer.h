@@ -21,6 +21,7 @@ private:
     Vec3 lightDirection = Vec3(0.0f, 0.0f, -1.0f);
 
     // Multithreading
+    bool gameOver;
     int threadCountHint = std::thread::hardware_concurrency();  // This does not necessarily reflect a suitable number of threads to create
     int threadCount = (threadCountHint > 4) ? threadCountHint : 4;
     std::vector<std::thread> threads;
@@ -48,7 +49,7 @@ public:
     Renderer();
     void Init();
     void Render(Pool<MeshComponent> &meshes, Pool<TransformComponent> &transforms, Pool<MeshResourceComponent> &meshResources);
-    void processMesh();
+    void calculateFace();
     void shutdown();
     void setProjectionMatrix();
     void setCameraMatrices();

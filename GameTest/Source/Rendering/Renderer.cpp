@@ -12,7 +12,7 @@ void Renderer::Init()
 
     for (int i = 0; i < threadCount; i++)
     {
-        threads.emplace_back(&Renderer::processMesh, this);
+        threads.emplace_back(&Renderer::calculateFace, this);
         facesProcessedByThread.emplace_back();
         facesProcessedByThread[i].reserve(defaultBufferSize/threadCount);
     }
@@ -104,13 +104,17 @@ void Renderer::Render(Pool<MeshComponent> &meshes, Pool<TransformComponent> &tra
     facesToRender.clear();
 }
 
-void Renderer::processMesh()
+void Renderer::calculateFace()
 {
-
+    while (!gameOver)
+    {
+        break;
+    }
 }
 
 void Renderer::shutdown()
 {
+    gameOver = true;
     for (int i = 0; i < threadCount; i++)
     {
         threads[i].join();
