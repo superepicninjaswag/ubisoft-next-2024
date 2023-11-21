@@ -108,5 +108,6 @@ void Render()
 //------------------------------------------------------------------------
 void Shutdown()
 {
+	g_renderer.shutdown();
 	return;
 }

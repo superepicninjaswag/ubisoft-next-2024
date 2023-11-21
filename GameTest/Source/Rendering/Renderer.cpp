@@ -5,14 +5,26 @@
 Renderer::Renderer() {}
 
 void Renderer::Init()
-{   
+{
+    facesToRender.reserve(defaultBufferSize);
     lightDirection.Normalize();
-    (*this).setProjectionMatrix();
+    setProjectionMatrix();
+
+    for (int i = 0; i < threadCount; i++)
+    {
+        threads.emplace_back(&Renderer::processMesh, this);
+        facesProcessedByThread.emplace_back();
+        facesProcessedByThread[i].reserve(defaultBufferSize/threadCount);
+    }
 }
 
 void Renderer::Render(Pool<MeshComponent> &meshes, Pool<TransformComponent> &transforms, Pool<MeshResourceComponent> &meshResources)
 {
-    std::vector<Face> facesToRender(512);
+    // Camera matrix
+    setCameraMatrices();
+    cameraAndProjectionMatrix = inverseCameraMatrix * projectionMatrix;
+
+    // Object-order render loop
     for (int i = 0; i < meshes.Size(); i++)
     {
         int meshResourceId = meshes._dense[i].meshResourceId;
@@ -32,9 +44,6 @@ void Renderer::Render(Pool<MeshComponent> &meshes, Pool<TransformComponent> &tra
         // World matrix
         worldMatrix.identity();
         worldMatrix = worldMatrix * rX * rY * rZ * translation;
-
-        // Camera matrix
-        setCameraMatrices();
 
         for(auto &f : meshResources.Get(meshResourceId)->faces)
         {
@@ -60,18 +69,11 @@ void Renderer::Render(Pool<MeshComponent> &meshes, Pool<TransformComponent> &tra
             */
             if (faceNormalProjectionOntoCameraRay < 0.0f)
             {
-                // Project the face from world space to camera space
-                Face faceCamera;
-                for (int i = 0; i < 3; i++)
-                {
-                    faceCamera.points[i] = inverseCameraMatrix * faceTransformed.points[i];
-                }
-
-                // Project the face from view space into screen space
+                // Project the face from world space to camera space to normalized
                 Face faceProjected;
                 for (int i = 0; i < 3; i++)
                 {
-                    faceProjected.points[i] = projectionMatrix * faceCamera.points[i];
+                    faceProjected.points[i] = cameraAndProjectionMatrix * faceTransformed.points[i];
                     faceProjected.points[i] = faceProjected.points[i] * (1 / faceProjected.points[i].w);
                 }
 
@@ -99,6 +101,20 @@ void Renderer::Render(Pool<MeshComponent> &meshes, Pool<TransformComponent> &tra
     {
         drawFilledTriangle(f, f.colour);
     }
+    facesToRender.clear();
+}
+
+void Renderer::processMesh()
+{
+
+}
+
+void Renderer::shutdown()
+{
+    for (int i = 0; i < threadCount; i++)
+    {
+        threads[i].join();
+    }
 }
 
 void Renderer::setProjectionMatrix()
@@ -111,16 +127,6 @@ void Renderer::setProjectionMatrix()
     projectionMatrix(3, 2) = (-zFar * zNear) / (zFar - zNear);
     projectionMatrix(2, 3) = 1.0f;
     projectionMatrix(3, 3) = 0.0f;
-}
-
-void Renderer::setViewportMatrix()
-{
-    viewportMatrix(0, 0) = SCREEN_WIDTH / 2.0f;
-    viewportMatrix(0, 3) = (SCREEN_WIDTH - 1.0f) / 2.0f;
-    viewportMatrix(1, 3) = (SCREEN_HEIGHT - 1.0f) / 2.0f;
-    viewportMatrix(1, 1) = SCREEN_HEIGHT / 2.0f;
-    viewportMatrix(2, 2) = 1.0f;
-    viewportMatrix(3, 3) = 1.0f;
 }
 
 void Renderer::setCameraMatrices()

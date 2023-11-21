@@ -17,10 +17,18 @@ private:
     float zNear = 0.1f;
     float aspectRatio = SCREEN_HEIGHT / SCREEN_WIDTH;
 
-    
-
     // Lighting
     Vec3 lightDirection = Vec3(0.0f, 0.0f, -1.0f);
+
+    // Multithreading
+    int threadCountHint = std::thread::hardware_concurrency();  // This does not necessarily reflect a suitable number of threads to create
+    int threadCount = (threadCountHint > 4) ? threadCountHint : 4;
+    std::vector<std::thread> threads;
+
+    // Face buffers
+    int defaultBufferSize = 1000000;
+    std::vector<std::vector<Face>> facesProcessedByThread;
+    std::vector<Face> facesToRender;
 
 public:
     // Camera
@@ -33,14 +41,15 @@ public:
 
     float theta = 0;
     Matrix4x4 projectionMatrix;
-    Matrix4x4 viewportMatrix;
     Matrix4x4 cameraMatrix;
     Matrix4x4 inverseCameraMatrix;
+    Matrix4x4 cameraAndProjectionMatrix;
 
     Renderer();
     void Init();
     void Render(Pool<MeshComponent> &meshes, Pool<TransformComponent> &transforms, Pool<MeshResourceComponent> &meshResources);
+    void processMesh();
+    void shutdown();
     void setProjectionMatrix();
-    void setViewportMatrix();
     void setCameraMatrices();
 };

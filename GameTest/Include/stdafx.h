@@ -21,9 +21,12 @@
 #include <sstream>
 #include <stdlib.h>
 #include <string>
-#include <thread>
 #include <utility>
 #include <vector>
+
+#include <condition_variable>
+#include <mutex>
+#include <thread>
 
 #include <windows.h> 
 #include <math.h>
