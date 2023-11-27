@@ -1,8 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="GameTest.cpp" />
-    <ClCompile Include="stdafx.cpp" />
+    <ClCompile Include="Include\stdafx.cpp" />
     <ClCompile Include="App\app.cpp">
       <Filter>NextAPI</Filter>
     </ClCompile>
@@ -21,9 +20,21 @@
     <ClCompile Include="stb_image\stb_image.cpp">
       <Filter>stb_image</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Game.cpp" />
+    <ClCompile Include="Source\Components\MeshComponent.cpp" />
+    <ClCompile Include="Source\Components\TransformComponent.cpp" />
+    <ClCompile Include="Source\ECS\ECS.cpp" />
+    <ClCompile Include="Source\ECS\IDManager.cpp" />
+    <ClCompile Include="Source\Rendering\Drawing.cpp" />
+    <ClCompile Include="Source\Rendering\Geometry.cpp" />
+    <ClCompile Include="Source\Rendering\Renderer.cpp" />
+    <ClCompile Include="Source\Systems\MeshResourceObjLoader.cpp" />
+    <ClCompile Include="Source\Util\GameMath.cpp" />
+    <ClCompile Include="Source\Util\GetModelNumber.cpp" />
+    <ClCompile Include="App\DirectSound.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="Include\stdafx.h" />
     <ClInclude Include="App\app.h">
       <Filter>NextAPI</Filter>
     </ClInclude>
@@ -42,12 +53,32 @@
     <ClInclude Include="App\SimpleSprite.h">
       <Filter>NextAPI</Filter>
     </ClInclude>
-    <ClInclude Include="targetver.h">
+    <ClInclude Include="Include\targetver.h">
       <Filter>NextAPI</Filter>
     </ClInclude>
     <ClInclude Include="stb_image\stb_image.h">
       <Filter>stb_image</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Components\Components.h" />
+    <ClInclude Include="Source\Components\MeshComponent.h" />
+    <ClInclude Include="Source\Components\MeshResourceComponent.h" />
+    <ClInclude Include="Source\Components\TransformComponent.h" />
+    <ClInclude Include="Source\ECS\ECS.h" />
+    <ClInclude Include="Source\ECS\IDManager.h" />
+    <ClInclude Include="Source\ECS\Pool.h" />
+    <ClInclude Include="Source\Rendering\Drawing.h" />
+    <ClInclude Include="Source\Rendering\Geometry.h" />
+    <ClInclude Include="Source\Rendering\Renderer.h" />
+    <ClInclude Include="Source\Systems\MeshResourceObjLoader.h" />
+    <ClInclude Include="Source\Systems\Systems.h" />
+    <ClInclude Include="Source\Util\GameMath.h" />
+    <ClInclude Include="Source\Util\GetModelNumber.h" />
+    <ClInclude Include="glut\include\GL\freeglut.h" />
+    <ClInclude Include="glut\include\GL\freeglut_ext.h" />
+    <ClInclude Include="glut\include\GL\freeglut_std.h" />
+    <ClInclude Include="glut\include\GL\glut.h" />
+    <ClInclude Include="App\DirectSound.h" />
+    <ClInclude Include="App\mydirectsound.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="NextAPI">
@@ -56,10 +87,5 @@
     <Filter Include="stb_image">
       <UniqueIdentifier>{61cfc19b-c57e-4021-b530-bac172fcba86}</UniqueIdentifier>
     </Filter>
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="ReadMe.txt">
-      <Filter>NextAPI</Filter>
-    </Text>
   </ItemGroup>
 </Project>
