@@ -13,9 +13,9 @@
 
 #include "app.h"
 #include "AppSettings.h"
-#include "TextureLoader.h"
 #include "SimpleSprite.h"
 
+#include "../stb_image/stb_image.h"
 #include "../glut/include/GL/freeglut_ext.h"
 
 std::map<const char *, CSimpleSprite::sTextureDef > CSimpleSprite::m_textures;
@@ -46,9 +46,19 @@ void CSimpleSprite::Update(float dt)
         m_animTime += dt/1000.0f;
         sAnimation &anim = m_animations[m_currentAnim];
         float duration = anim.m_speed * anim.m_frames.size();
+
+        //Looping around if reached the end of animation
         if (m_animTime > duration)
         {
-            m_animTime = m_animTime - duration;
+            //If we've gone farther than twice the duration, we have to remove as many full durations as possible
+            if (m_animTime >= 2 * duration)
+            {
+                m_animTime = m_animTime - duration * floorf(m_animTime / duration);
+            }
+            else //Otherwise, we can just do a simple loop around
+            {
+                m_animTime = m_animTime - duration;
+            }
         }
         int frame = (int)( m_animTime / anim.m_speed );
         SetFrame(anim.m_frames[frame]);        
@@ -148,7 +158,10 @@ bool CSimpleSprite::LoadTexture(const char * filename)
 		return true;
     }
     
-    unsigned char *imageData = loadBMPRaw(filename, m_texWidth, m_texHeight, true);
+    //unsigned char *imageData = loadBMPRaw(filename, m_texWidth, m_texHeight, true);
+
+    int channels;
+    unsigned char* imageData = stbi_load(filename, &m_texWidth, &m_texHeight, &channels, 4);
 
     GLuint texture = 0;
 	if (imageData)
@@ -162,8 +175,8 @@ bool CSimpleSprite::LoadTexture(const char * filename)
 		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 		gluBuild2DMipmaps(GL_TEXTURE_2D, 4, m_texWidth, m_texHeight, GL_RGBA, GL_UNSIGNED_BYTE, imageData);
-		free(imageData);
-		sTextureDef textureDef = { m_texWidth, m_texHeight, texture };
+        stbi_image_free(imageData);
+		sTextureDef textureDef = { (unsigned int) m_texWidth, (unsigned int) m_texHeight, texture };
 		m_textures[filename] = textureDef;
 		m_texture = texture;
 		return true;

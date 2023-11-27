@@ -31,6 +31,8 @@ public:
     float GetScale()  const { return m_scale;  }
     unsigned int GetFrame()  const { return m_frame; }
 	void SetColor(float r, float g, float b) { m_red = r; m_green = g; m_blue = b; }
+
+    // Note: speed must be > 0, frames must have size >= 1, id must be unique among animations
     void CreateAnimation( unsigned int id, float speed, const std::vector<int> &frames)
     {
         sAnimation anim;        
@@ -47,8 +49,8 @@ private:
     float m_ypos = 0.0F;
     float m_width = 0.0F;
     float m_height = 0.0F;
-    unsigned int   m_texWidth = 0;
-    unsigned int   m_texHeight = 0;
+    int   m_texWidth = 0;
+    int   m_texHeight = 0;
     float m_angle = 0.0F;
     float m_scale = 1.0F;
     float m_points[8];    
@@ -64,8 +66,8 @@ private:
 
     struct sAnimation
     {
-        unsigned int m_id;
-        float m_speed;
+        unsigned int m_id = 0;
+        float m_speed = 0.0f;
         std::vector<int> m_frames;
     };
     std::vector<sAnimation> m_animations;

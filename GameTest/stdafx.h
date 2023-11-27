@@ -13,22 +13,3 @@
 
 
 // TODO: reference additional headers your program requires here
-#include "../App/app.h"
-
-#include <cmath>
-#include <cstdlib>
-#include <iostream>
-#include <sstream>
-#include <stdlib.h>
-#include <string>
-#include <utility>
-#include <vector>
-
-#include <condition_variable>
-#include <mutex>
-#include <thread>
-
-#include <windows.h> 
-#include <math.h>
-
-#include <chrono>

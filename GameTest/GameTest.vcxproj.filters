@@ -1,93 +1,65 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
+    <ClCompile Include="GameTest.cpp" />
+    <ClCompile Include="stdafx.cpp" />
     <ClCompile Include="App\app.cpp">
-      <Filter>ChallengeAPI</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Game.cpp">
-      <Filter>ChallengeAPI</Filter>
+      <Filter>NextAPI</Filter>
     </ClCompile>
     <ClCompile Include="App\main.cpp">
-      <Filter>ChallengeAPI</Filter>
+      <Filter>NextAPI</Filter>
     </ClCompile>
     <ClCompile Include="App\SimpleController.cpp">
-      <Filter>ChallengeAPI</Filter>
+      <Filter>NextAPI</Filter>
     </ClCompile>
     <ClCompile Include="App\SimpleSound.cpp">
-      <Filter>ChallengeAPI</Filter>
+      <Filter>NextAPI</Filter>
     </ClCompile>
     <ClCompile Include="App\SimpleSprite.cpp">
-      <Filter>ChallengeAPI</Filter>
+      <Filter>NextAPI</Filter>
     </ClCompile>
-    <ClCompile Include="App\TextureLoader.cpp">
-      <Filter>ChallengeAPI</Filter>
+    <ClCompile Include="stb_image\stb_image.cpp">
+      <Filter>stb_image</Filter>
     </ClCompile>
-    <ClCompile Include="Include\stdafx.cpp">
-      <Filter>VisualStudioRelated</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\ECS\ECS.cpp" />
-    <ClCompile Include="Source\ECS\IDManager.cpp" />
-    <ClCompile Include="Source\Rendering\Geometry.cpp" />
-    <ClCompile Include="Source\Rendering\Renderer.cpp" />
-    <ClCompile Include="Source\Rendering\Drawing.cpp" />
-    <ClCompile Include="Source\Systems\MeshResourceObjLoader.cpp" />
-    <ClCompile Include="Source\Util\GameMath.cpp" />
-    <ClCompile Include="Source\Util\GetModelNumber.cpp" />
-    <ClCompile Include="Source\Components\MeshComponent.cpp" />
-    <ClCompile Include="Source\Components\TransformComponent.cpp" />
-    <ClCompile Include="App\DirectSound.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="stdafx.h" />
     <ClInclude Include="App\app.h">
-      <Filter>ChallengeAPI</Filter>
+      <Filter>NextAPI</Filter>
     </ClInclude>
     <ClInclude Include="App\AppSettings.h">
-      <Filter>ChallengeAPI</Filter>
+      <Filter>NextAPI</Filter>
     </ClInclude>
     <ClInclude Include="App\main.h">
-      <Filter>ChallengeAPI</Filter>
+      <Filter>NextAPI</Filter>
     </ClInclude>
     <ClInclude Include="App\SimpleController.h">
-      <Filter>ChallengeAPI</Filter>
+      <Filter>NextAPI</Filter>
     </ClInclude>
     <ClInclude Include="App\SimpleSound.h">
-      <Filter>ChallengeAPI</Filter>
+      <Filter>NextAPI</Filter>
     </ClInclude>
     <ClInclude Include="App\SimpleSprite.h">
-      <Filter>ChallengeAPI</Filter>
+      <Filter>NextAPI</Filter>
     </ClInclude>
-    <ClInclude Include="App\TextureLoader.h">
-      <Filter>ChallengeAPI</Filter>
+    <ClInclude Include="targetver.h">
+      <Filter>NextAPI</Filter>
     </ClInclude>
-    <ClInclude Include="Include\stdafx.h">
-      <Filter>VisualStudioRelated</Filter>
+    <ClInclude Include="stb_image\stb_image.h">
+      <Filter>stb_image</Filter>
     </ClInclude>
-    <ClInclude Include="Include\targetver.h">
-      <Filter>VisualStudioRelated</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\ECS\ECS.h" />
-    <ClInclude Include="Source\ECS\IDManager.h" />
-    <ClInclude Include="Source\ECS\Pool.h" />
-    <ClInclude Include="Source\Rendering\Geometry.h" />
-    <ClInclude Include="Source\Rendering\Renderer.h" />
-    <ClInclude Include="Source\Rendering\Drawing.h" />
-    <ClInclude Include="Source\Systems\MeshResourceObjLoader.h" />
-    <ClInclude Include="Source\Systems\Systems.h" />
-    <ClInclude Include="Source\Util\GameMath.h" />
-    <ClInclude Include="Source\Util\GetModelNumber.h" />
-    <ClInclude Include="Source\Components\Components.h" />
-    <ClInclude Include="Source\Components\MeshComponent.h" />
-    <ClInclude Include="Source\Components\MeshResourceComponent.h" />
-    <ClInclude Include="Source\Components\TransformComponent.h" />
-    <ClInclude Include="App\DirectSound.h" />
-    <ClInclude Include="App\mydirectsound.h" />
   </ItemGroup>
   <ItemGroup>
-    <Filter Include="ChallengeAPI">
-      <UniqueIdentifier>{247c844f-f2d1-415f-8421-cc912486261b}</UniqueIdentifier>
+    <Filter Include="NextAPI">
+      <UniqueIdentifier>{f318918d-bb9f-4402-ae1c-4f72186d16f6}</UniqueIdentifier>
     </Filter>
-    <Filter Include="VisualStudioRelated">
-      <UniqueIdentifier>{7e3f45b2-6fd5-4156-afab-517b5ada6a0a}</UniqueIdentifier>
+    <Filter Include="stb_image">
+      <UniqueIdentifier>{61cfc19b-c57e-4021-b530-bac172fcba86}</UniqueIdentifier>
     </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="ReadMe.txt">
+      <Filter>NextAPI</Filter>
+    </Text>
   </ItemGroup>
 </Project>
