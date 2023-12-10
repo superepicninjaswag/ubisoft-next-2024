@@ -87,7 +87,6 @@ void Renderer::Render(Pool<MeshComponent>& meshes, Pool<TransformComponent>& tra
                 {
                     faceProjected.points[i] = cameraAndProjectionMatrix * faceTransformed.points[i];
                     faceProjected.points[i] = faceProjected.points[i] * (1.0f / faceProjected.points[i].w);
-                    std::cout << faceProjected.points[i].z << "\n";
                 }
 
                 // Clip triangle

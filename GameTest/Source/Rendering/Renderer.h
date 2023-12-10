@@ -8,8 +8,8 @@ class Renderer
 {
 private:
     // Screen info
-    const float SCREEN_WIDTH = 1024.0f;
-    const float SCREEN_HEIGHT = 768.0f;
+    const float SCREEN_WIDTH = 1280.0f;
+    const float SCREEN_HEIGHT = 720.0f;
 
     // Projection matrix details
     float fovDeg = 70.0;

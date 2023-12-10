@@ -12,12 +12,14 @@
 
 ECS g_ecs;
 Renderer g_renderer;
+std::chrono::high_resolution_clock::time_point g_start;
+std::chrono::high_resolution_clock::time_point g_end;
 
 
 // Called before first update. Do any initial setup here.
 void Init()
 {
-	//*	If I needed a console for debugging with print lines
+	/*	If I needed a console for debugging with print lines
 	AllocConsole();
 	freopen("CONOUT$", "w", stdout);
 	freopen("CONOUT$", "w", stderr);
@@ -26,7 +28,7 @@ void Init()
 	g_renderer.Init();
 	MeshResourceObjLoader(g_ecs);
 
-	int limit = 1;
+	int limit = 2;
 	float gap = 4.0f;
 	for (int i = 0; i < limit; i++)
 	{
@@ -48,6 +50,7 @@ void Init()
 // This will be called at no greater frequency than the value of APP_MAX_FRAME_RATE
 void Update(float deltaTime)
 {
+	g_start = std::chrono::high_resolution_clock::now();
 	// Convert deltaTime from ms to seconds
 	deltaTime = deltaTime * 1.0f / 1000.0f;
 
