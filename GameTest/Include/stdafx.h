@@ -15,6 +15,7 @@
 // TODO: reference additional headers your program requires here
 #include "../App/app.h"
 
+#include <algorithm>
 #include <cmath>
 #include <cstdlib>
 #include <iostream>

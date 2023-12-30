@@ -1,8 +1,7 @@
 #pragma once
 
+#include "../ECS/ECS.h"
 #include "Drawing.h"
-#include <thread>
-#include <algorithm>
 
 class Renderer
 {
@@ -29,9 +28,24 @@ private:
     std::vector<Vec3> clippingPlaneNormals;
 
     // Multi-threading
-    int minThreadCount = 4;
-    int threadCountHint = std::thread::hardware_concurrency();
-    int threadCount = (threadCountHint > minThreadCount) ? threadCountHint : minThreadCount;
+    const int DEFAULT_THREAD_COUNT = 2; // Steam hardware survey says 0.06% of their users have a single-core cpu. 6+% have a dual-core
+    int threadCount = (std::thread::hardware_concurrency() == 0) ? DEFAULT_THREAD_COUNT : std::thread::hardware_concurrency();
+    std::vector<std::thread> threads;
+
+    // Used for thread coordination
+    int numThreadsDone = 0;
+    long frameNumber = 0;
+
+    std::mutex frameNumberMutex;
+    std::condition_variable frameNumberCV;
+
+    std::mutex numThreadsDoneMutex;
+    std::condition_variable numThreadsDoneCV;
+
+    std::mutex facesToRenderMutex;
+
+    // ECS
+    ECS* ecs;
 
 public:
     // Camera
@@ -47,11 +61,13 @@ public:
     Matrix4x4 projectionMatrix;
     Matrix4x4 cameraMatrix;
     Matrix4x4 inverseCameraMatrix;
-    Matrix4x4 worldMatrix;
 
     Renderer();
-    void Init();
-    void Render(Pool<MeshComponent> &meshes, Pool<TransformComponent> &transforms, Pool<MeshResourceComponent> &meshResources);
+    void init(ECS& ecs);
+    void Render();
+    void parallelProcessMesh(int threadId);
+    void shutdown();
+
     void setProjectionMatrix();
     void setCameraMatrices();
 };

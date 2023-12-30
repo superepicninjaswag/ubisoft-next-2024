@@ -26,64 +26,58 @@ void drawFilledTriangle(const Face &triangle, const Colour c) {
     }
 
     // Sort the three points of the triangle according to their y component
-    if(top.y < mid.y)
+    if (top.y < mid.y)
     {
         std::swap(top, mid);
     }
-    if(top.y < bot.y)
+    if (top.y < bot.y)
     {
         std::swap(top, bot);
     }
-    if(mid.y < bot.y)
+    if (mid.y < bot.y)
     {
         std::swap(mid, bot);
     }
 
-    // Draw outline of triangle
-    App::DrawLine(bot.x, bot.y, mid.x, mid.y, c.r, c.g, c.b);
-    App::DrawLine(mid.x, mid.y, top.x, top.y, c.r, c.g, c.b);
-    App::DrawLine(top.x, top.y, bot.x, bot.y, c.r, c.g, c.b);
+    float heightBottomToTop = top.y - bot.y;
+    float heightBottomToMid = mid.y - bot.y + 1.0f;
+    float heightMidToTop = top.y - mid.y + 1.0f;
 
-    float heightBotTop = top.y - bot.y + 1;
-    // Draw bottom half of triangle
-    float heightBotMid = mid.y - bot.y;
-    if (heightBotMid > 0)
+    // Bottom half
+    Vec3 dirBottomToTop = top - bot;
+    Vec3 dirBottomToMid = mid - bot;
+    Vec3 dirMidToTop = top - mid;
+
+    for (float y = bot.y; y <= mid.y; y = y + 1.0f)
     {
-        for (float y = bot.y; y <= mid.y; y = y + 1.0f)
+        float coverageBotToTop = (y - bot.y) / heightBottomToTop;
+        float coverageBotToMid = (y - bot.y) / heightBottomToMid;
+
+        Vec3 a = bot + dirBottomToTop * coverageBotToTop;
+        Vec3 b = bot + dirBottomToMid * coverageBotToMid;
+
+        if (a.x > b.x)
         {
-            float coverageBotTop = (y - bot.y)/heightBotTop;
-            float coverageBotMid = (y - bot.y)/heightBotMid;
-
-            if (coverageBotMid > 1 || coverageBotTop > 1)
-            {
-                break;
-            }
-
-            Vec3 pointBotTop = bot * (1 - coverageBotTop) + top * coverageBotTop;
-            Vec3 pointBotMid = bot * (1 - coverageBotMid) + mid * coverageBotMid;
-
-            App::DrawLine(floorf(pointBotMid.x) + 0.5f, y, ceilf(pointBotTop.x) - 0.5f, y, c.r, c.g, c.b);
+            std::swap(a, b);
         }
+
+        App::DrawLine(a.x, y, b.x, y, c.r, c.g, c.b);
     }
 
-    // Draw bottom half of triangle
-    float heightMidTop = top.y - mid.y;
-    if (heightMidTop > 0)
+    // Top half
+    for (float y = mid.y; y <= top.y; y = y + 1.0f)
     {
-        for (float y = mid.y; y <= top.y; y = y + 1.0f)
+        float coverageBotToTop = (y - bot.y) / heightBottomToTop;
+        float coverageMidToTop = (y - mid.y) / heightMidToTop;
+
+        Vec3 a = bot + dirBottomToTop * coverageBotToTop;
+        Vec3 b = mid + dirMidToTop * coverageMidToTop;
+
+        if (a.x > b.x)
         {
-            float coverageBotTop = (y - bot.y)/heightBotTop;
-            float coverageMidTop = (y - mid.y)/heightMidTop;
-
-            if (coverageMidTop > 1 || coverageBotTop > 1)
-            {
-                break;
-            }
-
-            Vec3 pointBotTop = bot * (1 - coverageBotTop) + top * coverageBotTop;
-            Vec3 pointMidTop = mid * (1 - coverageMidTop) + top * coverageMidTop;
-
-            App::DrawLine(floorf(pointMidTop.x) + 0.5f, y, ceilf(pointBotTop.x) - 0.5f, y, c.r, c.g, c.b);
+            std::swap(a, b);
         }
+
+        App::DrawLine(a.x, y, b.x, y, c.r, c.g, c.b);
     }
 }
