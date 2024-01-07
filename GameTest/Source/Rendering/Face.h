@@ -1,19 +1,12 @@
 #pragma once
 
-#include "../Util/GameMath.h"
-
-struct Colour
-{
-    float r = 1.0f;
-    float g = 1.0f;
-    float b = 1.0f;
-};
+#include "../Math/Vec3.h"
 
 struct Face
 {
 public:
     Vec3 points[3];
-    Colour colour;
+    int entityId = -1;
 
     Face();
     Face(Vec3 p1, Vec3 p2, Vec3 p3);

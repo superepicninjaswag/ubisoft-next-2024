@@ -1,10 +1,6 @@
 #pragma once
 
-#include "../Rendering/Geometry.h"
-#include "MeshResourceComponent.h"
-
-#include <vector>
-#include <string>
+#include "../Rendering/Face.h"
 
 struct MeshResourceComponent
 {

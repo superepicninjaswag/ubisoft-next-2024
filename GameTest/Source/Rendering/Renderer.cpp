@@ -39,26 +39,25 @@ void Renderer::init(ECS& ecs)
     for (int i = 0; i < threadCount; i++)
     {
         threads.emplace_back(&Renderer::parallelProcessMesh, this, i);
+        internalToThreadFacesToRender.reserve(defaultBufferSize / threadCount);
     }
 }
 
 void Renderer::Render()
 {
-    // timer
-    auto start = std::chrono::high_resolution_clock::now();
+    Pool<TextureComponent>& textures = ecs->GetTextures();
 
-    // Camera matrices
+    // These matrices are the same for each face in a frame so calculate them once now
     setCameraMatrices();
     cameraAndProjectionMatrix = inverseCameraMatrix * projectionMatrix;
 
-    // Object-order render loop
-    // Update frame number
+    // Let worker threads know it's time to work on the next frame
     {
         std::lock_guard<std::mutex> frameNumberLock(frameNumberMutex);
         frameNumber++;
     }
     frameNumberCV.notify_one();
-    
+
     // Wait for threads to finish
     {
         std::unique_lock<std::mutex> numThreadsDoneLock(numThreadsDoneMutex);
@@ -66,39 +65,29 @@ void Renderer::Render()
         numThreadsDone = 0;
     }
 
-    // timer
-    auto stopProcessingFaces = std::chrono::high_resolution_clock::now();
-
-    // Painter's algorithm
-    std::sort(facesToRender.begin(), facesToRender.end());
-    auto stopAfterSortingFaces = std::chrono::high_resolution_clock::now();
-    for (auto& f : facesToRender)
+    // Merge each thread's internal face buffers
+    for (int i = 0; i < threadCount; i++)
     {
-        drawFilledTriangle(f, f.colour);
-        /* TODO: Store model colour in mesh component and use that instead of default black */
-        f.colour.r = .5f;
-        f.colour.g = .5f;
-        f.colour.b = .5f;
-        drawTriangle(f, f.colour);
+        facesToRender.insert(facesToRender.end(), internalToThreadFacesToRender[i].begin(), internalToThreadFacesToRender[i].end());
     }
 
-    // I don't want faces from previous frames to linger in the buffer
-    facesToRender.clear();
-    auto stopAfterDrawingFaces = std::chrono::high_resolution_clock::now();
+    // Painter's algorithm because I can't use a z-buffer :(
+    std::sort(facesToRender.begin(), facesToRender.end());
+    for (int i = 0; i < facesToRender.size(); i++)
+    {
+        if (textures.Get(facesToRender[i].entityId)->fill.r != -1.0f)
+        {
+            drawFilledTriangle(facesToRender[i], textures.Get(facesToRender[i].entityId)->fill);
+        }
+        drawTriangle(facesToRender[i], textures.Get(facesToRender[i].entityId)->outline);
+    }
 
-    //*
-    auto durationDraw = std::chrono::duration_cast<std::chrono::milliseconds>(stopAfterDrawingFaces - stopAfterSortingFaces);
-    auto durationSort = std::chrono::duration_cast<std::chrono::milliseconds>(stopAfterSortingFaces - stopProcessingFaces);
-    auto durationProcess = std::chrono::duration_cast<std::chrono::milliseconds>(stopProcessingFaces - start);
-    float durationTotal = durationDraw.count() + durationSort.count() + durationProcess.count();
-    char textBuffer[64];
-    sprintf(textBuffer, "%s: %0.0f p", "Draw", 100*(float)durationDraw.count() / durationTotal);
-    App::Print(10, 700, textBuffer, 1.0f, 0.0f, 1.0f, GLUT_BITMAP_HELVETICA_10);
-    sprintf(textBuffer, "%s: %0.0f p", "Sort", 100*(float)durationSort.count() / durationTotal);
-    App::Print(10, 685, textBuffer, 1.0f, 0.0f, 1.0f, GLUT_BITMAP_HELVETICA_10);
-    sprintf(textBuffer, "%s: %0.0f p", "Process", 100*(float)durationProcess.count() / durationTotal);
-    App::Print(10, 670, textBuffer, 1.0f, 0.0f, 1.0f, GLUT_BITMAP_HELVETICA_10);
-    //*/
+    // I don't want faces from previous frames to linger in the buffers
+    facesToRender.clear();
+    for (int i = 0; i < threadCount; i++)
+    {
+        internalToThreadFacesToRender[i].clear();
+    }
 }
 
 void Renderer::parallelProcessMesh(int threadId)
@@ -106,7 +95,6 @@ void Renderer::parallelProcessMesh(int threadId)
     long frameNumberIWantToProcess = 1;
 
     Pool<MeshComponent>& meshes = ecs->GetMeshes();
-    //std::cout << meshes.Size() << "\n";
     Pool<MeshResourceComponent>& meshResources = ecs->GetMeshResources();
     Pool<TransformComponent>& transforms = ecs->GetTransforms();
 
@@ -122,7 +110,7 @@ void Renderer::parallelProcessMesh(int threadId)
         }
         frameNumberCV.notify_one();
         frameNumberIWantToProcess += 1;
-
+        
         for(int i = threadId; i < meshes.Size(); i = i + threadCount)
         {
             int meshResourceId = meshes._dense[i].meshResourceId;
@@ -142,9 +130,9 @@ void Renderer::parallelProcessMesh(int threadId)
             for (auto& f : meshResources.Get(meshResourceId)->faces)
             {
                 Face faceTransformed;
-                for (int i = 0; i < 3; i++)
+                for (int j = 0; j < 3; j++)
                 {
-                    faceTransformed.points[i] = worldMatrix * f.points[i];
+                    faceTransformed.points[j] = worldMatrix * f.points[j];
                 }
 
                 // Calculate face normal
@@ -165,62 +153,73 @@ void Renderer::parallelProcessMesh(int threadId)
                 {
                     // Project the face from world space to camera space to normalized
                     Face faceProjected;
-                    for (int i = 0; i < 3; i++)
+                    for (int j = 0; j < 3; j++)
                     {
-                        faceProjected.points[i] = cameraAndProjectionMatrix * faceTransformed.points[i];
-                        faceProjected.points[i] = faceProjected.points[i] * (1.0f / faceProjected.points[i].w);
+                        faceProjected.points[j] = cameraAndProjectionMatrix * faceTransformed.points[j];
+                        faceProjected.points[j] = faceProjected.points[j] * (1.0f / faceProjected.points[j].w);
                     }
 
+
                     // Clip triangle
-                    std::list<Face> clippedTriangles;
+                    /*std::list<Face> clippedTriangles;
                     clippedTriangles.push_back(faceProjected);
-                    for (int i = 0; i < clippingPlanePoints.size(); i++)
+                    
+                    for (int j = 0; j < clippingPlanePoints.size(); j++)
                     {
                         int numTriangles = clippedTriangles.size();
-                        int j = 0;
-                        while (j < numTriangles)
+                        int k = 0;
+                        while (k < numTriangles)
                         {
                             Face f = clippedTriangles.front();
                             clippedTriangles.pop_front();
-                            std::vector<Face> newClippedTriangles = f.clipAgainstPlane(clippingPlanePoints[i], clippingPlaneNormals[i]);
+                            std::vector<Face> newClippedTriangles = f.clipAgainstPlane(clippingPlanePoints[j], clippingPlaneNormals[j]);
                             clippedTriangles.insert(clippedTriangles.end(), newClippedTriangles.begin(), newClippedTriangles.end());
-                            j++;
+                            k++;
                         }
                     }
 
-                    for (int i = 0; i < clippedTriangles.size(); i++)
+                    for (int j = 0; j < clippedTriangles.size(); j++)
                     {
                         Face f = clippedTriangles.front();
-                        clippedTriangles.pop_front();
-                        // Scale from normalized to screen size
-                        for (int j = 0; j < 3; j++)
-                        {
-                            f.points[j].x = (faceProjected.points[j].x + 1) * 0.5 * SCREEN_WIDTH;
-                            f.points[j].y = (faceProjected.points[j].y + 1) * 0.5 * SCREEN_HEIGHT;
-                        }
-
-                        // Lighting
-                        float dp = normal * lightDirection;
-                        f.colour.r = dp / 2 + faceProjected.colour.r / 2;
-                        f.colour.g = dp / 2 + faceProjected.colour.g / 2;
-                        f.colour.b = dp / 2 + faceProjected.colour.b / 2;
-
-                        // Add face to render queue
-                        {
-                            std::lock_guard<std::mutex> facesToRenderLock(facesToRenderMutex);
-                            facesToRender.push_back(f);
-                        }
+                        clippedTriangles.pop_front();*/
+                    // Scale from normalized to screen size
+                    for (int k = 0; k < 3; k++)
+                    {
+                        faceProjected.points[k].x = (faceProjected.points[k].x + 1.0f) * 0.5f * SCREEN_WIDTH;
+                        faceProjected.points[k].y = (faceProjected.points[k].y + 1.0f) * 0.5f * SCREEN_HEIGHT;
                     }
+
+                    // Lighting and colour data transfer to face
+                    /*if (meshes._dense[i].isFilled)
+                    {
+                        float dp = normal * lightDirection;
+                        faceProjected.fillColour.r = dp * meshes._dense[i].fillColour.r;
+                        faceProjected.fillColour.g = dp * meshes._dense[i].fillColour.g;
+                        faceProjected.fillColour.b = dp * meshes._dense[i].fillColour.b;
+                        faceProjected.isFilled = true;
+                    }
+                    faceProjected.outlineColour = meshes._dense[i].outlineColour;
+                    */
+
+                    // Add face to render queue
+                    faceProjected.entityId = entityId;
+                    internalToThreadFacesToRender[threadId].push_back(faceProjected);
+                    //}
                 }
             }
         }
 
+        // How else will the main thread know everything is complete!
         {
             std::lock_guard<std::mutex> numThreadsDoneLock(numThreadsDoneMutex);
             numThreadsDone++;
         }
         numThreadsDoneCV.notify_one();
     }
+
+    // You only reach here if it's time to shutdown (frame number == -1), so make sure any other
+    // threads waiting know that the frameNumber has been updated (to -1) so they can also exit
+    // the while loop and join.
     frameNumberCV.notify_one();
 }
 
@@ -241,7 +240,7 @@ void Renderer::shutdown()
 void Renderer::setProjectionMatrix()
 {
     // Matrix definition taken from Real-time rendering textbook
-    float pi = 3.14159265;
+    float pi = 3.14159265f;
     float fovRad = 1.0f / tanf(fovDeg / 2.0f / 180.0f * pi);
     projectionMatrix(0, 0) = fovRad / aspectRatio;
     projectionMatrix(1, 1) = fovRad;

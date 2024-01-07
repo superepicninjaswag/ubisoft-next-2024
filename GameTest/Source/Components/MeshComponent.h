@@ -2,11 +2,11 @@
 
 #include <string>
 
-#include "../Rendering/Geometry.h"
+#include "../Rendering/Face.h"
 
 struct MeshComponent
 {
     int meshResourceId;
 
-    MeshComponent(int meshResourceId);
+    MeshComponent(int id);
 };

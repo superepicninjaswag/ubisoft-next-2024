@@ -26,12 +26,15 @@
     <ClCompile Include="Source\ECS\ECS.cpp" />
     <ClCompile Include="Source\ECS\IDManager.cpp" />
     <ClCompile Include="Source\Rendering\Drawing.cpp" />
-    <ClCompile Include="Source\Rendering\Geometry.cpp" />
+    <ClCompile Include="Source\Rendering\Face.cpp" />
     <ClCompile Include="Source\Rendering\Renderer.cpp" />
     <ClCompile Include="Source\Systems\MeshResourceObjLoader.cpp" />
-    <ClCompile Include="Source\Util\GameMath.cpp" />
+    <ClCompile Include="Source\Math\Vec3.cpp" />
     <ClCompile Include="Source\Util\GetModelNumber.cpp" />
     <ClCompile Include="App\DirectSound.cpp" />
+    <ClCompile Include="Source\Components\TextureComponent.cpp" />
+    <ClCompile Include="Source\Math\Matrix4x4.cpp" />
+    <ClCompile Include="Source\Rendering\Colour.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Include\stdafx.h" />
@@ -67,11 +70,11 @@
     <ClInclude Include="Source\ECS\IDManager.h" />
     <ClInclude Include="Source\ECS\Pool.h" />
     <ClInclude Include="Source\Rendering\Drawing.h" />
-    <ClInclude Include="Source\Rendering\Geometry.h" />
+    <ClInclude Include="Source\Rendering\Face.h" />
     <ClInclude Include="Source\Rendering\Renderer.h" />
     <ClInclude Include="Source\Systems\MeshResourceObjLoader.h" />
     <ClInclude Include="Source\Systems\Systems.h" />
-    <ClInclude Include="Source\Util\GameMath.h" />
+    <ClInclude Include="Source\Math\Vec3.h" />
     <ClInclude Include="Source\Util\GetModelNumber.h" />
     <ClInclude Include="glut\include\GL\freeglut.h" />
     <ClInclude Include="glut\include\GL\freeglut_ext.h" />
@@ -79,6 +82,9 @@
     <ClInclude Include="glut\include\GL\glut.h" />
     <ClInclude Include="App\DirectSound.h" />
     <ClInclude Include="App\mydirectsound.h" />
+    <ClInclude Include="Source\Components\TextureComponent.h" />
+    <ClInclude Include="Source\Math\Matrix4x4.h" />
+    <ClInclude Include="Source\Rendering\Colour.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="NextAPI">

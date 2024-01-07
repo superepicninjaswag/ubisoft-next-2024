@@ -2,7 +2,8 @@
 
 #include "../ECS/Pool.h"
 #include "../Components/Components.h"
-#include "./Geometry.h"
+#include "./Face.h"
+#include "../Math/Matrix4x4.h"
 
 
 extern Matrix4x4 g_projectionMatrix;

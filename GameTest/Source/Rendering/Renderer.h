@@ -7,12 +7,12 @@ class Renderer
 {
 private:
     // Screen info
-    const float SCREEN_WIDTH = 1280.0f;
-    const float SCREEN_HEIGHT = 720.0f;
+    const float SCREEN_WIDTH = 1024;
+    const float SCREEN_HEIGHT = 768;
 
     // Projection matrix details
     float fovDeg = 70.0;
-    float zFar = 1000.0f;
+    float zFar = 2000.0f;
     float zNear = 0.1f;
     float aspectRatio = SCREEN_WIDTH / SCREEN_HEIGHT;
 
@@ -22,6 +22,7 @@ private:
     // Face buffers
     int defaultBufferSize = 1000000;
     std::vector<Face> facesToRender;
+    std::vector<std::vector<Face>> internalToThreadFacesToRender;
 
     // Clipping planes
     std::vector<Vec3> clippingPlanePoints;
@@ -29,10 +30,10 @@ private:
 
     // Multi-threading
     const int DEFAULT_THREAD_COUNT = 2; // Steam hardware survey says 0.06% of their users have a single-core cpu. 6+% have a dual-core
-    int threadCount = (std::thread::hardware_concurrency() == 0) ? DEFAULT_THREAD_COUNT : std::thread::hardware_concurrency();
+    const int threadCount = (std::thread::hardware_concurrency() == 0) ? DEFAULT_THREAD_COUNT : std::thread::hardware_concurrency();
     std::vector<std::thread> threads;
 
-    // Used for thread coordination
+    // Thread coordination
     int numThreadsDone = 0;
     long frameNumber = 0;
 

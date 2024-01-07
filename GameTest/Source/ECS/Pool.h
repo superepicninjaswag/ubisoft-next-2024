@@ -17,7 +17,7 @@ public:
     template <typename... Args>
     void Add(int id, Args&&... args);
     T *Get(int id);
-    int Size();
+    size_t Size();
     int MirrorIdToEntityId(int index);
 };
 
@@ -51,7 +51,7 @@ T *Pool<T>::Get(int id)
 }
 
 template <typename T>
-int Pool<T>::Size()
+size_t Pool<T>::Size()
 {
     return _dense.size();
 }

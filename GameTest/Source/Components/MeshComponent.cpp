@@ -2,7 +2,7 @@
 
 #include "MeshComponent.h"
 
-MeshComponent::MeshComponent(int meshResourceId)
+MeshComponent::MeshComponent(int id)
 {
-    this->meshResourceId = meshResourceId;
+    meshResourceId = id;
 }

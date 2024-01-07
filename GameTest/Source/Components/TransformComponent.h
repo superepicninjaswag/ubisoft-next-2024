@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../Util/GameMath.h"
+#include "../Math/Vec3.h"
 
 struct TransformComponent
 {

@@ -1,11 +1,9 @@
 #include "stdafx.h"
 
-#include "Geometry.h"
+#include "Face.h"
 
-Face::Face()
-{
-    
-}
+
+Face::Face() {}
 
 Face::Face(Vec3 p1, Vec3 p2, Vec3 p3)
 {
@@ -63,26 +61,15 @@ std::vector<Face> Face::clipAgainstPlane(Vec3 point, Vec3 normal)
     {
         Vec3 newPoint1 = inside[0].intersectPlane(point, normal, outside[0]);
         output.emplace_back(inside[0], inside[1], newPoint1);
-        output[output.size() - 1].colour.r = 1.0f;
-        output[output.size() - 1].colour.g = .0f;
-        output[output.size() - 1].colour.b = .0f;
 
         Vec3 newPoint2 = inside[1].intersectPlane(point, normal, outside[0]);
         output.emplace_back(inside[1], newPoint1, newPoint2);
-        output[output.size() - 1].colour.r = 1.0f;
-        output[output.size() - 1].colour.g = .0f;
-        output[output.size() - 1].colour.b = .0f;
-
-        //std::cout << newPoint1.x << " | " << newPoint1.y << " | " << newPoint2.x << " | " << newPoint2.y << "\n";
     }
     else if (numInside == 1)
     {
         Vec3 newPoint1 = inside[0].intersectPlane(point, normal, outside[0]);
         Vec3 newPoint2 = inside[0].intersectPlane(point, normal, outside[1]);
         output.emplace_back(inside[0], newPoint1, newPoint2);
-        output[output.size() - 1].colour.r = .0f;
-        output[output.size() - 1].colour.g = 1.0f;
-        output[output.size() - 1].colour.b = .0f;
     }
 
     return output;
