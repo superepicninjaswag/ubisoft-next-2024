@@ -138,11 +138,11 @@ void Renderer::parallelProcessMesh(int threadId)
                 // Calculate face normal
                 Vec3 line1 = faceTransformed.points[1] - faceTransformed.points[0];
                 Vec3 line2 = faceTransformed.points[2] - faceTransformed.points[0];
-                Vec3 normal = line1.CrossProduct(line2);
-                normal.Normalize();
+                Vec3 faceNormal = line1^line2;
+                faceNormal.Normalize();
 
                 // Normal projection onto line from camera to face
-                float faceNormalProjectionOntoCameraRay = normal * (faceTransformed.points[0] - camera);
+                float faceNormalProjectionOntoCameraRay = faceNormal * (faceTransformed.points[0] - camera);
 
                 /*
                 If the projection of the face normal is negative (relative
@@ -263,7 +263,7 @@ void Renderer::setCameraMatrices()
     up = up - (forward * (up * forward));
     up.Normalize();
 
-    right = up.CrossProduct(forward);
+    right = up^forward;
 
     cameraMatrix(0, 0) = right.x;    cameraMatrix(0, 1) = right.y;    cameraMatrix(0, 2) = right.z;    cameraMatrix(0, 3) = 0.0f;
     cameraMatrix(1, 0) = up.x;       cameraMatrix(1, 1) = up.y;       cameraMatrix(1, 2) = up.z;       cameraMatrix(1, 3) = 0.0f;

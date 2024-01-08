@@ -2,17 +2,29 @@
 
 #include "Vec3.h"
 
+
 Vec3::Vec3()
 {
-
+    x = 0.0f;
+    y = 0.0f;
+    z = 0.0f;
+    w = 0.0f;
 }
 
-Vec3::Vec3(float x, float y, float z)
+Vec3::Vec3(float newX, float newY)
 {
-    this->x = x;
-    this->y = y;
-    this->z = z;
-    this->w = 1.0f;
+    x = newX;
+    y = newY;
+    z = 0.0f;
+    w = 0.0f;
+}
+
+Vec3::Vec3(float newX, float newY, float newZ)
+{
+    x = newX;
+    y = newY;
+    z = newZ;
+    w = 1.0f;
 }
 
 Vec3 Vec3::operator+(const Vec3 &i)
@@ -47,6 +59,15 @@ Vec3 Vec3::operator*(const float &i)
     return o;
 }
 
+Vec3 Vec3::operator^(const Vec3& i)
+{
+    Vec3 o;
+    o.x = y * i.z - z * i.y;
+    o.y = z * i.x - x * i.z;
+    o.z = x * i.y - y * i.x;
+    return o;
+}
+
 void Vec3::Normalize()
 {
     float length = sqrtf(x * x + y * y + z * z);
@@ -55,19 +76,14 @@ void Vec3::Normalize()
     z = z / length;
 }
 
-float Vec3::Length()
+float Vec3::Length2D()
 {
-    // Euclidean norm
-    return sqrtf(x*x + y*y + z*z);
+    return sqrtf(x * x + y * y);
 }
 
-Vec3 Vec3::CrossProduct(const Vec3 &input)
+float Vec3::Length3D()
 {
-    Vec3 output;
-    output.x = y*input.z - z*input.y;
-    output.y = z*input.x - x*input.z;
-    output.z = x*input.y - y*input.x;
-    return output;
+    return sqrtf(x * x + y * y + z * z);
 }
 
 Vec3 Vec3::intersectPlane(Vec3 point, Vec3 normal, Vec3 lineEnd)
