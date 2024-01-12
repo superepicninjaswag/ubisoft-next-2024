@@ -29,7 +29,7 @@ void MeshResourceObjLoader(ECS &ecs)
         }
 
         /* I'm going to assume the given .obj files are nice. ie they define vertices before faces */
-        std::vector<Vec3> vertices;
+        std::vector<Vector4> vertices;
         std::vector<Face> faces;
         char leadingCharacter;
         float x, y, z;

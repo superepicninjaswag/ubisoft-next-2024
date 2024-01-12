@@ -13,6 +13,7 @@ jan 06, threaded rendering
 jan 06, ecs using sparse sets and pools for each component
 jan 06, transform, mesh, meshresource components
 jan 06, texture component (just colour information for flat shade and outline)
+jan 08, clean up Vector4 and Matrix4 class
 
 
 LEARNING RESOURCES

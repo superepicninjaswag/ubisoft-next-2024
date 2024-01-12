@@ -5,7 +5,7 @@
 
 Face::Face() {}
 
-Face::Face(Vec3 p1, Vec3 p2, Vec3 p3)
+Face::Face(Vector4 p1, Vector4 p2, Vector4 p3)
 {
     points[0] = p1;
     points[1] = p2;
@@ -14,6 +14,7 @@ Face::Face(Vec3 p1, Vec3 p2, Vec3 p3)
 
 bool Face::operator<(const Face &b) const
 {
+    // Average of z values
     float zSumFaceA = 0.0f;
     float zSumFaceB = 0.0f;
     for(int i = 0; i < 3; i++)
@@ -26,18 +27,18 @@ bool Face::operator<(const Face &b) const
     return zSumFaceA > zSumFaceB;
 }
 
-std::vector<Face> Face::clipAgainstPlane(Vec3 point, Vec3 normal)
+std::vector<Face> Face::clipAgainstPlane(Vector4 point, Vector4 normal)
 {
     normal.Normalize();
 
     // Determine if points are inside or outside
     int numInside = 0;
     float distanceFromPlane[3];
-    std::vector<Vec3> inside;
-    std::vector<Vec3> outside;
+    std::vector<Vector4> inside;
+    std::vector<Vector4> outside;
     for (int i = 0; i < 3; i++)
     {
-        Vec3 temp = points[i];
+        Vector4 temp = points[i];
         distanceFromPlane[i] = normal * temp - normal * point;
         if (distanceFromPlane[i] >= 0)
         {
@@ -59,16 +60,16 @@ std::vector<Face> Face::clipAgainstPlane(Vec3 point, Vec3 normal)
     }
     else if (numInside == 2)
     {
-        Vec3 newPoint1 = inside[0].intersectPlane(point, normal, outside[0]);
+        Vector4 newPoint1 = inside[0].intersectPlane(point, normal, outside[0]);
         output.emplace_back(inside[0], inside[1], newPoint1);
 
-        Vec3 newPoint2 = inside[1].intersectPlane(point, normal, outside[0]);
+        Vector4 newPoint2 = inside[1].intersectPlane(point, normal, outside[0]);
         output.emplace_back(inside[1], newPoint1, newPoint2);
     }
     else if (numInside == 1)
     {
-        Vec3 newPoint1 = inside[0].intersectPlane(point, normal, outside[0]);
-        Vec3 newPoint2 = inside[0].intersectPlane(point, normal, outside[1]);
+        Vector4 newPoint1 = inside[0].intersectPlane(point, normal, outside[0]);
+        Vector4 newPoint2 = inside[0].intersectPlane(point, normal, outside[1]);
         output.emplace_back(inside[0], newPoint1, newPoint2);
     }
 

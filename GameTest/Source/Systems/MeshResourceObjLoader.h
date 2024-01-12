@@ -4,6 +4,6 @@
 #include "../ECS/Pool.h"
 #include "../Components/Components.h"
 #include "../Rendering/Face.h"
-#include "../Math/Vec3.h"
+#include "../Math/Vector4.h"
 
 void MeshResourceObjLoader(ECS &ecs);

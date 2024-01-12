@@ -17,7 +17,7 @@ Renderer g_renderer;
 // Called before first update. Do any initial setup here.
 void Init()
 {
-	/*	If I needed a console for debugging with print lines
+	//*	If I needed a console for debugging with print lines
 	AllocConsole();
 	freopen("CONOUT$", "w", stdout);
 	freopen("CONOUT$", "w", stderr);
@@ -26,7 +26,7 @@ void Init()
 	MeshResourceObjLoader(g_ecs);
 	g_renderer.init(g_ecs);
 
-	int limit = 45;
+	int limit = 2;
 	float gap = 4.0f;
 	Colour red(1.0f, 0.0f, 0.0f);
 	Colour green(0.0f, 1.0f, 0.0f);
@@ -37,11 +37,11 @@ void Init()
 		{
 			int newEntity = g_ecs.GetIDs().CreateId();
 			Pool<MeshComponent>& meshes = g_ecs.GetMeshes();
-			meshes.Add(newEntity, GetModelNumber(g_ecs.GetMeshResources(), "torus"));
+			meshes.Add(newEntity, GetModelNumber(g_ecs.GetMeshResources(), "cube"));
 			Pool<TextureComponent>& textures = g_ecs.GetTextures();
-			if (j % 2 == 0)
+			if (j == 0 && i == 0)
 			{
-				textures.Add(newEntity, red);
+				textures.Add(newEntity, blue);
 			}
 			else
 			{
@@ -50,7 +50,7 @@ void Init()
 			g_ecs.GetTransforms().Add(newEntity);
 			g_ecs.GetTransforms().Get(newEntity)->v.x = gap*(i - (limit / 2.0f) + 0.5f);
 			g_ecs.GetTransforms().Get(newEntity)->v.y = gap*(j - (limit / 2.0f) + 0.5f);
-			g_ecs.GetTransforms().Get(newEntity)->v.z = 6.0f;
+			g_ecs.GetTransforms().Get(newEntity)->v.z = 50.0f;
 		}
 	}
 }
@@ -64,10 +64,10 @@ void Update(float deltaTime)
 	deltaTime = deltaTime * 1.0f / 1000.0f;
 
 	// Set up rotation matrices
-	g_renderer.theta += 1.0f * deltaTime;
+	//g_renderer.theta += 1.0f * deltaTime;
 
 	// Move camera
-	float speed = 50.0f;
+	float speed = 40.0f;
 	if (App::IsKeyPressed('W'))
 	{
 		g_renderer.camera = g_renderer.camera + g_renderer.cameraLookDirection * deltaTime * speed;
@@ -94,11 +94,11 @@ void Update(float deltaTime)
 	}
 	if (App::IsKeyPressed(VK_LEFT))
 	{
-		g_renderer.yaw += speed * deltaTime;
+		g_renderer.yaw += deltaTime;
 	}
 	if (App::IsKeyPressed(VK_RIGHT))
 	{
-		g_renderer.yaw -= speed * deltaTime;
+		g_renderer.yaw -= deltaTime;
 	}
 }
 

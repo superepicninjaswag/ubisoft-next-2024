@@ -12,12 +12,12 @@ private:
 
     // Projection matrix details
     float fovDeg = 70.0;
-    float zFar = 2000.0f;
+    float zFar = 1000.0f;
     float zNear = 0.1f;
     float aspectRatio = SCREEN_WIDTH / SCREEN_HEIGHT;
 
     // Lighting
-    Vec3 lightDirection = Vec3(0.0f, 0.0f, -1.0f);
+    Vector4 lightDirection = Vector4(0.0f, 0.0f, -1.0f);
 
     // Face buffers
     int defaultBufferSize = 1000000;
@@ -25,8 +25,8 @@ private:
     std::vector<std::vector<Face>> internalToThreadFacesToRender;
 
     // Clipping planes
-    std::vector<Vec3> clippingPlanePoints;
-    std::vector<Vec3> clippingPlaneNormals;
+    std::vector<Vector4> clippingPlanePoints;
+    std::vector<Vector4> clippingPlaneNormals;
 
     // Multi-threading
     const int DEFAULT_THREAD_COUNT = 2; // Steam hardware survey says 0.06% of their users have a single-core cpu. 6+% have a dual-core
@@ -50,18 +50,18 @@ private:
 
 public:
     // Camera
-    Vec3 cameraLookDirection = Vec3(0.0f, 0.0f, 1.0f);
-    Vec3 up = Vec3(0.0f, 1.0f, 0.0f);
-    Vec3 right;
-    Vec3 camera = Vec3(0.0f, 0.0f, 0.0f);
+    Vector4 cameraLookDirection = Vector4(0.0f, 0.0f, 1.0f);
+    Vector4 up = Vector4(0.0f, 1.0f, 0.0f);
+    Vector4 right;
+    Vector4 camera = Vector4(0.0f, 0.0f, 0.0f);
     float yaw = 0.0f;
 
 
     float theta = 0;
-    Matrix4x4 cameraAndProjectionMatrix;
-    Matrix4x4 projectionMatrix;
-    Matrix4x4 cameraMatrix;
-    Matrix4x4 inverseCameraMatrix;
+    Matrix4 cameraAndProjectionMatrix;
+    Matrix4 projectionMatrix;
+    Matrix4 cameraMatrix;
+    Matrix4 inverseCameraMatrix;
 
     Renderer();
     void init(ECS& ecs);

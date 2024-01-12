@@ -1,9 +1,9 @@
 #include "stdafx.h"
 
-#include "Vec3.h"
+#include "Vector4.h"
 
 
-Vec3::Vec3()
+Vector4::Vector4()
 {
     x = 0.0f;
     y = 0.0f;
@@ -11,7 +11,7 @@ Vec3::Vec3()
     w = 0.0f;
 }
 
-Vec3::Vec3(float newX, float newY)
+Vector4::Vector4(float newX, float newY)
 {
     x = newX;
     y = newY;
@@ -19,7 +19,7 @@ Vec3::Vec3(float newX, float newY)
     w = 0.0f;
 }
 
-Vec3::Vec3(float newX, float newY, float newZ)
+Vector4::Vector4(float newX, float newY, float newZ)
 {
     x = newX;
     y = newY;
@@ -27,48 +27,48 @@ Vec3::Vec3(float newX, float newY, float newZ)
     w = 1.0f;
 }
 
-Vec3 Vec3::operator+(const Vec3 &i)
+Vector4 Vector4::operator+(const Vector4 &i)
 {
-    Vec3 o;
+    Vector4 o;
     o.x = x + i.x;
     o.y = y + i.y;
     o.z = z + i.z;
     return o;
 }
 
-Vec3 Vec3::operator-(const Vec3 &i)
+Vector4 Vector4::operator-(const Vector4 &i)
 {
-    Vec3 o;
+    Vector4 o;
     o.x = x - i.x;
     o.y = y - i.y;
     o.z = z - i.z;
     return o;
 }
 
-float Vec3::operator*(const Vec3 &i)
+float Vector4::operator*(const Vector4 &i)
 {
     return x*i.x + y*i.y + z*i.z;
 }
 
-Vec3 Vec3::operator*(const float &i)
+Vector4 Vector4::operator*(const float &i)
 {
-    Vec3 o;
+    Vector4 o;
     o.x = x * i;
     o.y = y * i;
     o.z = z * i;
     return o;
 }
 
-Vec3 Vec3::operator^(const Vec3& i)
+Vector4 Vector4::operator^(const Vector4& i)
 {
-    Vec3 o;
+    Vector4 o;
     o.x = y * i.z - z * i.y;
     o.y = z * i.x - x * i.z;
     o.z = x * i.y - y * i.x;
     return o;
 }
 
-void Vec3::Normalize()
+void Vector4::Normalize()
 {
     float length = sqrtf(x * x + y * y + z * z);
     x = x / length;
@@ -76,24 +76,24 @@ void Vec3::Normalize()
     z = z / length;
 }
 
-float Vec3::Length2D()
+float Vector4::Length2D()
 {
     return sqrtf(x * x + y * y);
 }
 
-float Vec3::Length3D()
+float Vector4::Length3D()
 {
     return sqrtf(x * x + y * y + z * z);
 }
 
-Vec3 Vec3::intersectPlane(Vec3 point, Vec3 normal, Vec3 lineEnd)
+Vector4 Vector4::intersectPlane(Vector4 point, Vector4 normal, Vector4 lineEnd)
 {
     normal.Normalize();
     float d = -(point * normal);
     float ad = normal * (*this);
     float bd = normal * lineEnd;
     float t = (-d - ad) / (bd - ad);
-    Vec3 lineStartToEnd = lineEnd - (*this);
-    Vec3 lineToIntersect = lineStartToEnd * t;
+    Vector4 lineStartToEnd = lineEnd - (*this);
+    Vector4 lineToIntersect = lineStartToEnd * t;
     return (*this) + lineToIntersect;
 }

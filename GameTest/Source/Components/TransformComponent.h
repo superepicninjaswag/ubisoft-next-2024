@@ -1,10 +1,10 @@
 #pragma once
 
-#include "../Math/Vec3.h"
+#include "../Math/Vector4.h"
 
 struct TransformComponent
 {
-    Vec3 v;
+    Vector4 v;
 
     TransformComponent();
     TransformComponent(float x, float y, float z);

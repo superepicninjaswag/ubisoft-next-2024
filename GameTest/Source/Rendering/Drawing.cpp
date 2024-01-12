@@ -11,9 +11,9 @@ void drawTriangle(const Face &triangle, const Colour c) {
 }
 
 void drawFilledTriangle(const Face &triangle, const Colour c) {
-    Vec3 top = triangle.points[0];
-    Vec3 mid = triangle.points[1];
-    Vec3 bot = triangle.points[2];
+    Vector4 top = triangle.points[0];
+    Vector4 mid = triangle.points[1];
+    Vector4 bot = triangle.points[2];
 
     // Ignore degen triangles
     if (top.y == mid.y && mid.y == bot.y)
@@ -44,17 +44,17 @@ void drawFilledTriangle(const Face &triangle, const Colour c) {
     float heightMidToTop = top.y - mid.y + 1.0f;
 
     // Bottom half
-    Vec3 dirBottomToTop = top - bot;
-    Vec3 dirBottomToMid = mid - bot;
-    Vec3 dirMidToTop = top - mid;
+    Vector4 dirBottomToTop = top - bot;
+    Vector4 dirBottomToMid = mid - bot;
+    Vector4 dirMidToTop = top - mid;
 
     for (float y = bot.y; y <= mid.y; y = y + 1.0f)
     {
         float coverageBotToTop = (y - bot.y) / heightBottomToTop;
         float coverageBotToMid = (y - bot.y) / heightBottomToMid;
 
-        Vec3 a = bot + dirBottomToTop * coverageBotToTop;
-        Vec3 b = bot + dirBottomToMid * coverageBotToMid;
+        Vector4 a = bot + dirBottomToTop * coverageBotToTop;
+        Vector4 b = bot + dirBottomToMid * coverageBotToMid;
 
         if (a.x > b.x)
         {
@@ -70,8 +70,8 @@ void drawFilledTriangle(const Face &triangle, const Colour c) {
         float coverageBotToTop = (y - bot.y) / heightBottomToTop;
         float coverageMidToTop = (y - mid.y) / heightMidToTop;
 
-        Vec3 a = bot + dirBottomToTop * coverageBotToTop;
-        Vec3 b = mid + dirMidToTop * coverageMidToTop;
+        Vector4 a = bot + dirBottomToTop * coverageBotToTop;
+        Vector4 b = mid + dirMidToTop * coverageMidToTop;
 
         if (a.x > b.x)
         {
