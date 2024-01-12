@@ -49,7 +49,7 @@ void Renderer::Render()
 
     // These matrices are the same for each face in a frame so calculate them once now
     setCameraMatrices();
-    cameraAndProjectionMatrix = inverseCameraMatrix * projectionMatrix;
+    cameraAndProjectionMatrix = projectionMatrix * inverseCameraMatrix;
 
     // Let worker threads know it's time to work on the next frame
     {
@@ -212,11 +212,11 @@ void Renderer::shutdown()
 
 void Renderer::setProjectionMatrix()
 {
-    const float pi = acosf(-1.0);   // cos(pi) = -1 so inverse equals pi
+    const float pi = acosf(-1.0);   // cos(pi) = -1, so inverting gives us pi :D
     const float fovRad = fovDeg * ( pi / 180.0f );
     const float c = 1.0f / tanf(fovRad / 2.0f);
-    projectionMatrix(0, 0) = c * aspectRatio;
-    projectionMatrix(1, 1) = c;
+    projectionMatrix(0, 0) = c;
+    projectionMatrix(1, 1) = c * aspectRatio;
     projectionMatrix(2, 2) = zFar / (zFar - zNear);
     projectionMatrix(2, 3) = -((zFar * zNear) / (zFar - zNear));
     projectionMatrix(3, 2) = 1.0f;
@@ -224,7 +224,7 @@ void Renderer::setProjectionMatrix()
 
 void Renderer::setCameraMatrices()
 {
-    Vector4 cameraTarget = Vector4(0.0f, 0.0f, 1.0f);
+    Vector4 cameraTarget = Vector4(0.0f, 0.0f, -1.0f);
     Matrix4 cameraRotation;
     cameraRotation.rotationY(yaw);
     cameraLookDirection = cameraRotation * cameraTarget;
@@ -252,7 +252,7 @@ void Renderer::setCameraMatrices()
     inverseCameraMatrix(2, 0) = forward.x;  inverseCameraMatrix(2, 1) = forward.y;  inverseCameraMatrix(2, 2) = forward.z;
     inverseCameraMatrix(3, 0) = 0.0f;       inverseCameraMatrix(3, 1) = 0.0f;       inverseCameraMatrix(3, 2) = 0.0f;       inverseCameraMatrix(3, 3) = 1.0f;
 
-    inverseCameraMatrix(0, 3) = 0.0f; //-(right.x * camera.x +      right.y * camera.y +        right.z * camera.z);
-    inverseCameraMatrix(1, 3) = 0.0f; //-(up.x * camera.x +         up.y * camera.y +           up.z * camera.z);
-    inverseCameraMatrix(2, 3) = 0.0f; //-(forward.x * camera.x +    forward.y  * camera.y +     forward.z * camera.z);
+    inverseCameraMatrix(0, 3) = -(right.x * camera.x +      right.y * camera.y +        right.z * camera.z);
+    inverseCameraMatrix(1, 3) = -(up.x * camera.x +         up.y * camera.y +           up.z * camera.z);
+    inverseCameraMatrix(2, 3) = -(forward.x * camera.x +    forward.y  * camera.y +     forward.z * camera.z);
 }
