@@ -127,7 +127,7 @@ void Renderer::parallelProcessMesh(int threadId)
 
             Matrix4 worldMatrix;
             worldMatrix.identity();
-            worldMatrix = rX * rY * rZ * translationMatrix * worldMatrix;
+            worldMatrix = translationMatrix * rX * rY * rZ;
 
             for (auto& f : meshResources.Get(meshResourceId)->faces)
             {
@@ -142,42 +142,57 @@ void Renderer::parallelProcessMesh(int threadId)
                 Vector4 faceNormal = line1^line2;
                 faceNormal.Normalize();
 
-                float faceNormalProjectionOntoCameraRay = faceNormal * (faceTransformed.points[0] - camera);
+                float faceNormalProjectionOntoCameraRay = (faceTransformed.points[0] - camera) * faceNormal;
                 if (faceNormalProjectionOntoCameraRay < 0.0f)
                 {
                     Face faceProjected;
+                    bool zIsTooCloseToZero = false;   // For culling meshes that are too close or behind the camera
                     for (int j = 0; j < 3; j++)
                     {
                         faceProjected.points[j] = cameraAndProjectionMatrix * faceTransformed.points[j];
-                        faceProjected.points[j] = faceProjected.points[j] * (1.0f / faceProjected.points[j].w);
+                        if (faceProjected.points[j].w > zNear)
+                        {
+                            faceProjected.points[j] = faceProjected.points[j] * (1.0f / faceProjected.points[j].w);
+                        }
+                        else
+                        {
+                            zIsTooCloseToZero = true;
+                            break;  // No reason to process the rest of the points.
+                        }
                     }
-
-
-                    // TODO: Clip triangle
-
-                    // Scale from normalized to screen size
-                    for (int k = 0; k < 3; k++)
+                    if (zIsTooCloseToZero)
                     {
-                        faceProjected.points[k].x = (faceProjected.points[k].x + 1.0f) * 0.5f * SCREEN_WIDTH;
-                        faceProjected.points[k].y = (faceProjected.points[k].y + 1.0f) * 0.5f * SCREEN_HEIGHT;
+                        // Onto the next face
+                        // TODO: This is ugly. Think of a better way to do this so I dont have to use a flag
+                        continue;
                     }
 
-                    // Lighting and colour data transfer to face
-                    /*if (meshes._dense[i].isFilled)
+                    // Cull faces according to NDC cube boundaries
+                    if (faceProjected.isWithinNDCCube())
                     {
-                        float dp = normal * lightDirection;
-                        faceProjected.fillColour.r = dp * meshes._dense[i].fillColour.r;
-                        faceProjected.fillColour.g = dp * meshes._dense[i].fillColour.g;
-                        faceProjected.fillColour.b = dp * meshes._dense[i].fillColour.b;
-                        faceProjected.isFilled = true;
-                    }
-                    faceProjected.outlineColour = meshes._dense[i].outlineColour;
-                    */
+                        // Scale from normalized to screen size
+                        for (int k = 0; k < 3; k++)
+                        {
+                            faceProjected.points[k].x = (faceProjected.points[k].x + 1.0f) * 0.5f * SCREEN_WIDTH;
+                            faceProjected.points[k].y = (faceProjected.points[k].y + 1.0f) * 0.5f * SCREEN_HEIGHT;
+                        }
 
-                    // Add face to render queue
-                    faceProjected.entityId = entityId;
-                    internalToThreadFacesToRender[threadId].push_back(faceProjected);
-                    //}
+                        // Lighting and colour data transfer to face
+                        /*if (meshes._dense[i].isFilled)
+                        {
+                            float dp = normal * lightDirection;
+                            faceProjected.fillColour.r = dp * meshes._dense[i].fillColour.r;
+                            faceProjected.fillColour.g = dp * meshes._dense[i].fillColour.g;
+                            faceProjected.fillColour.b = dp * meshes._dense[i].fillColour.b;
+                            faceProjected.isFilled = true;
+                        }
+                        faceProjected.outlineColour = meshes._dense[i].outlineColour;
+                        */
+
+
+                        faceProjected.entityId = entityId;
+                        internalToThreadFacesToRender[threadId].push_back(faceProjected);
+                    }
                 }
             }
         }
@@ -215,16 +230,16 @@ void Renderer::setProjectionMatrix()
     const float pi = acosf(-1.0);   // cos(pi) = -1, so inverting gives us pi :D
     const float fovRad = fovDeg * ( pi / 180.0f );
     const float c = 1.0f / tanf(fovRad / 2.0f);
-    projectionMatrix(0, 0) = c;
-    projectionMatrix(1, 1) = c * aspectRatio;
+    projectionMatrix(0, 0) = c / aspectRatio;
+    projectionMatrix(1, 1) = c;
     projectionMatrix(2, 2) = zFar / (zFar - zNear);
-    projectionMatrix(2, 3) = -((zFar * zNear) / (zFar - zNear));
+    projectionMatrix(2, 3) = -(zFar * zNear) / (zFar - zNear);
     projectionMatrix(3, 2) = 1.0f;
 }
 
 void Renderer::setCameraMatrices()
 {
-    Vector4 cameraTarget = Vector4(0.0f, 0.0f, -1.0f);
+    Vector4 cameraTarget = Vector4(0.0f, 0.0f, 1.0f);
     Matrix4 cameraRotation;
     cameraRotation.rotationY(yaw);
     cameraLookDirection = cameraRotation * cameraTarget;
@@ -236,7 +251,7 @@ void Renderer::setCameraMatrices()
     up = up - (forward * (up * forward));
     up.Normalize();
 
-    right = up^forward;
+    right = up ^ forward;
 
     /*
     We can directly compute the inverse but I'll leave this here for future reference. This is an affine tranform so it can be

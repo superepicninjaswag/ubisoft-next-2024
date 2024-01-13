@@ -17,7 +17,7 @@ Renderer g_renderer;
 // Called before first update. Do any initial setup here.
 void Init()
 {
-	//*	If I needed a console for debugging with print lines
+	/*	If I needed a console for debugging with print lines
 	AllocConsole();
 	freopen("CONOUT$", "w", stdout);
 	freopen("CONOUT$", "w", stderr);
@@ -26,7 +26,7 @@ void Init()
 	MeshResourceObjLoader(g_ecs);
 	g_renderer.init(g_ecs);
 
-	int limit = 2;
+	int limit = 128;
 	float gap = 4.0f;
 	Colour red(1.0f, 0.0f, 0.0f);
 	Colour green(0.0f, 1.0f, 0.0f);
@@ -37,7 +37,7 @@ void Init()
 		{
 			int newEntity = g_ecs.GetIDs().CreateId();
 			Pool<MeshComponent>& meshes = g_ecs.GetMeshes();
-			meshes.Add(newEntity, GetModelNumber(g_ecs.GetMeshResources(), "cube"));
+			meshes.Add(newEntity, GetModelNumber(g_ecs.GetMeshResources(), "cone"));
 			Pool<TextureComponent>& textures = g_ecs.GetTextures();
 			if (j == 0 && i == 0)
 			{
@@ -64,7 +64,7 @@ void Update(float deltaTime)
 	deltaTime = deltaTime * 1.0f / 1000.0f;
 
 	// Set up rotation matrices
-	//g_renderer.theta += 1.0f * deltaTime;
+	g_renderer.theta += 1.0f * deltaTime;
 
 	// Move camera
 	float speed = 40.0f;
@@ -94,11 +94,11 @@ void Update(float deltaTime)
 	}
 	if (App::IsKeyPressed(VK_LEFT))
 	{
-		g_renderer.yaw += deltaTime;
+		g_renderer.yaw -= deltaTime;
 	}
 	if (App::IsKeyPressed(VK_RIGHT))
 	{
-		g_renderer.yaw -= deltaTime;
+		g_renderer.yaw += deltaTime;
 	}
 }
 

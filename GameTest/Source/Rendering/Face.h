@@ -11,5 +11,5 @@ public:
     Face();
     Face(Vector4 p1, Vector4 p2, Vector4 p3);
     bool operator<(const Face &b) const;
-    std::vector<Face> clipAgainstPlane(Vector4 point, Vector4 normal);
+    bool isWithinNDCCube();
 };

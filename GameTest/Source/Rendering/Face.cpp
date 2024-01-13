@@ -27,51 +27,33 @@ bool Face::operator<(const Face &b) const
     return zSumFaceA > zSumFaceB;
 }
 
-std::vector<Face> Face::clipAgainstPlane(Vector4 point, Vector4 normal)
+bool Face::isWithinNDCCube()
 {
-    normal.Normalize();
-
-    // Determine if points are inside or outside
-    int numInside = 0;
-    float distanceFromPlane[3];
-    std::vector<Vector4> inside;
-    std::vector<Vector4> outside;
-    for (int i = 0; i < 3; i++)
+    // Right boundary
+    if (points[0].x > 1.0 && points[1].x > 1.0 && points[2].x > 1.0)
     {
-        Vector4 temp = points[i];
-        distanceFromPlane[i] = normal * temp - normal * point;
-        if (distanceFromPlane[i] >= 0)
-        {
-            numInside++;
-            inside.push_back(points[i]);
-        }
-        else
-        {
-            outside.push_back(points[i]);
-        }
+        return false;
+    }
+    // Top boundary
+    else if (points[0].y > 1.0 && points[1].y > 1.0 && points[2].y > 1.0)
+    {
+        return false;
+    }
+    // Far boundary
+    else if (points[0].z > 1.0 && points[1].z > 1.0 && points[2].z > 1.0)
+    {
+        return false;
+    }
+    // Left boundary
+    else if (points[0].x < -1.0 && points[1].x < -1.0 && points[2].x < -1.0)
+    {
+        return false;
+    }
+    // Bottom boundary
+    else if (points[0].y < -1.0 && points[1].y < -1.0 && points[2].y < -1.0)
+    {
+        return false;
     }
 
-    // Create new triangles
-    std::vector<Face> output;
-
-    if (numInside == 3)
-    {
-        output.push_back(*this);
-    }
-    else if (numInside == 2)
-    {
-        Vector4 newPoint1 = inside[0].intersectPlane(point, normal, outside[0]);
-        output.emplace_back(inside[0], inside[1], newPoint1);
-
-        Vector4 newPoint2 = inside[1].intersectPlane(point, normal, outside[0]);
-        output.emplace_back(inside[1], newPoint1, newPoint2);
-    }
-    else if (numInside == 1)
-    {
-        Vector4 newPoint1 = inside[0].intersectPlane(point, normal, outside[0]);
-        Vector4 newPoint2 = inside[0].intersectPlane(point, normal, outside[1]);
-        output.emplace_back(inside[0], newPoint1, newPoint2);
-    }
-
-    return output;
+    return true;
 }
