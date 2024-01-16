@@ -39,7 +39,8 @@ void Renderer::init(ECS& ecs)
     for (int i = 0; i < threadCount; i++)
     {
         threads.emplace_back(&Renderer::parallelProcessMesh, this, i);
-        internalToThreadFacesToRender.reserve(defaultBufferSize / threadCount);
+        internalToThreadFacesToRender.emplace_back();
+        internalToThreadFacesToRender[i].reserve(defaultBufferSize / threadCount);
     }
 }
 
@@ -146,7 +147,7 @@ void Renderer::parallelProcessMesh(int threadId)
                 if (faceNormalProjectionOntoCameraRay < 0.0f)
                 {
                     Face faceProjected;
-                    bool zIsTooCloseToZero = false;   // For culling meshes that are too close or behind the camera
+                    bool tooCloseOrBehindCamera = false;
                     for (int j = 0; j < 3; j++)
                     {
                         faceProjected.points[j] = cameraAndProjectionMatrix * faceTransformed.points[j];
@@ -156,38 +157,23 @@ void Renderer::parallelProcessMesh(int threadId)
                         }
                         else
                         {
-                            zIsTooCloseToZero = true;
-                            break;  // No reason to process the rest of the points.
+                            tooCloseOrBehindCamera = true;
+                            break;
                         }
                     }
-                    if (zIsTooCloseToZero)
+                    if (tooCloseOrBehindCamera)
                     {
-                        // Onto the next face
-                        // TODO: This is ugly. Think of a better way to do this so I dont have to use a flag
+                        // TODO: This flagging system isn't pleasant to look at.
                         continue;
                     }
 
-                    // Cull faces according to NDC cube boundaries
                     if (faceProjected.isWithinNDCCube())
                     {
-                        // Scale from normalized to screen size
                         for (int k = 0; k < 3; k++)
                         {
                             faceProjected.points[k].x = (faceProjected.points[k].x + 1.0f) * 0.5f * SCREEN_WIDTH;
                             faceProjected.points[k].y = (faceProjected.points[k].y + 1.0f) * 0.5f * SCREEN_HEIGHT;
                         }
-
-                        // Lighting and colour data transfer to face
-                        /*if (meshes._dense[i].isFilled)
-                        {
-                            float dp = normal * lightDirection;
-                            faceProjected.fillColour.r = dp * meshes._dense[i].fillColour.r;
-                            faceProjected.fillColour.g = dp * meshes._dense[i].fillColour.g;
-                            faceProjected.fillColour.b = dp * meshes._dense[i].fillColour.b;
-                            faceProjected.isFilled = true;
-                        }
-                        faceProjected.outlineColour = meshes._dense[i].outlineColour;
-                        */
 
 
                         faceProjected.entityId = entityId;
@@ -197,7 +183,6 @@ void Renderer::parallelProcessMesh(int threadId)
             }
         }
 
-        // How else will the main thread know everything is complete!
         {
             std::lock_guard<std::mutex> numThreadsDoneLock(numThreadsDoneMutex);
             numThreadsDone++;

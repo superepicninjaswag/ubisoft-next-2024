@@ -26,7 +26,7 @@ void Init()
 	MeshResourceObjLoader(g_ecs);
 	g_renderer.init(g_ecs);
 
-	int limit = 128;
+	int limit = 8;
 	float gap = 4.0f;
 	Colour red(1.0f, 0.0f, 0.0f);
 	Colour green(0.0f, 1.0f, 0.0f);
