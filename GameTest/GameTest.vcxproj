@@ -188,7 +188,6 @@
     <ClInclude Include="glut\include\GL\glut.h" />
     <ClInclude Include="Source\Components\Components.h" />
     <ClInclude Include="Source\Components\MeshComponent.h" />
-    <ClInclude Include="Source\Components\MeshResourceComponent.h" />
     <ClInclude Include="Source\Components\TextureComponent.h" />
     <ClInclude Include="Source\Components\TransformComponent.h" />
     <ClInclude Include="Source\ECS\ECS.h" />
@@ -198,11 +197,10 @@
     <ClInclude Include="Source\Rendering\Drawing.h" />
     <ClInclude Include="Source\Rendering\Face.h" />
     <ClInclude Include="Source\Rendering\Renderer.h" />
-    <ClInclude Include="Source\Systems\MeshResourceObjLoader.h" />
+    <ClInclude Include="Source\Rendering\MeshAssetManager.h" />
     <ClInclude Include="Source\Systems\Systems.h" />
     <ClInclude Include="Source\Math\Matrix4.h" />
     <ClInclude Include="Source\Math\Vector4.h" />
-    <ClInclude Include="Source\Util\GetModelNumber.h" />
     <ClInclude Include="stb_image\stb_image.h" />
     <ClInclude Include="Include\stdafx.h" />
     <ClInclude Include="Include\targetver.h" />
@@ -224,10 +222,9 @@
     <ClCompile Include="Source\Rendering\Drawing.cpp" />
     <ClCompile Include="Source\Rendering\Face.cpp" />
     <ClCompile Include="Source\Rendering\Renderer.cpp" />
-    <ClCompile Include="Source\Systems\MeshResourceObjLoader.cpp" />
+    <ClCompile Include="Source\Rendering\MeshAssetManager.cpp" />
     <ClCompile Include="Source\Math\Matrix4.cpp" />
     <ClCompile Include="Source\Math\Vector4.cpp" />
-    <ClCompile Include="Source\Util\GetModelNumber.cpp" />
     <ClCompile Include="stb_image\stb_image.cpp" />
     <ClCompile Include="Include\stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

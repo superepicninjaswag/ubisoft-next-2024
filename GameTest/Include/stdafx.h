@@ -22,6 +22,7 @@
 #include <sstream>
 #include <stdlib.h>
 #include <string>
+#include <unordered_map>
 #include <utility>
 #include <vector>
 

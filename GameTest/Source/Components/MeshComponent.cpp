@@ -2,7 +2,7 @@
 
 #include "MeshComponent.h"
 
-MeshComponent::MeshComponent(int id)
+MeshComponent::MeshComponent(std::string assignedAssetName)
 {
-    meshResourceId = id;
+    assetName = assignedAssetName;
 }

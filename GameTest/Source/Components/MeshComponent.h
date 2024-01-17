@@ -6,7 +6,7 @@
 
 struct MeshComponent
 {
-    int meshResourceId;
+    std::string assetName;
 
-    MeshComponent(int id);
+    MeshComponent(std::string assignedAssetName);
 };

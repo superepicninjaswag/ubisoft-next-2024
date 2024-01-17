@@ -5,13 +5,14 @@
 
 #include "./ECS/ECS.h"
 #include "./Rendering/Renderer.h"
+#include "Rendering/MeshAssetManager.h"
 
 #include "Systems/Systems.h"
-#include "Util/GetModelNumber.h"
 
 
 ECS g_ecs;
-Renderer g_renderer(g_ecs);
+MeshAssetManager g_meshAssetManager;
+Renderer g_renderer(g_ecs, g_meshAssetManager);
 
 
 // Called before first update. Do any initial setup here.
@@ -23,8 +24,15 @@ void Init()
 	freopen("CONOUT$", "w", stderr);
 	//*/
 
-	MeshResourceObjLoader(g_ecs);
 	g_renderer.Init();
+	g_meshAssetManager.LoadMeshAsset("cone");
+	g_meshAssetManager.LoadMeshAsset("cube");
+	g_meshAssetManager.LoadMeshAsset("cylinder");
+	g_meshAssetManager.LoadMeshAsset("icosphere");
+	g_meshAssetManager.LoadMeshAsset("monkey");
+	g_meshAssetManager.LoadMeshAsset("plane");
+	g_meshAssetManager.LoadMeshAsset("torus");
+	g_meshAssetManager.LoadMeshAsset("uvsphere");
 
 	int limit = 8;
 	float gap = 4.0f;
@@ -37,7 +45,7 @@ void Init()
 		{
 			int newEntity = g_ecs.GetIDs().CreateId();
 			Pool<MeshComponent>& meshes = g_ecs.GetMeshes();
-			meshes.Add(newEntity, GetModelNumber(g_ecs.GetMeshResources(), "cone"));
+			meshes.Add(newEntity, "cube");
 			Pool<TextureComponent>& textures = g_ecs.GetTextures();
 			if (j == 0 && i == 0)
 			{

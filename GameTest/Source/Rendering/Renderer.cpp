@@ -2,7 +2,7 @@
 
 #include "Renderer.h"
 
-Renderer::Renderer(ECS &ecsReference) : ecs(ecsReference) {}
+Renderer::Renderer(ECS &ecsReference, MeshAssetManager &mamReference) : ecs(ecsReference), mam(mamReference)  {}
 
 void Renderer::Init()
 {
@@ -61,7 +61,6 @@ void Renderer::Render()
 void Renderer::ParallelProcessMesh(int threadId)
 {
     Pool<MeshComponent>& meshes = ecs.GetMeshes();
-    Pool<MeshResourceComponent>& meshResources = ecs.GetMeshResources();
     Pool<TransformComponent>& transforms = ecs.GetTransforms();
     long frameNumberIWantToProcess = 1;
 
@@ -81,7 +80,7 @@ void Renderer::ParallelProcessMesh(int threadId)
         
         for(int i = threadId; i < meshes.Size(); i = i + threadCount)
         {
-            int meshResourceId = meshes._dense[i].meshResourceId;
+            std::string meshAssetName = meshes._dense[i].assetName;
             int entityId = meshes.MirrorIdToEntityId(i);
 
             Matrix4 rX, rY, rZ, translationMatrix;
@@ -97,7 +96,7 @@ void Renderer::ParallelProcessMesh(int threadId)
             localSpaceToWorldSpaceTransform.identity();
             localSpaceToWorldSpaceTransform = translationMatrix * rX * rY * rZ;
 
-            for (auto& f : meshResources.Get(meshResourceId)->faces)
+            for (auto& f : mam.assets[meshAssetName])
             {
                 Face faceTransformed;
                 for (int j = 0; j < 3; j++)

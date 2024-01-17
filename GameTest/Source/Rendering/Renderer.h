@@ -1,27 +1,27 @@
 #pragma once
 
 #include "../ECS/ECS.h"
+#include "MeshAssetManager.h"
 #include "Drawing.h"
 
 class Renderer
 {
 private:
     ECS &ecs;
+    MeshAssetManager &mam;
+
     const float SCREEN_WIDTH = 1024;
     const float SCREEN_HEIGHT = 768;
 
-    // Projection matrix details
     float fovDeg = 70.0;
     float zFar = 1000.0f;
     float zNear = 0.1f;
     float aspectRatio = SCREEN_WIDTH / SCREEN_HEIGHT;
 
-    // Face buffers
     int DEFAULT_BUFFER_SIZE = 1000000;
     std::vector<Face> renderQueue;
     std::vector<std::vector<Face>> parallelRenderQueues;
 
-    // Multi-threading
     const int DEFAULT_THREAD_COUNT = 2; // Steam hardware survey says 0.06% of their users have a single-core cpu. 6+% have a dual-core
     const int threadCount = (std::thread::hardware_concurrency() == 0) ? DEFAULT_THREAD_COUNT : std::thread::hardware_concurrency();
     std::vector<std::thread> threads;
@@ -37,7 +37,6 @@ private:
     std::condition_variable numThreadsDoneCV;
 
 public:
-    // Camera
     Vector4 cameraLookDirection = Vector4(0.0f, 0.0f, 1.0f);
     Vector4 up = Vector4(0.0f, 1.0f, 0.0f);
     Vector4 right;
@@ -51,7 +50,7 @@ public:
     Matrix4 cameraMatrix;
     Matrix4 worldSpaceToCameraSpaceTransform;
 
-    Renderer(ECS& ecsReference);
+    Renderer(ECS& ecsReference , MeshAssetManager& mamReference);
     void Init();
     void Render();
     void ParallelProcessMesh(int threadId);
