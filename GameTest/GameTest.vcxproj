@@ -192,7 +192,7 @@
     <ClInclude Include="Source\Components\TransformComponent.h" />
     <ClInclude Include="Source\ECS\ECS.h" />
     <ClInclude Include="Source\ECS\IDManager.h" />
-    <ClInclude Include="Source\ECS\Pool.h" />
+    <ClInclude Include="Source\ECS\ComponentPool.h" />
     <ClInclude Include="Source\Rendering\Colour.h" />
     <ClInclude Include="Source\Rendering\Drawing.h" />
     <ClInclude Include="Source\Rendering\Face.h" />

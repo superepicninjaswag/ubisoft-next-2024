@@ -153,7 +153,7 @@ void Idle()
 
 		if (App::IsKeyPressed(APP_QUIT_KEY))
 		{
-			Shutdown();	// SORRY. HAD TO MAKE THIS CHANGE SO THREADS WOULD JOIN ONE CLOSE
+			Shutdown();	// SORRY. HAD TO MAKE THIS CHANGE SO THREADS WOULD JOIN CORRECTLY
 			exit(0);
 		}
 		gUpdateDeltaTime.Start();

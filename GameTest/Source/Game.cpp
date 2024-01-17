@@ -44,9 +44,9 @@ void Init()
 		for (int j = 0; j < limit; j++)
 		{
 			int newEntity = g_ecs.GetIDs().CreateId();
-			Pool<MeshComponent>& meshes = g_ecs.GetMeshes();
+			ComponentPool<MeshComponent>& meshes = g_ecs.GetMeshes();
 			meshes.Add(newEntity, "cube");
-			Pool<TextureComponent>& textures = g_ecs.GetTextures();
+			ComponentPool<TextureComponent>& textures = g_ecs.GetTextures();
 			if (j == 0 && i == 0)
 			{
 				textures.Add(newEntity, blue);

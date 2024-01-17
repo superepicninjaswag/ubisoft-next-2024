@@ -4,7 +4,7 @@
 #include <utility>
 
 template <typename T>
-class Pool
+class ComponentPool
 {
 private:
     std::vector<int> _sparse;
@@ -13,7 +13,7 @@ private:
 public:
     std::vector<T> _dense;
 
-    Pool(): _sparse(65536), _dense(), _mirror(){}
+    ComponentPool(): _sparse(65536), _dense(), _mirror(){}
     template <typename... Args>
     void Add(int id, Args&&... args);
     T *Get(int id);
@@ -23,7 +23,7 @@ public:
 
 template <typename T>
 template <typename... Args>
-void Pool<T>::Add(int id, Args&&... args)
+void ComponentPool<T>::Add(int id, Args&&... args)
 {
     _mirror.push_back(id);
     _dense.emplace_back(std::forward<Args>(args)...);
@@ -31,7 +31,7 @@ void Pool<T>::Add(int id, Args&&... args)
 }
 
 template <typename T>
-T *Pool<T>::Get(int id)
+T *ComponentPool<T>::Get(int id)
 {
     if (id < 0 || id >= _sparse.size())
     {
@@ -51,13 +51,13 @@ T *Pool<T>::Get(int id)
 }
 
 template <typename T>
-size_t Pool<T>::Size()
+size_t ComponentPool<T>::Size()
 {
     return _dense.size();
 }
 
 template <typename T>
-int Pool<T>::MirrorIdToEntityId(int index)
+int ComponentPool<T>::MirrorIdToEntityId(int index)
 {
     return _mirror[index];
 }

@@ -19,7 +19,7 @@ void Renderer::Init()
 
 void Renderer::Render()
 {
-    Pool<TextureComponent>& textures = ecs.GetTextures();
+    ComponentPool<TextureComponent>& textures = ecs.GetTextures();
 
     SetCameraMatrices();
     worldSpaceToClipSpaceTransform = cameraSpaceToClipSpaceTransform * worldSpaceToCameraSpaceTransform;
@@ -60,8 +60,8 @@ void Renderer::Render()
 
 void Renderer::ParallelProcessMesh(int threadId)
 {
-    Pool<MeshComponent>& meshes = ecs.GetMeshes();
-    Pool<TransformComponent>& transforms = ecs.GetTransforms();
+    ComponentPool<MeshComponent>& meshes = ecs.GetMeshes();
+    ComponentPool<TransformComponent>& transforms = ecs.GetTransforms();
     long frameNumberIWantToProcess = 1;
 
 

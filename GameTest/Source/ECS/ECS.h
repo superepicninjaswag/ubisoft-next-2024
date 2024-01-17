@@ -1,7 +1,7 @@
 #pragma once
 
 #include "./IDManager.h"
-#include "./Pool.h"
+#include "./ComponentPool.h"
 #include "../Components/Components.h"
 
 
@@ -9,13 +9,13 @@ class ECS
 {
 private:
     IDManager _ids;
-    Pool<MeshComponent> _meshes;
-    Pool<TransformComponent> _transforms;
-    Pool<TextureComponent> _textures;
+    ComponentPool<MeshComponent> _meshes;
+    ComponentPool<TransformComponent> _transforms;
+    ComponentPool<TextureComponent> _textures;
 public:
     IDManager &GetIDs();
-    Pool<MeshComponent> &GetMeshes();
-    Pool<TextureComponent>& GetTextures();
-    Pool<TransformComponent> &GetTransforms();
+    ComponentPool<MeshComponent> &GetMeshes();
+    ComponentPool<TextureComponent>& GetTextures();
+    ComponentPool<TransformComponent> &GetTransforms();
 };
 

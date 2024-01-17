@@ -7,17 +7,17 @@ IDManager &ECS::GetIDs()
     return _ids;
 }
 
-Pool<MeshComponent> &ECS::GetMeshes()
+ComponentPool<MeshComponent> &ECS::GetMeshes()
 {
     return _meshes;
 }
 
-Pool<TextureComponent>& ECS::GetTextures()
+ComponentPool<TextureComponent>& ECS::GetTextures()
 {
     return _textures;
 }
 
-Pool<TransformComponent> &ECS::GetTransforms()
+ComponentPool<TransformComponent> &ECS::GetTransforms()
 {
     return _transforms;
 }

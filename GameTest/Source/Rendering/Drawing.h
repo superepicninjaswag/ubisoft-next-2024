@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../ECS/Pool.h"
+#include "../ECS/ComponentPool.h"
 #include "../Components/Components.h"
 #include "./Face.h"
 #include "../Math/Matrix4.h"
