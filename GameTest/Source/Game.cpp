@@ -11,7 +11,7 @@
 
 
 ECS g_ecs;
-Renderer g_renderer;
+Renderer g_renderer(g_ecs);
 
 
 // Called before first update. Do any initial setup here.
@@ -24,7 +24,7 @@ void Init()
 	//*/
 
 	MeshResourceObjLoader(g_ecs);
-	g_renderer.init(g_ecs);
+	g_renderer.Init();
 
 	int limit = 8;
 	float gap = 4.0f;
@@ -116,5 +116,5 @@ void Render()
 //------------------------------------------------------------------------
 void Shutdown()
 {
-	g_renderer.shutdown();
+	g_renderer.Shutdown();
 }

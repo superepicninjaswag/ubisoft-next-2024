@@ -22,3 +22,8 @@ TextureComponent::TextureComponent(Colour o, Colour f)
 	fill.g = f.g;
 	fill.b = f.b;
 }
+
+bool TextureComponent::isFilled()
+{
+	return fill.r >= 0.0f && fill.g >= 0.0f && fill.b >= 0.0f;
+}

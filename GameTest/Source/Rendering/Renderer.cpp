@@ -2,109 +2,76 @@
 
 #include "Renderer.h"
 
-Renderer::Renderer() {}
+Renderer::Renderer(ECS &ecsReference) : ecs(ecsReference) {}
 
-void Renderer::init(ECS& ecs)
+void Renderer::Init()
 {
-    //
-    this->ecs = &ecs;
+    SetCameraSpaceToClipSpaceTransform();
+    renderQueue.reserve(DEFAULT_BUFFER_SIZE);
 
-    // Define clipping planes
-    // Bottom
-    clippingPlanePoints.emplace_back(0.0f, -1.0f, 0.0f);
-    clippingPlaneNormals.emplace_back(0.0f, 1.0f, 0.0f);
-
-    // Top
-    clippingPlanePoints.emplace_back(0.0f, 1.0f, 0.0f);
-    clippingPlaneNormals.emplace_back(0.0f, -1.0f, 0.0f);
-
-    // Left
-    clippingPlanePoints.emplace_back(-1.0f, 0.0f, 0.0f);
-    clippingPlaneNormals.emplace_back(1.0f, 0.0f, 0.0f);
-
-    // Right
-    clippingPlanePoints.emplace_back(1.0f, 0.0f, 0.0f);
-    clippingPlaneNormals.emplace_back(-1.0f, 0.0f, 0.0f);
-
-    // Near
-    clippingPlanePoints.emplace_back(0.0f, 0.0f, 1.0f);
-    clippingPlaneNormals.emplace_back(0.0f, 0.0f, -1.0f);
-
-    // Other setup
-    facesToRender.reserve(defaultBufferSize);
-    lightDirection.Normalize();
-    setProjectionMatrix();
-
-    // Create threads
     for (int i = 0; i < threadCount; i++)
     {
-        threads.emplace_back(&Renderer::parallelProcessMesh, this, i);
-        internalToThreadFacesToRender.emplace_back();
-        internalToThreadFacesToRender[i].reserve(defaultBufferSize / threadCount);
+        threads.emplace_back(&Renderer::ParallelProcessMesh, this, i);
+        parallelRenderQueues.emplace_back();
+        parallelRenderQueues[i].reserve(DEFAULT_BUFFER_SIZE / threadCount);
     }
 }
 
 void Renderer::Render()
 {
-    Pool<TextureComponent>& textures = ecs->GetTextures();
+    Pool<TextureComponent>& textures = ecs.GetTextures();
 
-    // These matrices are the same for each face in a frame so calculate them once now
-    setCameraMatrices();
-    cameraAndProjectionMatrix = projectionMatrix * inverseCameraMatrix;
+    SetCameraMatrices();
+    worldSpaceToClipSpaceTransform = cameraSpaceToClipSpaceTransform * worldSpaceToCameraSpaceTransform;
 
-    // Let worker threads know it's time to work on the next frame
     {
         std::lock_guard<std::mutex> frameNumberLock(frameNumberMutex);
         frameNumber++;
     }
     frameNumberCV.notify_one();
 
-    // Wait for threads to finish
     {
         std::unique_lock<std::mutex> numThreadsDoneLock(numThreadsDoneMutex);
         numThreadsDoneCV.wait(numThreadsDoneLock, [this] { return numThreadsDone == threadCount; });
         numThreadsDone = 0;
     }
 
-    // Merge each thread's internal face buffers
     for (int i = 0; i < threadCount; i++)
     {
-        facesToRender.insert(facesToRender.end(), internalToThreadFacesToRender[i].begin(), internalToThreadFacesToRender[i].end());
+        renderQueue.insert(renderQueue.end(), parallelRenderQueues[i].begin(), parallelRenderQueues[i].end());
     }
 
-    // Painter's algorithm because I can't use a z-buffer :(
-    std::sort(facesToRender.begin(), facesToRender.end());
-    for (int i = 0; i < facesToRender.size(); i++)
+    std::sort(renderQueue.begin(), renderQueue.end());
+    for (int i = 0; i < renderQueue.size(); i++)
     {
-        if (textures.Get(facesToRender[i].entityId)->fill.r != -1.0f)
+        if (textures.Get(renderQueue[i].entityId)->isFilled())
         {
-            drawFilledTriangle(facesToRender[i], textures.Get(facesToRender[i].entityId)->fill);
+            drawFilledTriangle(renderQueue[i], textures.Get(renderQueue[i].entityId)->fill);
         }
-        drawTriangle(facesToRender[i], textures.Get(facesToRender[i].entityId)->outline);
+        drawTriangle(renderQueue[i], textures.Get(renderQueue[i].entityId)->outline);
     }
 
-    // I don't want faces from previous frames to linger in the buffers
-    facesToRender.clear();
+    renderQueue.clear();
     for (int i = 0; i < threadCount; i++)
     {
-        internalToThreadFacesToRender[i].clear();
+        parallelRenderQueues[i].clear();
     }
 }
 
-void Renderer::parallelProcessMesh(int threadId)
+void Renderer::ParallelProcessMesh(int threadId)
 {
+    Pool<MeshComponent>& meshes = ecs.GetMeshes();
+    Pool<MeshResourceComponent>& meshResources = ecs.GetMeshResources();
+    Pool<TransformComponent>& transforms = ecs.GetTransforms();
     long frameNumberIWantToProcess = 1;
 
-    Pool<MeshComponent>& meshes = ecs->GetMeshes();
-    Pool<MeshResourceComponent>& meshResources = ecs->GetMeshResources();
-    Pool<TransformComponent>& transforms = ecs->GetTransforms();
 
     while (true)
     {
         {
             std::unique_lock<std::mutex> frameNumberLock(frameNumberMutex);
-            frameNumberCV.wait(frameNumberLock, [this, frameNumberIWantToProcess] { return frameNumber == frameNumberIWantToProcess || frameNumber == -1; });
-            if (frameNumber == -1)
+            frameNumberCV.wait(frameNumberLock, [this, frameNumberIWantToProcess] { return frameNumber == frameNumberIWantToProcess || frameNumber == SHUTDOWN; });
+            if (frameNumber == SHUTDOWN)
             {
                 break;
             }
@@ -126,33 +93,35 @@ void Renderer::parallelProcessMesh(int threadId)
             Vector4 position = transforms.Get(entityId)->v;
             translationMatrix.translation(position.x, position.y, position.z);
 
-            Matrix4 worldMatrix;
-            worldMatrix.identity();
-            worldMatrix = translationMatrix * rX * rY * rZ;
+            Matrix4 localSpaceToWorldSpaceTransform;
+            localSpaceToWorldSpaceTransform.identity();
+            localSpaceToWorldSpaceTransform = translationMatrix * rX * rY * rZ;
 
             for (auto& f : meshResources.Get(meshResourceId)->faces)
             {
                 Face faceTransformed;
                 for (int j = 0; j < 3; j++)
                 {
-                    faceTransformed.points[j] = worldMatrix * f.points[j];
+                    faceTransformed.points[j] = localSpaceToWorldSpaceTransform * f.points[j];
                 }
 
                 Vector4 line1 = faceTransformed.points[1] - faceTransformed.points[0];
                 Vector4 line2 = faceTransformed.points[2] - faceTransformed.points[0];
-                Vector4 faceNormal = line1^line2;
-                faceNormal.Normalize();
+                Vector4 surfaceNormal = line1^line2;
+                surfaceNormal.Normalize();
+                Vector4 cameraToFaceRay = faceTransformed.points[0] - camera;
+                bool facingAwayFromCamera = (cameraToFaceRay * surfaceNormal) >= 0.0f;
 
-                float faceNormalProjectionOntoCameraRay = (faceTransformed.points[0] - camera) * faceNormal;
-                if (faceNormalProjectionOntoCameraRay < 0.0f)
+                if (!facingAwayFromCamera)
                 {
                     Face faceProjected;
                     bool tooCloseOrBehindCamera = false;
                     for (int j = 0; j < 3; j++)
                     {
-                        faceProjected.points[j] = cameraAndProjectionMatrix * faceTransformed.points[j];
+                        faceProjected.points[j] = worldSpaceToClipSpaceTransform * faceTransformed.points[j];
                         if (faceProjected.points[j].w > zNear)
                         {
+                            // This takes us from Clip space to NDC space
                             faceProjected.points[j] = faceProjected.points[j] * (1.0f / faceProjected.points[j].w);
                         }
                         else
@@ -163,7 +132,7 @@ void Renderer::parallelProcessMesh(int threadId)
                     }
                     if (tooCloseOrBehindCamera)
                     {
-                        // TODO: This flagging system isn't pleasant to look at.
+                        // TODO: This flagging system isn't pleasant to look at...
                         continue;
                     }
 
@@ -171,13 +140,14 @@ void Renderer::parallelProcessMesh(int threadId)
                     {
                         for (int k = 0; k < 3; k++)
                         {
+                            // This takes us from NDC space to Screen space
                             faceProjected.points[k].x = (faceProjected.points[k].x + 1.0f) * 0.5f * SCREEN_WIDTH;
                             faceProjected.points[k].y = (faceProjected.points[k].y + 1.0f) * 0.5f * SCREEN_HEIGHT;
                         }
 
 
                         faceProjected.entityId = entityId;
-                        internalToThreadFacesToRender[threadId].push_back(faceProjected);
+                        parallelRenderQueues[threadId].push_back(faceProjected);
                     }
                 }
             }
@@ -190,17 +160,16 @@ void Renderer::parallelProcessMesh(int threadId)
         numThreadsDoneCV.notify_one();
     }
 
-    // You only reach here if it's time to shutdown (frame number == -1), so make sure any other
-    // threads waiting know that the frameNumber has been updated (to -1) so they can also exit
-    // the while loop and join.
+    // You only reach here if it's time to shutdown, so make sure any other
+    // threads waiting know that the frameNumber has been updated
     frameNumberCV.notify_one();
 }
 
-void Renderer::shutdown()
+void Renderer::Shutdown()
 {
     {
         std::lock_guard<std::mutex> guard(frameNumberMutex);
-        frameNumber = -1;
+        frameNumber = SHUTDOWN;
     }
     frameNumberCV.notify_one();
 
@@ -210,19 +179,19 @@ void Renderer::shutdown()
     }
 }
 
-void Renderer::setProjectionMatrix()
+void Renderer::SetCameraSpaceToClipSpaceTransform()
 {
     const float pi = acosf(-1.0);   // cos(pi) = -1, so inverting gives us pi :D
     const float fovRad = fovDeg * ( pi / 180.0f );
     const float c = 1.0f / tanf(fovRad / 2.0f);
-    projectionMatrix(0, 0) = c / aspectRatio;
-    projectionMatrix(1, 1) = c;
-    projectionMatrix(2, 2) = zFar / (zFar - zNear);
-    projectionMatrix(2, 3) = -(zFar * zNear) / (zFar - zNear);
-    projectionMatrix(3, 2) = 1.0f;
+    cameraSpaceToClipSpaceTransform(0, 0) = c / aspectRatio;
+    cameraSpaceToClipSpaceTransform(1, 1) = c;
+    cameraSpaceToClipSpaceTransform(2, 2) = zFar / (zFar - zNear);
+    cameraSpaceToClipSpaceTransform(2, 3) = -(zFar * zNear) / (zFar - zNear);
+    cameraSpaceToClipSpaceTransform(3, 2) = 1.0f;
 }
 
-void Renderer::setCameraMatrices()
+void Renderer::SetCameraMatrices()
 {
     Vector4 cameraTarget = Vector4(0.0f, 0.0f, 1.0f);
     Matrix4 cameraRotation;
@@ -233,6 +202,7 @@ void Renderer::setCameraMatrices()
     Vector4 forward = cameraTarget - camera;
     forward.Normalize();
 
+    // There is a notion of a "world up" and the "camera's up" should be somewhat aligned with that
     up = up - (forward * (up * forward));
     up.Normalize();
 
@@ -247,12 +217,12 @@ void Renderer::setCameraMatrices()
     cameraMatrix(3, 0) = 0.0f;      cameraMatrix(3, 1) = 0.0f;  cameraMatrix(3, 2) = 0.0f;          cameraMatrix(3, 3) = 1.0f;
     */
 
-    inverseCameraMatrix(0, 0) = right.x;    inverseCameraMatrix(0, 1) = right.y;    inverseCameraMatrix(0, 2) = right.z;
-    inverseCameraMatrix(1, 0) = up.x;       inverseCameraMatrix(1, 1) = up.y;       inverseCameraMatrix(1, 2) = up.z;
-    inverseCameraMatrix(2, 0) = forward.x;  inverseCameraMatrix(2, 1) = forward.y;  inverseCameraMatrix(2, 2) = forward.z;
-    inverseCameraMatrix(3, 0) = 0.0f;       inverseCameraMatrix(3, 1) = 0.0f;       inverseCameraMatrix(3, 2) = 0.0f;       inverseCameraMatrix(3, 3) = 1.0f;
+    worldSpaceToCameraSpaceTransform(0, 0) = right.x;    worldSpaceToCameraSpaceTransform(0, 1) = right.y;    worldSpaceToCameraSpaceTransform(0, 2) = right.z;
+    worldSpaceToCameraSpaceTransform(1, 0) = up.x;       worldSpaceToCameraSpaceTransform(1, 1) = up.y;       worldSpaceToCameraSpaceTransform(1, 2) = up.z;
+    worldSpaceToCameraSpaceTransform(2, 0) = forward.x;  worldSpaceToCameraSpaceTransform(2, 1) = forward.y;  worldSpaceToCameraSpaceTransform(2, 2) = forward.z;
+    worldSpaceToCameraSpaceTransform(3, 0) = 0.0f;       worldSpaceToCameraSpaceTransform(3, 1) = 0.0f;       worldSpaceToCameraSpaceTransform(3, 2) = 0.0f;       worldSpaceToCameraSpaceTransform(3, 3) = 1.0f;
 
-    inverseCameraMatrix(0, 3) = -(right.x * camera.x +      right.y * camera.y +        right.z * camera.z);
-    inverseCameraMatrix(1, 3) = -(up.x * camera.x +         up.y * camera.y +           up.z * camera.z);
-    inverseCameraMatrix(2, 3) = -(forward.x * camera.x +    forward.y  * camera.y +     forward.z * camera.z);
+    worldSpaceToCameraSpaceTransform(0, 3) = -(right.x * camera.x +      right.y * camera.y +        right.z * camera.z);
+    worldSpaceToCameraSpaceTransform(1, 3) = -(up.x * camera.x +         up.y * camera.y +           up.z * camera.z);
+    worldSpaceToCameraSpaceTransform(2, 3) = -(forward.x * camera.x +    forward.y  * camera.y +     forward.z * camera.z);
 }

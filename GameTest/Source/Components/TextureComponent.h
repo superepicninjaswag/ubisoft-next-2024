@@ -12,4 +12,6 @@ struct TextureComponent
 
     TextureComponent(Colour o);
     TextureComponent(Colour o, Colour f);
+
+    bool isFilled();
 };

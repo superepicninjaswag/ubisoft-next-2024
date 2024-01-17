@@ -6,7 +6,7 @@
 class Renderer
 {
 private:
-    // Screen info
+    ECS &ecs;
     const float SCREEN_WIDTH = 1024;
     const float SCREEN_HEIGHT = 768;
 
@@ -16,37 +16,25 @@ private:
     float zNear = 0.1f;
     float aspectRatio = SCREEN_WIDTH / SCREEN_HEIGHT;
 
-    // Lighting
-    Vector4 lightDirection = Vector4(0.0f, 0.0f, -1.0f);
-
     // Face buffers
-    int defaultBufferSize = 1000000;
-    std::vector<Face> facesToRender;
-    std::vector<std::vector<Face>> internalToThreadFacesToRender;
-
-    // Clipping planes
-    std::vector<Vector4> clippingPlanePoints;
-    std::vector<Vector4> clippingPlaneNormals;
+    int DEFAULT_BUFFER_SIZE = 1000000;
+    std::vector<Face> renderQueue;
+    std::vector<std::vector<Face>> parallelRenderQueues;
 
     // Multi-threading
     const int DEFAULT_THREAD_COUNT = 2; // Steam hardware survey says 0.06% of their users have a single-core cpu. 6+% have a dual-core
     const int threadCount = (std::thread::hardware_concurrency() == 0) ? DEFAULT_THREAD_COUNT : std::thread::hardware_concurrency();
     std::vector<std::thread> threads;
 
-    // Thread coordination
     int numThreadsDone = 0;
     long frameNumber = 0;
+    const long SHUTDOWN = -1;
 
     std::mutex frameNumberMutex;
     std::condition_variable frameNumberCV;
 
     std::mutex numThreadsDoneMutex;
     std::condition_variable numThreadsDoneCV;
-
-    std::mutex facesToRenderMutex;
-
-    // ECS
-    ECS* ecs;
 
 public:
     // Camera
@@ -58,17 +46,17 @@ public:
 
 
     float theta = 0;
-    Matrix4 cameraAndProjectionMatrix;
-    Matrix4 projectionMatrix;
+    Matrix4 worldSpaceToClipSpaceTransform;
+    Matrix4 cameraSpaceToClipSpaceTransform;
     Matrix4 cameraMatrix;
-    Matrix4 inverseCameraMatrix;
+    Matrix4 worldSpaceToCameraSpaceTransform;
 
-    Renderer();
-    void init(ECS& ecs);
+    Renderer(ECS& ecsReference);
+    void Init();
     void Render();
-    void parallelProcessMesh(int threadId);
-    void shutdown();
+    void ParallelProcessMesh(int threadId);
+    void Shutdown();
 
-    void setProjectionMatrix();
-    void setCameraMatrices();
+    void SetCameraSpaceToClipSpaceTransform();  // Projection Matrix
+    void SetCameraMatrices();
 };
