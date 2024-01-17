@@ -34,6 +34,7 @@
     <ClCompile Include="Source\Components\TextureComponent.cpp" />
     <ClCompile Include="Source\Math\Matrix4.cpp" />
     <ClCompile Include="Source\Rendering\Colour.cpp" />
+    <ClCompile Include="Source\ECS\EntityDescriptor.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Include\stdafx.h" />
@@ -82,6 +83,7 @@
     <ClInclude Include="Source\Components\TextureComponent.h" />
     <ClInclude Include="Source\Math\Matrix4.h" />
     <ClInclude Include="Source\Rendering\Colour.h" />
+    <ClInclude Include="Source\ECS\EntityDescriptor.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="NextAPI">

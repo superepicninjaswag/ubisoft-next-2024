@@ -191,6 +191,7 @@
     <ClInclude Include="Source\Components\TextureComponent.h" />
     <ClInclude Include="Source\Components\TransformComponent.h" />
     <ClInclude Include="Source\ECS\ECS.h" />
+    <ClInclude Include="Source\ECS\EntityDescriptor.h" />
     <ClInclude Include="Source\ECS\IDManager.h" />
     <ClInclude Include="Source\ECS\ComponentPool.h" />
     <ClInclude Include="Source\Rendering\Colour.h" />
@@ -216,6 +217,7 @@
     <ClCompile Include="Source\Components\TextureComponent.cpp" />
     <ClCompile Include="Source\Components\TransformComponent.cpp" />
     <ClCompile Include="Source\ECS\ECS.cpp" />
+    <ClCompile Include="Source\ECS\EntityDescriptor.cpp" />
     <ClCompile Include="Source\ECS\IDManager.cpp" />
     <ClCompile Include="Source\Game.cpp" />
     <ClCompile Include="Source\Rendering\Colour.cpp" />
