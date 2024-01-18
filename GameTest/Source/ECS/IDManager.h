@@ -1,14 +1,16 @@
 #pragma once
 
-#include <vector>
+#include "EntityDescriptor.h"
 
 class IDManager
 {
 private:
-    std::vector<uint32_t> _ids;
-    uint32_t _nextNewID = 0;
-    int _recyclable = 0;
+    std::vector<EntityDescriptor> _descriptors;
+    int _availableForRecycling = 0;
+    EntityDescriptor _next = EntityDescriptor(0, 0);
 public:
+    static const unsigned int ENTITY_LIMIT = 65536;
     IDManager();
-    uint32_t CreateId();
+    EntityDescriptor CreateId();
+    void DeleteId(EntityDescriptor entityToDelete);
 };

@@ -43,7 +43,7 @@ void Init()
 	{
 		for (int j = 0; j < limit; j++)
 		{
-			int newEntity = g_ecs.GetIDs().CreateId();
+			EntityDescriptor newEntity = g_ecs.GetIDs().CreateId();
 			ComponentPool<MeshComponent>& meshes = g_ecs.GetMeshes();
 			meshes.Add(newEntity, "cube");
 			ComponentPool<TextureComponent>& textures = g_ecs.GetTextures();
@@ -56,9 +56,9 @@ void Init()
 				textures.Add(newEntity, green, blue);
 			}
 			g_ecs.GetTransforms().Add(newEntity);
-			g_ecs.GetTransforms().Get(newEntity)->v.x = gap*(i - (limit / 2.0f) + 0.5f);
-			g_ecs.GetTransforms().Get(newEntity)->v.y = gap*(j - (limit / 2.0f) + 0.5f);
-			g_ecs.GetTransforms().Get(newEntity)->v.z = 50.0f;
+			g_ecs.GetTransforms().Get(newEntity.id)->v.x = gap*(i - (limit / 2.0f) + 0.5f);
+			g_ecs.GetTransforms().Get(newEntity.id)->v.y = gap*(j - (limit / 2.0f) + 0.5f);
+			g_ecs.GetTransforms().Get(newEntity.id)->v.z = 50.0f;
 		}
 	}
 }

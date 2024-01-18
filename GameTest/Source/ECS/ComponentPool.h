@@ -1,53 +1,46 @@
 #pragma once
 
-#include <vector>
-#include <utility>
+
+#include "EntityDescriptor.h"
 
 template <typename T>
 class ComponentPool
 {
 private:
-    std::vector<int> _sparse;
-    std::vector<int> _mirror;
-    int nextAvailableIndex = 0;
+    std::vector<unsigned short> _sparse;
+    std::vector<EntityDescriptor> _mirror;
 public:
     std::vector<T> _dense;
 
-    ComponentPool(): _sparse(65536), _dense(), _mirror(){}
+    ComponentPool();
     template <typename... Args>
-    void Add(int id, Args&&... args);
-    T *Get(int id);
+    void Add(EntityDescriptor idToAdd, Args&&... args);
+    T *Get(unsigned short idToGet);
     size_t Size();
-    int MirrorIdToEntityId(int index);
+    EntityDescriptor MirrorIdToEntityId(unsigned short index);
 };
 
-template <typename T>
-template <typename... Args>
-void ComponentPool<T>::Add(int id, Args&&... args)
+
+template<typename T>
+inline ComponentPool<T>::ComponentPool() : _sparse(IDManager::ENTITY_LIMIT)
 {
-    _mirror.push_back(id);
-    _dense.emplace_back(std::forward<Args>(args)...);
-    _sparse[id] = nextAvailableIndex++;
+    _dense.reserve(IDManager::ENTITY_LIMIT);
+    _mirror.reserve(IDManager::ENTITY_LIMIT);
 }
 
 template <typename T>
-T *ComponentPool<T>::Get(int id)
+template <typename... Args>
+void ComponentPool<T>::Add(EntityDescriptor idToAdd, Args&&... args)
 {
-    if (id < 0 || id >= _sparse.size())
-    {
-        // Invalid ID
-        return nullptr;
-    }
-    else if (_mirror[_sparse[id]] == id)
-    {
-        // Found it
-        return &_dense[_sparse[id]];
-    }
-    else
-    {
-        // Entity doesn't have the component
-        return nullptr;
-    }
+    _mirror.push_back(idToAdd);
+    _dense.emplace_back(std::forward<Args>(args)...);
+    _sparse[idToAdd.id] = _dense.size() - 1;
+}
+
+template <typename T>
+T *ComponentPool<T>::Get(unsigned short idToGet)
+{
+    return &_dense[_sparse[idToGet]];
 }
 
 template <typename T>
@@ -57,7 +50,7 @@ size_t ComponentPool<T>::Size()
 }
 
 template <typename T>
-int ComponentPool<T>::MirrorIdToEntityId(int index)
+EntityDescriptor ComponentPool<T>::MirrorIdToEntityId(unsigned short index)
 {
     return _mirror[index];
 }

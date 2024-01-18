@@ -81,7 +81,7 @@ void Renderer::ParallelProcessMesh(int threadId)
         for(int i = threadId; i < meshes.Size(); i = i + threadCount)
         {
             std::string meshAssetName = meshes._dense[i].assetName;
-            int entityId = meshes.MirrorIdToEntityId(i);
+            EntityDescriptor entityId = meshes.MirrorIdToEntityId(i);
 
             Matrix4 rX, rY, rZ, translationMatrix;
 
@@ -89,7 +89,7 @@ void Renderer::ParallelProcessMesh(int threadId)
             rY.rotationY(theta * 0.5f);
             rZ.rotationZ(theta * 0.25f);
 
-            Vector4 position = transforms.Get(entityId)->v;
+            Vector4 position = transforms.Get(entityId.id)->v;
             translationMatrix.translation(position.x, position.y, position.z);
 
             Matrix4 localSpaceToWorldSpaceTransform;
@@ -145,7 +145,7 @@ void Renderer::ParallelProcessMesh(int threadId)
                         }
 
 
-                        faceProjected.entityId = entityId;
+                        faceProjected.entityId = entityId.id;
                         parallelRenderQueues[threadId].push_back(faceProjected);
                     }
                 }

@@ -7,4 +7,5 @@ struct EntityDescriptor
 	unsigned short version;
 
 	EntityDescriptor(unsigned short assignedId, unsigned short assignedVersion);
+	bool operator==(EntityDescriptor descriptorToCompare);
 };
