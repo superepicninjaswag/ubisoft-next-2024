@@ -2,7 +2,4 @@
 
 #include "MeshComponent.h"
 
-MeshComponent::MeshComponent(int assignedAssetCode)
-{
-    assetCode = assignedAssetCode;
-}
+MeshComponent::MeshComponent(std::vector<Face>& assignedMeshData) : meshData(assignedMeshData) {}

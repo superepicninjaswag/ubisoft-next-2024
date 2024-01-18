@@ -1,17 +1,17 @@
 #pragma once
 
 #include "../ECS/ECS.h"
-#include "MeshAssetManager.h"
+#include "MeshLibrary.h"
 #include "Drawing.h"
 
 class Renderer
 {
 private:
     ECS &ecs;
-    MeshAssetManager &mam;
+    MeshLibrary &meshLib;
 
-    const float SCREEN_WIDTH = 1024;
-    const float SCREEN_HEIGHT = 768;
+    const float SCREEN_WIDTH = APP_VIRTUAL_WIDTH;
+    const float SCREEN_HEIGHT = APP_VIRTUAL_HEIGHT;
 
     float fovDeg = 70.0;
     float zFar = 1000.0f;
@@ -50,7 +50,7 @@ public:
     Matrix4 cameraMatrix;
     Matrix4 worldSpaceToCameraSpaceTransform;
 
-    Renderer(ECS& ecsReference , MeshAssetManager& mamReference);
+    Renderer(ECS& ecsReference , MeshLibrary& meshLibraryReference);
     void Init();
     void Render();
     void ParallelProcessMesh(int threadId);

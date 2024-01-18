@@ -4,7 +4,7 @@
 
 struct MeshComponent
 {
-    int assetCode;
+    std::vector<Face> &meshData;
 
-    MeshComponent(int assignedAssetCode);
+    MeshComponent(std::vector<Face>& assignedMeshData);
 };

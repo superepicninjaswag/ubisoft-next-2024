@@ -198,7 +198,7 @@
     <ClInclude Include="Source\Rendering\Drawing.h" />
     <ClInclude Include="Source\Rendering\Face.h" />
     <ClInclude Include="Source\Rendering\Renderer.h" />
-    <ClInclude Include="Source\Rendering\MeshAssetManager.h" />
+    <ClInclude Include="Source\Rendering\MeshLibrary.h" />
     <ClInclude Include="Source\Systems\Systems.h" />
     <ClInclude Include="Source\Math\Matrix4.h" />
     <ClInclude Include="Source\Math\Vector4.h" />
@@ -224,7 +224,7 @@
     <ClCompile Include="Source\Rendering\Drawing.cpp" />
     <ClCompile Include="Source\Rendering\Face.cpp" />
     <ClCompile Include="Source\Rendering\Renderer.cpp" />
-    <ClCompile Include="Source\Rendering\MeshAssetManager.cpp" />
+    <ClCompile Include="Source\Rendering\MeshLibrary.cpp" />
     <ClCompile Include="Source\Math\Matrix4.cpp" />
     <ClCompile Include="Source\Math\Vector4.cpp" />
     <ClCompile Include="stb_image\stb_image.cpp" />
