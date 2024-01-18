@@ -4,7 +4,7 @@
 
 MeshAssetManager::MeshAssetManager() {};
 
-void MeshAssetManager::LoadMeshAsset(std::string assetName)
+void MeshAssetManager::LoadMeshAsset(std::string assetName, int assetCode)
 {
     std::string pathPrefix = "./Assets/Meshes/";
     std::string pathSuffix = ".obj";
@@ -39,6 +39,6 @@ void MeshAssetManager::LoadMeshAsset(std::string assetName)
 
     file.close();
 
-    assets[assetName] = faces;
+    assets[assetCode] = faces;
 }
 

@@ -44,11 +44,11 @@ void Renderer::Render()
     std::sort(renderQueue.begin(), renderQueue.end());
     for (int i = 0; i < renderQueue.size(); i++)
     {
-        if (textures.Get(renderQueue[i].entityId)->isFilled())
+        if (textures.Get(renderQueue[i].entityId).isFilled())
         {
-            drawFilledTriangle(renderQueue[i], textures.Get(renderQueue[i].entityId)->fill);
+            drawFilledTriangle(renderQueue[i], textures.Get(renderQueue[i].entityId).fill);
         }
-        drawTriangle(renderQueue[i], textures.Get(renderQueue[i].entityId)->outline);
+        drawTriangle(renderQueue[i], textures.Get(renderQueue[i].entityId).outline);
     }
 
     renderQueue.clear();
@@ -80,7 +80,7 @@ void Renderer::ParallelProcessMesh(int threadId)
         
         for(int i = threadId; i < meshes.Size(); i = i + threadCount)
         {
-            std::string meshAssetName = meshes._dense[i].assetName;
+            int meshCode = meshes._dense[i].assetCode;
             EntityDescriptor entityId = meshes.MirrorIdToEntityId(i);
 
             Matrix4 rX, rY, rZ, translationMatrix;
@@ -89,14 +89,14 @@ void Renderer::ParallelProcessMesh(int threadId)
             rY.rotationY(theta * 0.5f);
             rZ.rotationZ(theta * 0.25f);
 
-            Vector4 position = transforms.Get(entityId.id)->v;
+            Vector4 position = transforms.Get(entityId.id).v;
             translationMatrix.translation(position.x, position.y, position.z);
 
             Matrix4 localSpaceToWorldSpaceTransform;
             localSpaceToWorldSpaceTransform.identity();
             localSpaceToWorldSpaceTransform = translationMatrix * rX * rY * rZ;
 
-            for (auto& f : mam.assets[meshAssetName])
+            for (auto& f : mam.assets[meshCode])
             {
                 Face faceTransformed;
                 for (int j = 0; j < 3; j++)

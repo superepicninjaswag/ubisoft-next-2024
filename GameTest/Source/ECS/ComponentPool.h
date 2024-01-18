@@ -7,6 +7,7 @@ template <typename T>
 class ComponentPool
 {
 private:
+    unsigned short componentsInPool = 0;
     std::vector<unsigned short> _sparse;
     std::vector<EntityDescriptor> _mirror;
 public:
@@ -15,7 +16,7 @@ public:
     ComponentPool();
     template <typename... Args>
     void Add(EntityDescriptor idToAdd, Args&&... args);
-    T *Get(unsigned short idToGet);
+    T &Get(unsigned short idToGet);
     size_t Size();
     EntityDescriptor MirrorIdToEntityId(unsigned short index);
 };
@@ -34,13 +35,13 @@ void ComponentPool<T>::Add(EntityDescriptor idToAdd, Args&&... args)
 {
     _mirror.push_back(idToAdd);
     _dense.emplace_back(std::forward<Args>(args)...);
-    _sparse[idToAdd.id] = _dense.size() - 1;
+    _sparse[idToAdd.id] = componentsInPool++;
 }
 
 template <typename T>
-T *ComponentPool<T>::Get(unsigned short idToGet)
+T &ComponentPool<T>::Get(unsigned short idToGet)
 {
-    return &_dense[_sparse[idToGet]];
+    return _dense[_sparse[idToGet]];
 }
 
 template <typename T>

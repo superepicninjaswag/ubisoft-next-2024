@@ -15,7 +15,7 @@ private:
 public:
     IDManager &GetIDs();
     ComponentPool<MeshComponent> &GetMeshes();
-    ComponentPool<TextureComponent>& GetTextures();
+    ComponentPool<TextureComponent> &GetTextures();
     ComponentPool<TransformComponent> &GetTransforms();
 };
 

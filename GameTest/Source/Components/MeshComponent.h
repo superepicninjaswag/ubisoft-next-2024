@@ -1,12 +1,10 @@
 #pragma once
 
-#include <string>
-
 #include "../Rendering/Face.h"
 
 struct MeshComponent
 {
-    std::string assetName;
+    int assetCode;
 
-    MeshComponent(std::string assignedAssetName);
+    MeshComponent(int assignedAssetCode);
 };

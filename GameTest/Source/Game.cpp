@@ -25,14 +25,14 @@ void Init()
 	//*/
 
 	g_renderer.Init();
-	g_meshAssetManager.LoadMeshAsset("cone");
-	g_meshAssetManager.LoadMeshAsset("cube");
-	g_meshAssetManager.LoadMeshAsset("cylinder");
-	g_meshAssetManager.LoadMeshAsset("icosphere");
-	g_meshAssetManager.LoadMeshAsset("monkey");
-	g_meshAssetManager.LoadMeshAsset("plane");
-	g_meshAssetManager.LoadMeshAsset("torus");
-	g_meshAssetManager.LoadMeshAsset("uvsphere");
+	g_meshAssetManager.LoadMeshAsset("cone", MeshAssetManager::CONE);
+	g_meshAssetManager.LoadMeshAsset("cube", MeshAssetManager::CUBE);
+	g_meshAssetManager.LoadMeshAsset("cylinder", MeshAssetManager::CYLINDER);
+	g_meshAssetManager.LoadMeshAsset("icosphere", MeshAssetManager::ICOSPHERE);
+	g_meshAssetManager.LoadMeshAsset("monkey", MeshAssetManager::MONKEY);
+	g_meshAssetManager.LoadMeshAsset("plane", MeshAssetManager::PLANE);
+	g_meshAssetManager.LoadMeshAsset("torus", MeshAssetManager::TORUS);
+	g_meshAssetManager.LoadMeshAsset("uvsphere", MeshAssetManager::UVSPHERE);
 
 	int limit = 8;
 	float gap = 4.0f;
@@ -45,7 +45,7 @@ void Init()
 		{
 			EntityDescriptor newEntity = g_ecs.GetIDs().CreateId();
 			ComponentPool<MeshComponent>& meshes = g_ecs.GetMeshes();
-			meshes.Add(newEntity, "cube");
+			meshes.Add(newEntity, MeshAssetManager::CUBE);
 			ComponentPool<TextureComponent>& textures = g_ecs.GetTextures();
 			if (j == 0 && i == 0)
 			{
@@ -56,9 +56,9 @@ void Init()
 				textures.Add(newEntity, green, blue);
 			}
 			g_ecs.GetTransforms().Add(newEntity);
-			g_ecs.GetTransforms().Get(newEntity.id)->v.x = gap*(i - (limit / 2.0f) + 0.5f);
-			g_ecs.GetTransforms().Get(newEntity.id)->v.y = gap*(j - (limit / 2.0f) + 0.5f);
-			g_ecs.GetTransforms().Get(newEntity.id)->v.z = 50.0f;
+			g_ecs.GetTransforms().Get(newEntity.id).v.x = gap*(i - (limit / 2.0f) + 0.5f);
+			g_ecs.GetTransforms().Get(newEntity.id).v.y = gap*(j - (limit / 2.0f) + 0.5f);
+			g_ecs.GetTransforms().Get(newEntity.id).v.z = 50.0f;
 		}
 	}
 }
