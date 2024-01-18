@@ -29,7 +29,7 @@ EntityDescriptor IDManager::CreateId()
     }
     else if (_descriptors.size() < ENTITY_LIMIT)
     {
-        _descriptors.emplace_back(_descriptors.size() - 1, 0);
+        _descriptors.emplace_back(_descriptors.size(), 0);
         return _descriptors.back();
     }
     else
@@ -40,5 +40,15 @@ EntityDescriptor IDManager::CreateId()
 
 void IDManager::DeleteId(EntityDescriptor entityToDelete)
 {
-    return; //TODO: !!!!!!!
+    if (_availableForRecycling == 0)
+    {
+        _next = entityToDelete;
+        _next.version += 1;
+        _availableForRecycling += 1;
+    }
+    else
+    {
+        std::swap(_next, _descriptors[entityToDelete.id]);
+        _next.version += 1;
+    }
 }

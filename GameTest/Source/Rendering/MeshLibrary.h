@@ -8,7 +8,7 @@
 class MeshLibrary
 {
 private:
-    void LoadMeshAsset(std::string assetPath, std::vector<Face>& destination);
+    void LoadMeshAsset(std::string assetPath, std::vector<Face> *destination);
 
 public:
     std::vector<Face> cone;

@@ -80,7 +80,7 @@ void Renderer::ParallelProcessMesh(int threadId)
         
         for(int i = threadId; i < meshes.Size(); i = i + threadCount)
         {
-            EntityDescriptor entityId = meshes.MirrorIdToEntityId(i);
+            EntityDescriptor entityId = meshes.MirrorToEntityDescriptor(i);
 
             Matrix4 rX, rY, rZ, translationMatrix;
 
@@ -95,7 +95,7 @@ void Renderer::ParallelProcessMesh(int threadId)
             localSpaceToWorldSpaceTransform.identity();
             localSpaceToWorldSpaceTransform = translationMatrix * rX * rY * rZ;
 
-            for (auto& f : meshes._dense[i].meshData)
+            for (auto& f : *(meshes._dense[i].meshData))
             {
                 Face faceTransformed;
                 for (int j = 0; j < 3; j++)
