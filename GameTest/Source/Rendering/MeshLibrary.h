@@ -5,21 +5,25 @@
 #include "../Rendering/Face.h"
 #include "../Math/Vector4.h"
 
+
+enum MeshCode
+{
+    CONE,
+    CUBE,
+    CYLINDER,
+    ICOSPHERE,
+    MONKEY,
+    PLANE,
+    TORUS,
+    UVSPHERE
+};
+
 class MeshLibrary
 {
 private:
-    void LoadMeshAsset(std::string assetPath, std::vector<Face> *destination);
-
+    std::vector<std::vector<Face>> meshData;
+    void LoadMeshAsset(std::string assetPath, int meshCode);
 public:
-    std::vector<Face> cone;
-    std::vector<Face> cube;
-    std::vector<Face> cylinder;
-    std::vector<Face> icosphere;
-    std::vector<Face> monkey;
-    std::vector<Face> plane;
-    std::vector<Face> torus;
-    std::vector<Face> uvsphere;
-
-
     MeshLibrary();
+    std::vector<Face>& operator[](int assetCode);
 };

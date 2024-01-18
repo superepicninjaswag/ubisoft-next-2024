@@ -44,11 +44,11 @@ void IDManager::DeleteId(EntityDescriptor entityToDelete)
     {
         _next = entityToDelete;
         _next.version += 1;
-        _availableForRecycling += 1;
     }
     else
     {
         std::swap(_next, _descriptors[entityToDelete.id]);
         _next.version += 1;
     }
+    _availableForRecycling += 1;
 }

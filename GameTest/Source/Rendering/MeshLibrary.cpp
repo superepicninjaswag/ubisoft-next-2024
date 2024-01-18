@@ -2,19 +2,24 @@
 
 #include "MeshLibrary.h"
 
-MeshLibrary::MeshLibrary()
+MeshLibrary::MeshLibrary() : meshData(8)
 {
-    LoadMeshAsset("./Assets/Meshes/cone.obj", &cone);
-    LoadMeshAsset("./Assets/Meshes/cube.obj", &cube);
-    LoadMeshAsset("./Assets/Meshes/cylinder.obj", &cylinder);
-    LoadMeshAsset("./Assets/Meshes/icosphere.obj", &icosphere);
-    LoadMeshAsset("./Assets/Meshes/monkey.obj", &monkey);
-    LoadMeshAsset("./Assets/Meshes/plane.obj", &plane);
-    LoadMeshAsset("./Assets/Meshes/torus.obj", &torus);
-    LoadMeshAsset("./Assets/Meshes/uvsphere.obj", &uvsphere);
-};
+    LoadMeshAsset("./Assets/Meshes/cone.obj", MeshCode::CONE);
+    LoadMeshAsset("./Assets/Meshes/cube.obj", MeshCode::CUBE);
+    LoadMeshAsset("./Assets/Meshes/cylinder.obj", MeshCode::CYLINDER);
+    LoadMeshAsset("./Assets/Meshes/icosphere.obj", MeshCode::ICOSPHERE);
+    LoadMeshAsset("./Assets/Meshes/monkey.obj", MeshCode::MONKEY);
+    LoadMeshAsset("./Assets/Meshes/plane.obj", MeshCode::PLANE);
+    LoadMeshAsset("./Assets/Meshes/torus.obj", MeshCode::TORUS);
+    LoadMeshAsset("./Assets/Meshes/uvsphere.obj", MeshCode::UVSPHERE);
+}
+std::vector<Face>& MeshLibrary::operator[](int assetCode)
+{
+    return meshData[assetCode];
+}
+;
 
-void MeshLibrary::LoadMeshAsset(std::string assetPath, std::vector<Face> *destination)
+void MeshLibrary::LoadMeshAsset(std::string assetPath, int meshCode)
 {
     std::ifstream file(assetPath);
 
@@ -39,7 +44,7 @@ void MeshLibrary::LoadMeshAsset(std::string assetPath, std::vector<Face> *destin
         else if (leadingCharacter == 'f')
         {
             file >> p1 >> p2 >> p3;
-            destination->emplace_back(vertices[p1 - 1], vertices[p2 - 1], vertices[p3 - 1]);
+            meshData[meshCode].emplace_back(vertices[p1 - 1], vertices[p2 - 1], vertices[p3 - 1]);
         }
     }
 

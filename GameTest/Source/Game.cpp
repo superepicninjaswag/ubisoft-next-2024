@@ -15,9 +15,9 @@ MeshLibrary g_MeshLibrary;
 Renderer g_renderer(g_ecs, g_MeshLibrary);
 
 int limit = 3;
+int wow = 0;
 std::default_random_engine rng;
-std::uniform_int_distribution<int> dist(1, limit * limit);
-
+std::uniform_int_distribution<int> dist(1, limit* limit);
 // Called before first update. Do any initial setup here.
 void Init()
 {
@@ -44,7 +44,7 @@ void Init()
 			if (newEntityDescriptor.isValid())
 			{
 				ComponentPool<MeshComponent>& meshes = g_ecs.GetMeshes();
-				meshes.Add(newEntityDescriptor, &g_MeshLibrary.cone);
+				meshes.Add(newEntityDescriptor, MeshCode::CONE);
 
 				ComponentPool<TextureComponent>& textures = g_ecs.GetTextures();
 				textures.Add(newEntityDescriptor, green, blue);
@@ -104,19 +104,23 @@ void Update(float deltaTime)
 		g_renderer.yaw += deltaTime;
 	}
 
-	static int wow = 0;
 	if (App::IsKeyPressed('H'))
 	{
-		int destroyThisOne = (wow++) % (limit * limit);
+		int destroyThisOne = wow % (limit * limit);
 		ComponentPool<MeshComponent>& meshes = g_ecs.GetMeshes();
 		ComponentPool<TextureComponent>& textures = g_ecs.GetTextures();
 		ComponentPool<TransformComponent>& transforms = g_ecs.GetTransforms();
 		EntityDescriptor victim = meshes.MirrorToEntityDescriptor(destroyThisOne);
-		std::cout << destroyThisOne << " | " << victim.id << " | " << victim.version << "\n";
 		bool well = meshes.Delete(victim);
 		bool well2 = textures.Delete(victim);
 		bool well3 = transforms.Delete(victim);
-		g_ecs.GetIDs().DeleteId(victim);
+		if (well && well2 && well3)
+		{
+			std::cout << destroyThisOne << " | " << victim.id << " | " << victim.version << "\n";
+			g_ecs.GetIDs().DeleteId(victim);
+		}
+		//std::cout << wow << "|" << destroyThisOne << "\n";
+		wow = wow + 1;
 	}
 	else if (g_ecs.GetMeshes().Size() < limit * limit)
 	{
@@ -126,7 +130,7 @@ void Update(float deltaTime)
 		Colour blue(0.3f, 0.0f, .5f);
 		EntityDescriptor newEntityDescriptor = g_ecs.GetIDs().CreateId();
 		ComponentPool<MeshComponent>& meshes = g_ecs.GetMeshes();
-		meshes.Add(newEntityDescriptor, &g_MeshLibrary.cone);
+		meshes.Add(newEntityDescriptor, MeshCode::CONE);
 
 		ComponentPool<TextureComponent>& textures = g_ecs.GetTextures();
 		textures.Add(newEntityDescriptor, blue, red);
@@ -135,6 +139,8 @@ void Update(float deltaTime)
 		g_ecs.GetTransforms().Get(newEntityDescriptor.id).v.x = gap * ((dist(rng) % 10) - (limit / 2.0f) + 0.5f);
 		g_ecs.GetTransforms().Get(newEntityDescriptor.id).v.y = gap * ((dist(rng) % 10) - (limit / 2.0f) + 0.5f);
 		g_ecs.GetTransforms().Get(newEntityDescriptor.id).v.z = 40.0f;
+
+		std::cout << "new: " << newEntityDescriptor.id << " | " << newEntityDescriptor.version << "\n";
 	}
 }
 

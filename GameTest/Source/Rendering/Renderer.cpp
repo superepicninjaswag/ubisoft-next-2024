@@ -95,7 +95,7 @@ void Renderer::ParallelProcessMesh(int threadId)
             localSpaceToWorldSpaceTransform.identity();
             localSpaceToWorldSpaceTransform = translationMatrix * rX * rY * rZ;
 
-            for (auto& f : *(meshes._dense[i].meshData))
+            for (auto& f : meshLib[meshes.Get(entityId.id).meshAssetCode])
             {
                 Face faceTransformed;
                 for (int j = 0; j < 3; j++)
