@@ -12,7 +12,12 @@ ComponentPool<MeshComponent> &ECS::GetMeshes()
     return _meshes;
 }
 
-ComponentPool<TextureComponent>& ECS::GetTextures()
+ComponentPool<ParticleComponent> &ECS::GetParticles()
+{
+    return _particles;
+}
+
+ComponentPool<TextureComponent> &ECS::GetTextures()
 {
     return _textures;
 }

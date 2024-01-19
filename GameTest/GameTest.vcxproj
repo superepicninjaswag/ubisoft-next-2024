@@ -188,6 +188,7 @@
     <ClInclude Include="glut\include\GL\glut.h" />
     <ClInclude Include="Source\Components\Components.h" />
     <ClInclude Include="Source\Components\MeshComponent.h" />
+    <ClInclude Include="Source\Components\ParticleComponent.h" />
     <ClInclude Include="Source\Components\TextureComponent.h" />
     <ClInclude Include="Source\Components\TransformComponent.h" />
     <ClInclude Include="Source\ECS\ECS.h" />
@@ -199,6 +200,7 @@
     <ClInclude Include="Source\Rendering\Face.h" />
     <ClInclude Include="Source\Rendering\Renderer.h" />
     <ClInclude Include="Source\Rendering\MeshLibrary.h" />
+    <ClInclude Include="Source\Systems\AnimateParticles.h" />
     <ClInclude Include="Source\Systems\Systems.h" />
     <ClInclude Include="Source\Math\Matrix4.h" />
     <ClInclude Include="Source\Math\Vector4.h" />
@@ -214,6 +216,7 @@
     <ClCompile Include="App\SimpleSound.cpp" />
     <ClCompile Include="App\SimpleSprite.cpp" />
     <ClCompile Include="Source\Components\MeshComponent.cpp" />
+    <ClCompile Include="Source\Components\ParticleComponent.cpp" />
     <ClCompile Include="Source\Components\TextureComponent.cpp" />
     <ClCompile Include="Source\Components\TransformComponent.cpp" />
     <ClCompile Include="Source\ECS\ECS.cpp" />
@@ -227,6 +230,7 @@
     <ClCompile Include="Source\Rendering\MeshLibrary.cpp" />
     <ClCompile Include="Source\Math\Matrix4.cpp" />
     <ClCompile Include="Source\Math\Vector4.cpp" />
+    <ClCompile Include="Source\Systems\AnimateParticles.cpp" />
     <ClCompile Include="stb_image\stb_image.cpp" />
     <ClCompile Include="Include\stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

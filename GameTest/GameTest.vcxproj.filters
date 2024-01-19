@@ -35,6 +35,8 @@
     <ClCompile Include="Source\Math\Matrix4.cpp" />
     <ClCompile Include="Source\Rendering\Colour.cpp" />
     <ClCompile Include="Source\ECS\EntityDescriptor.cpp" />
+    <ClCompile Include="Source\Components\ParticleComponent.cpp" />
+    <ClCompile Include="Source\Systems\AnimateParticles.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Include\stdafx.h" />
@@ -84,6 +86,8 @@
     <ClInclude Include="Source\Math\Matrix4.h" />
     <ClInclude Include="Source\Rendering\Colour.h" />
     <ClInclude Include="Source\ECS\EntityDescriptor.h" />
+    <ClInclude Include="Source\Components\ParticleComponent.h" />
+    <ClInclude Include="Source\Systems\AnimateParticles.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="NextAPI">

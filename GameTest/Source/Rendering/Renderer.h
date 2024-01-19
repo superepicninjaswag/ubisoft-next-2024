@@ -13,7 +13,7 @@ private:
     const float SCREEN_WIDTH = APP_VIRTUAL_WIDTH;
     const float SCREEN_HEIGHT = APP_VIRTUAL_HEIGHT;
 
-    float fovDeg = 70.0;
+    float fovDeg = 90.0;
     float zFar = 1000.0f;
     float zNear = 0.1f;
     float aspectRatio = SCREEN_WIDTH / SCREEN_HEIGHT;

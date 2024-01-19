@@ -26,8 +26,8 @@ void Init()
 
 	g_renderer.Init();
 
-	int limit = 16;
-	float gap = 5.0f;
+	int limit = 1;
+	float gap = 8.0f;
 	Colour red(1.0f, 0.0f, 0.0f);
 	Colour green(0.0f, 1.0f, 0.0f);
 	Colour blue(0.3f, 0.0f, .5f);
@@ -46,12 +46,17 @@ void Init()
 				ComponentPool<TextureComponent>& textures = g_ecs.GetTextures();
 				textures.Add(newEntityDescriptor, green, blue);
 
-				g_ecs.GetTransforms().Add(newEntityDescriptor);
-				g_ecs.GetTransforms().Get(newEntityDescriptor.id).position.x = gap * (i - (limit / 2.0f) + 0.5f);
-				g_ecs.GetTransforms().Get(newEntityDescriptor.id).position.y = gap * (j - (limit / 2.0f) + 0.5f);
-				g_ecs.GetTransforms().Get(newEntityDescriptor.id).position.z = 50.0f;
-				g_ecs.GetTransforms().Get(newEntityDescriptor.id).scale.x = 2.0f;
-				g_ecs.GetTransforms().Get(newEntityDescriptor.id).scale.y = 2.0f;
+				ComponentPool<ParticleComponent>& particles = g_ecs.GetParticles();
+				particles.Add(newEntityDescriptor, 1.0f, 1.0f, 1.0f, 2000);
+
+				ComponentPool<TransformComponent>& transforms = g_ecs.GetTransforms();
+				transforms.Add(newEntityDescriptor);
+				transforms.Get(newEntityDescriptor.id).position.x = gap * (i - (limit / 2.0f) + 0.5f);
+				transforms.Get(newEntityDescriptor.id).position.y = gap * (j - (limit / 2.0f) + 0.5f);
+				transforms.Get(newEntityDescriptor.id).position.z = 50.0f;
+				//g_ecs.GetTransforms().Get(newEntityDescriptor.id).scale.x = 10.0f;
+				//g_ecs.GetTransforms().Get(newEntityDescriptor.id).scale.y = 10.0f;
+				//g_ecs.GetTransforms().Get(newEntityDescriptor.id).scale.z = 10.0f;
 			}
 		}
 	}
@@ -105,6 +110,8 @@ void Update(float deltaTime)
 		EntityDescriptor targetEntity = g_ecs.GetTransforms().MirrorToEntityDescriptor(i);
 		g_ecs.GetTransforms().Get(targetEntity.id).rotation.y += deltaTime;
 	}
+
+	AnimateParticles(g_ecs);
 }
 
 
