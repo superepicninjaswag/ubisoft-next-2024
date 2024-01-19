@@ -70,7 +70,7 @@ void Update(float deltaTime)
 
 
 	playerCamera.UpdatePosition(deltaTime);
-	playerCamera.UpdatePitchAndYaw();
+	playerCamera.UpdatePitchAndYaw(deltaTime);
 	AnimateParticles(g_ecs);
 }
 

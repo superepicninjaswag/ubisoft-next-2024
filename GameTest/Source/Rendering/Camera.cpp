@@ -40,39 +40,44 @@ void Camera::UpdatePosition(float deltaTime)
 
     if (App::IsKeyPressed('W'))
     {
-        position = position + forwardFlattened * deltaTime * speed;
+        position = position + forwardFlattened * deltaTime * SPEED;
     }
     if (App::IsKeyPressed('S'))
     {
-        position = position - forwardFlattened * deltaTime * speed;
+        position = position - forwardFlattened * deltaTime * SPEED;
     }
     if (App::IsKeyPressed('A'))
     {
-        position = position - rightFlattened * deltaTime * speed;
+        position = position - rightFlattened * deltaTime * SPEED;
     }
     if (App::IsKeyPressed('D'))
     {
-        position = position + rightFlattened * deltaTime * speed;
+        position = position + rightFlattened * deltaTime * SPEED;
     }
 }
 
-void Camera::UpdatePitchAndYaw()
+void Camera::UpdatePitchAndYaw(float deltaTime)
 {
-    float oldMouseX = currentMouseX;
-    float oldMouseY = currentMouseY;
+    float borderWidth = 100.0f;
     App::GetMousePos(currentMouseX, currentMouseY);
-    if (oldMouseX != currentMouseX)
+    if (currentMouseX < borderWidth)
     {
-        float deltaX = currentMouseX - oldMouseX;
-        yaw += deltaX * SENSITIVITY * RADIANS_PER_PIXEL;
+        yaw -= RADIANS_PER_SECOND;
     }
-    if (oldMouseY != currentMouseY)
+    else if (currentMouseX > APP_VIRTUAL_WIDTH - borderWidth)
     {
-        float deltaY = currentMouseY - oldMouseY;
-        pitch -= deltaY * SENSITIVITY * RADIANS_PER_PIXEL;
+        yaw += RADIANS_PER_SECOND;
+    }
+    if (currentMouseY < borderWidth)
+    {
+        pitch += RADIANS_PER_SECOND;
+    }
+    else if (currentMouseY > APP_VIRTUAL_HEIGHT - borderWidth)
+    {
+        pitch -= RADIANS_PER_SECOND;
+    }
 
-        // Looking exactly straight up or down causes problems so prevent that
-        float maxPitch = 89.0f * (PI/180.0f);
-        pitch = max(-maxPitch, min(pitch, maxPitch));
-    }
+    // Looking directly up or down mangles the camera frame. This prevents that
+    pitch = min(pitch, MAX_PITCH);
+    pitch = max(-MAX_PITCH, pitch);
 }

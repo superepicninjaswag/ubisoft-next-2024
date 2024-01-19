@@ -7,9 +7,9 @@
 class Camera
 {
 public:
-    float speed = 40.0f;
-    const float SENSITIVITY = 2.0f;
-    const float RADIANS_PER_PIXEL = 0.003;
+    const float SPEED = 40.0f;
+    const float MAX_PITCH = 89.0f * (acosf(-1.0) / 180.0f); // cos(pi) = -1, so inverting gives us pi :D
+    const float RADIANS_PER_SECOND = 0.02;
     float currentMouseX;
     float currentMouseY;
 
@@ -24,5 +24,5 @@ public:
     Camera();
     void UpdateCameraFrame();
     void UpdatePosition(float deltaTime);
-    void UpdatePitchAndYaw();
+    void UpdatePitchAndYaw(float deltaTime);
 };
