@@ -26,7 +26,7 @@ void Init()
 
 	g_renderer.Init();
 
-	int limit = 1;
+	int limit = 8;
 	float gap = 8.0f;
 	Colour red(1.0f, 0.0f, 0.0f);
 	Colour green(0.0f, 1.0f, 0.0f);
@@ -74,35 +74,35 @@ void Update(float deltaTime)
 	float speed = 40.0f;
 	if (App::IsKeyPressed('W'))
 	{
-		g_renderer.camera = g_renderer.camera + g_renderer.cameraLookDirection * deltaTime * speed;
+		g_renderer.mainCamera.position = g_renderer.mainCamera.position + g_renderer.mainCamera.lookDirection * deltaTime * speed;
 	}
 	if (App::IsKeyPressed('S'))
 	{
-		g_renderer.camera = g_renderer.camera - g_renderer.cameraLookDirection * deltaTime * speed;
+		g_renderer.mainCamera.position = g_renderer.mainCamera.position - g_renderer.mainCamera.lookDirection * deltaTime * speed;
 	}
 	if (App::IsKeyPressed('A'))
 	{
-		g_renderer.camera = g_renderer.camera - g_renderer.right * deltaTime * speed;
+		g_renderer.mainCamera.position = g_renderer.mainCamera.position - g_renderer.mainCamera.right * deltaTime * speed;
 	}
 	if (App::IsKeyPressed('D'))
 	{
-		g_renderer.camera = g_renderer.camera + g_renderer.right * deltaTime * speed;
+		g_renderer.mainCamera.position = g_renderer.mainCamera.position + g_renderer.mainCamera.right * deltaTime * speed;
 	}
 	if (App::IsKeyPressed(VK_SPACE))
 	{
-		g_renderer.camera.y += speed * deltaTime;
+		g_renderer.mainCamera.position.y += speed * deltaTime;
 	}
 	if (App::IsKeyPressed(VK_SHIFT))
 	{
-		g_renderer.camera.y -= speed * deltaTime;
+		g_renderer.mainCamera.position.y -= speed * deltaTime;
 	}
 	if (App::IsKeyPressed(VK_LEFT))
 	{
-		g_renderer.yaw -= 1.5f * deltaTime;
+		g_renderer.mainCamera.yaw -= 1.5f * deltaTime;
 	}
 	if (App::IsKeyPressed(VK_RIGHT))
 	{
-		g_renderer.yaw += 1.5f * deltaTime;
+		g_renderer.mainCamera.yaw += 1.5f * deltaTime;
 	}
 
 	for (int i = 0; i < g_ecs.GetTransforms().Size();i++)

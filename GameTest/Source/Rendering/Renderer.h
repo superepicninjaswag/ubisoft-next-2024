@@ -3,6 +3,7 @@
 #include "../ECS/ECS.h"
 #include "MeshLibrary.h"
 #include "Drawing.h"
+#include "Camera.h"
 
 class Renderer
 {
@@ -37,12 +38,7 @@ private:
     std::condition_variable numThreadsDoneCV;
 
 public:
-    Vector4 cameraLookDirection = Vector4(0.0f, 0.0f, 1.0f);
-    Vector4 up = Vector4(0.0f, 1.0f, 0.0f);
-    Vector4 right;
-    Vector4 camera = Vector4(0.0f, 0.0f, 0.0f);
-    float yaw = 0.0f;
-
+    Camera mainCamera;
 
     Matrix4 worldSpaceToClipSpaceTransform;
     Matrix4 cameraSpaceToClipSpaceTransform;

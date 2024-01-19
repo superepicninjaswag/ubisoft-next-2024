@@ -37,6 +37,7 @@
     <ClCompile Include="Source\ECS\EntityDescriptor.cpp" />
     <ClCompile Include="Source\Components\ParticleComponent.cpp" />
     <ClCompile Include="Source\Systems\AnimateParticles.cpp" />
+    <ClCompile Include="Source\Rendering\Camera.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Include\stdafx.h" />
@@ -88,6 +89,7 @@
     <ClInclude Include="Source\ECS\EntityDescriptor.h" />
     <ClInclude Include="Source\Components\ParticleComponent.h" />
     <ClInclude Include="Source\Systems\AnimateParticles.h" />
+    <ClInclude Include="Source\Rendering\Camera.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="NextAPI">

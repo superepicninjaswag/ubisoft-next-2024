@@ -14,7 +14,7 @@ void AnimateParticles(ECS& ecs)
 		{
 			if (particles.Get(targetEntity.id).remainingLifetimeFrames == 0)
 			{
-				// delete
+				ecs.DeleteEntity(targetEntity);
 			}
 			else
 			{

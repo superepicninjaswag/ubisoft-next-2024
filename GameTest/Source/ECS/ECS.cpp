@@ -2,6 +2,15 @@
 
 #include "ECS.h"
 
+void ECS::DeleteEntity(EntityDescriptor entityToDelete)
+{
+    _meshes.Delete(entityToDelete);
+    _particles.Delete(entityToDelete);
+    _textures.Delete(entityToDelete);
+    _transforms.Delete(entityToDelete);
+    _ids.DeleteId(entityToDelete);
+}
+
 IDManager &ECS::GetIDs()
 {
     return _ids;

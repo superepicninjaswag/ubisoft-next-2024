@@ -14,6 +14,7 @@ private:
     ComponentPool<TransformComponent> _transforms;
     ComponentPool<TextureComponent> _textures;
 public:
+    void DeleteEntity(EntityDescriptor entityToDelete);
     IDManager &GetIDs();
     ComponentPool<MeshComponent> &GetMeshes();
     ComponentPool<ParticleComponent> &GetParticles();
