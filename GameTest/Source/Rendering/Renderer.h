@@ -44,7 +44,6 @@ public:
     float yaw = 0.0f;
 
 
-    float theta = 0;
     Matrix4 worldSpaceToClipSpaceTransform;
     Matrix4 cameraSpaceToClipSpaceTransform;
     Matrix4 cameraMatrix;

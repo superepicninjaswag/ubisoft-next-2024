@@ -4,14 +4,30 @@
 
 TransformComponent::TransformComponent()
 {
-    v.x = 0.0f;
-    v.y = 0.0f;
-    v.z = 0.0f;
+    position.x = 0.0f;
+    position.y = 0.0f;
+    position.z = 0.0f;
+
+    scale.x = 1.0f;
+    scale.y = 1.0f;
+    scale.z = 1.0f;
+
+    rotation.x = 0.0f;
+    rotation.y = 0.0f;
+    rotation.z = 0.0f;
 }
 
 TransformComponent::TransformComponent(float x, float y, float z)
 {
-    v.x = x;
-    v.y = y;
-    v.z = z;
+    position.x = x;
+    position.y = y;
+    position.z = z;
+
+    scale.x = 1.0f;
+    scale.y = 1.0f;
+    scale.z = 1.0f;
+
+    rotation.x = 0.0f;
+    rotation.y = 0.0f;
+    rotation.z = 0.0f;
 }

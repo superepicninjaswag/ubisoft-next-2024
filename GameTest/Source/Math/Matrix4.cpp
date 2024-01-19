@@ -9,10 +9,18 @@ Matrix4::Matrix4() : a{ 0 }
 
 void Matrix4::identity()
 {
-    (*this)(0, 0) = 1.0f;
-    (*this)(1, 1) = 1.0f;
-    (*this)(2, 2) = 1.0f;
-    (*this)(3, 3) = 1.0f;
+    a[0][0] = 1.0f;
+    a[1][1] = 1.0f;
+    a[2][2] = 1.0f;
+    a[3][3] = 1.0f;
+}
+
+void Matrix4::scale(const float x, const float y, const float z)
+{
+    a[0][0] = x;
+    a[1][1] = y;
+    a[2][2] = z;
+    a[3][3] = 1.0f;
 }
 
 void Matrix4::rotationX(const float r)

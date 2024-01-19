@@ -14,15 +14,11 @@ ECS g_ecs;
 MeshLibrary g_MeshLibrary;
 Renderer g_renderer(g_ecs, g_MeshLibrary);
 
-int limit = 3;
-int wow = 0;
-std::default_random_engine rng;
-std::uniform_int_distribution<int> dist(1, limit* limit);
+
 // Called before first update. Do any initial setup here.
 void Init()
 {
-	rng.seed(std::random_device{}());
-	//*	If I needed a console for debugging with print lines
+	/*	If I needed a console for debugging with print lines
 	AllocConsole();
 	freopen("CONOUT$", "w", stdout);
 	freopen("CONOUT$", "w", stderr);
@@ -30,7 +26,8 @@ void Init()
 
 	g_renderer.Init();
 
-	float gap = 4.0f;
+	int limit = 16;
+	float gap = 5.0f;
 	Colour red(1.0f, 0.0f, 0.0f);
 	Colour green(0.0f, 1.0f, 0.0f);
 	Colour blue(0.3f, 0.0f, .5f);
@@ -44,15 +41,17 @@ void Init()
 			if (newEntityDescriptor.isValid())
 			{
 				ComponentPool<MeshComponent>& meshes = g_ecs.GetMeshes();
-				meshes.Add(newEntityDescriptor, MeshCode::CONE);
+				meshes.Add(newEntityDescriptor, MeshCode::CUBE);
 
 				ComponentPool<TextureComponent>& textures = g_ecs.GetTextures();
 				textures.Add(newEntityDescriptor, green, blue);
 
 				g_ecs.GetTransforms().Add(newEntityDescriptor);
-				g_ecs.GetTransforms().Get(newEntityDescriptor.id).v.x = gap * (i - (limit / 2.0f) + 0.5f);
-				g_ecs.GetTransforms().Get(newEntityDescriptor.id).v.y = gap * (j - (limit / 2.0f) + 0.5f);
-				g_ecs.GetTransforms().Get(newEntityDescriptor.id).v.z = 50.0f;
+				g_ecs.GetTransforms().Get(newEntityDescriptor.id).position.x = gap * (i - (limit / 2.0f) + 0.5f);
+				g_ecs.GetTransforms().Get(newEntityDescriptor.id).position.y = gap * (j - (limit / 2.0f) + 0.5f);
+				g_ecs.GetTransforms().Get(newEntityDescriptor.id).position.z = 50.0f;
+				g_ecs.GetTransforms().Get(newEntityDescriptor.id).scale.x = 2.0f;
+				g_ecs.GetTransforms().Get(newEntityDescriptor.id).scale.y = 2.0f;
 			}
 		}
 	}
@@ -66,11 +65,8 @@ void Update(float deltaTime)
 	// Convert deltaTime from ms to seconds
 	deltaTime = deltaTime * 1.0f / 1000.0f;
 
-	// Set up rotation matrices
-	g_renderer.theta += 1.0f * deltaTime;
-
 	// Move camera
-	float speed = 100.0f;
+	float speed = 40.0f;
 	if (App::IsKeyPressed('W'))
 	{
 		g_renderer.camera = g_renderer.camera + g_renderer.cameraLookDirection * deltaTime * speed;
@@ -97,50 +93,17 @@ void Update(float deltaTime)
 	}
 	if (App::IsKeyPressed(VK_LEFT))
 	{
-		g_renderer.yaw -= deltaTime;
+		g_renderer.yaw -= 1.5f * deltaTime;
 	}
 	if (App::IsKeyPressed(VK_RIGHT))
 	{
-		g_renderer.yaw += deltaTime;
+		g_renderer.yaw += 1.5f * deltaTime;
 	}
 
-	if (App::IsKeyPressed('H'))
+	for (int i = 0; i < g_ecs.GetTransforms().Size();i++)
 	{
-		int destroyThisOne = wow % (limit * limit);
-		ComponentPool<MeshComponent>& meshes = g_ecs.GetMeshes();
-		ComponentPool<TextureComponent>& textures = g_ecs.GetTextures();
-		ComponentPool<TransformComponent>& transforms = g_ecs.GetTransforms();
-		EntityDescriptor victim = meshes.MirrorToEntityDescriptor(destroyThisOne);
-		bool well = meshes.Delete(victim);
-		bool well2 = textures.Delete(victim);
-		bool well3 = transforms.Delete(victim);
-		if (well && well2 && well3)
-		{
-			std::cout << destroyThisOne << " | " << victim.id << " | " << victim.version << "\n";
-			g_ecs.GetIDs().DeleteId(victim);
-		}
-		//std::cout << wow << "|" << destroyThisOne << "\n";
-		wow = wow + 1;
-	}
-	else if (g_ecs.GetMeshes().Size() < limit * limit)
-	{
-		float gap = 4.0f;
-		Colour red(1.0f, 0.0f, 0.0f);
-		Colour green(0.0f, 1.0f, 0.0f);
-		Colour blue(0.3f, 0.0f, .5f);
-		EntityDescriptor newEntityDescriptor = g_ecs.GetIDs().CreateId();
-		ComponentPool<MeshComponent>& meshes = g_ecs.GetMeshes();
-		meshes.Add(newEntityDescriptor, MeshCode::CONE);
-
-		ComponentPool<TextureComponent>& textures = g_ecs.GetTextures();
-		textures.Add(newEntityDescriptor, blue, red);
-
-		g_ecs.GetTransforms().Add(newEntityDescriptor);
-		g_ecs.GetTransforms().Get(newEntityDescriptor.id).v.x = gap * ((dist(rng) % 10) - (limit / 2.0f) + 0.5f);
-		g_ecs.GetTransforms().Get(newEntityDescriptor.id).v.y = gap * ((dist(rng) % 10) - (limit / 2.0f) + 0.5f);
-		g_ecs.GetTransforms().Get(newEntityDescriptor.id).v.z = 40.0f;
-
-		std::cout << "new: " << newEntityDescriptor.id << " | " << newEntityDescriptor.version << "\n";
+		EntityDescriptor targetEntity = g_ecs.GetTransforms().MirrorToEntityDescriptor(i);
+		g_ecs.GetTransforms().Get(targetEntity.id).rotation.y += deltaTime;
 	}
 }
 

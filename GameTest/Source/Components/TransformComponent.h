@@ -4,7 +4,9 @@
 
 struct TransformComponent
 {
-    Vector4 v;
+    Vector4 position;
+    Vector4 scale;
+    Vector4 rotation;
 
     TransformComponent();
     TransformComponent(float x, float y, float z);

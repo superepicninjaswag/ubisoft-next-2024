@@ -82,18 +82,17 @@ void Renderer::ParallelProcessMesh(int threadId)
         {
             EntityDescriptor entityId = meshes.MirrorToEntityDescriptor(i);
 
-            Matrix4 rX, rY, rZ, translationMatrix;
-
-            rX.rotationX(theta);
-            rY.rotationY(theta * 0.5f);
-            rZ.rotationZ(theta * 0.25f);
-
-            Vector4 position = transforms.Get(entityId.id).v;
-            translationMatrix.translation(position.x, position.y, position.z);
+            TransformComponent faceTransform = transforms.Get(entityId.id);
+            Matrix4 rX, rY, rZ, scaleMatrix, translationMatrix;
+            scaleMatrix.scale(faceTransform.scale.x, faceTransform.scale.y, faceTransform.scale.z);
+            rX.rotationX(faceTransform.rotation.x);
+            rY.rotationY(faceTransform.rotation.y);
+            rZ.rotationZ(faceTransform.rotation.z);
+            translationMatrix.translation(faceTransform.position.x, faceTransform.position.y, faceTransform.position.z);
 
             Matrix4 localSpaceToWorldSpaceTransform;
             localSpaceToWorldSpaceTransform.identity();
-            localSpaceToWorldSpaceTransform = translationMatrix * rX * rY * rZ;
+            localSpaceToWorldSpaceTransform = translationMatrix * rX * rY * rZ * scaleMatrix;
 
             for (auto& f : meshLib[meshes.Get(entityId.id).meshAssetCode])
             {

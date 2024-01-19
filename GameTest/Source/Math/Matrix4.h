@@ -10,6 +10,7 @@ private:
 public:
     Matrix4();
     void identity();
+    void scale(const float x, const float y, const float z);
     void rotationX(const float r);
     void rotationY(const float r);
     void rotationZ(const float r);
