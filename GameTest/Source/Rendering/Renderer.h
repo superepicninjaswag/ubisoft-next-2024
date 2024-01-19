@@ -10,6 +10,7 @@ class Renderer
 private:
     ECS &ecs;
     MeshLibrary &meshLib;
+    Camera &mainCamera;
 
     const float SCREEN_WIDTH = APP_VIRTUAL_WIDTH;
     const float SCREEN_HEIGHT = APP_VIRTUAL_HEIGHT;
@@ -38,14 +39,12 @@ private:
     std::condition_variable numThreadsDoneCV;
 
 public:
-    Camera mainCamera;
-
     Matrix4 worldSpaceToClipSpaceTransform;
     Matrix4 cameraSpaceToClipSpaceTransform;
     Matrix4 cameraMatrix;
     Matrix4 worldSpaceToCameraSpaceTransform;
 
-    Renderer(ECS& ecsReference , MeshLibrary& meshLibraryReference);
+    Renderer(ECS& ecsReference , MeshLibrary& meshLibraryReference, Camera& cameraReference);
     void Init();
     void Render();
     void ParallelProcessMesh(int threadId);

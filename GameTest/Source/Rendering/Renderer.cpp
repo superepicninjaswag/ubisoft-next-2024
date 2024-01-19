@@ -2,10 +2,11 @@
 
 #include "Renderer.h"
 
-Renderer::Renderer(ECS &ecsReference, MeshLibrary &meshLibraryReference) : ecs(ecsReference), meshLib(meshLibraryReference)  {}
+Renderer::Renderer(ECS& ecsReference, MeshLibrary& meshLibraryReference, Camera& cameraReference) : ecs(ecsReference), meshLib(meshLibraryReference), mainCamera(cameraReference)  {}
 
 void Renderer::Init()
 {
+    mainCamera.position.y = 14.0f;
     SetCameraSpaceToClipSpaceTransform();
     renderQueue.reserve(DEFAULT_BUFFER_SIZE);
 
@@ -116,7 +117,7 @@ void Renderer::ParallelProcessMesh(int threadId)
                     for (int j = 0; j < 3; j++)
                     {
                         faceProjected.points[j] = worldSpaceToClipSpaceTransform * faceTransformed.points[j];
-                        if (faceProjected.points[j].w > zNear)
+                        if (faceProjected.points[j].w > zNear/2)
                         {
                             // This takes us from Clip space to NDC space
                             faceProjected.points[j] = faceProjected.points[j] * (1.0f / faceProjected.points[j].w);

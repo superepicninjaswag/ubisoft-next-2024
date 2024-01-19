@@ -2,17 +2,15 @@ My submission for the Ubisoft Toronto Next 2024 Programming Challenge :)
 
 NOTE: My game does not account for window resizing. If you do so, the filled triangles will no longer be 100% filled and the game will look strange.
 
-TODO:
-Entity id upgrade
-Entity deletion
-Particle system
-Physics
-UI
-Level loading
-Entity factory
+ENGINE FEATURES:
+Multi-threaded 3D renderer
+ECS
+Object pools and sparse sets for components
+AI navigation
+Simple 3D physics and collision
 
 
-LEARNING RESOURCES
+LEARNING RESOURCES:
 
 "www.google.com", helpful website for finding solutions to arbitrary problems ;)
 

@@ -12,7 +12,8 @@
 
 ECS g_ecs;
 MeshLibrary g_MeshLibrary;
-Renderer g_renderer(g_ecs, g_MeshLibrary);
+Camera playerCamera;
+Renderer g_renderer(g_ecs, g_MeshLibrary, playerCamera);
 
 
 // Called before first update. Do any initial setup here.
@@ -25,38 +26,35 @@ void Init()
 	//*/
 
 	g_renderer.Init();
+	playerCamera.position.y = 16.0f;
 
-	int limit = 8;
-	float gap = 8.0f;
-	Colour red(1.0f, 0.0f, 0.0f);
-	Colour green(0.0f, 1.0f, 0.0f);
-	Colour blue(0.3f, 0.0f, .5f);
-	int count = 0;
-	for (int i = 0; i < limit; i++)
+	// Create Ground
+	const int ENVIRONMENT_LENGTH = 90;
+	const int ENVIRONMENT_WIDTH = 30;
+	const int GROUND_PLANE_SCALE = 5;
+	const float GAP = 2 * GROUND_PLANE_SCALE;
+	for (int i = 0; i < ENVIRONMENT_LENGTH; i++)
 	{
-		for (int j = 0; j < limit; j++)
+		for (int j = 0; j < ENVIRONMENT_WIDTH; j++)
 		{
+			Colour brown(0.54509803921f, 0.27058823529f, 0.07450980392f);
+			Colour white(1.0f, 1.0f, 1.0f);
+			Colour blue(0.3f, 0.0f, .5f);
 			EntityDescriptor newEntityDescriptor = g_ecs.GetIDs().CreateId();
-
 			if (newEntityDescriptor.isValid())
 			{
 				ComponentPool<MeshComponent>& meshes = g_ecs.GetMeshes();
-				meshes.Add(newEntityDescriptor, MeshCode::CUBE);
+				meshes.Add(newEntityDescriptor, MeshCode::PLANE);
 
 				ComponentPool<TextureComponent>& textures = g_ecs.GetTextures();
-				textures.Add(newEntityDescriptor, green, blue);
-
-				ComponentPool<ParticleComponent>& particles = g_ecs.GetParticles();
-				particles.Add(newEntityDescriptor, 1.0f, 1.0f, 1.0f, 2000);
+				textures.Add(newEntityDescriptor, white, brown);
 
 				ComponentPool<TransformComponent>& transforms = g_ecs.GetTransforms();
 				transforms.Add(newEntityDescriptor);
-				transforms.Get(newEntityDescriptor.id).position.x = gap * (i - (limit / 2.0f) + 0.5f);
-				transforms.Get(newEntityDescriptor.id).position.y = gap * (j - (limit / 2.0f) + 0.5f);
-				transforms.Get(newEntityDescriptor.id).position.z = 50.0f;
-				//g_ecs.GetTransforms().Get(newEntityDescriptor.id).scale.x = 10.0f;
-				//g_ecs.GetTransforms().Get(newEntityDescriptor.id).scale.y = 10.0f;
-				//g_ecs.GetTransforms().Get(newEntityDescriptor.id).scale.z = 10.0f;
+				transforms.Get(newEntityDescriptor.id).position.x = GAP * (j - (ENVIRONMENT_WIDTH / 2.0f) + 0.5f);
+				transforms.Get(newEntityDescriptor.id).position.z = GAP * (i - (ENVIRONMENT_LENGTH / 2.0f) + 0.5f);
+				transforms.Get(newEntityDescriptor.id).scale.x = GROUND_PLANE_SCALE;
+				transforms.Get(newEntityDescriptor.id).scale.z = GROUND_PLANE_SCALE;
 			}
 		}
 	}
@@ -67,50 +65,12 @@ void Init()
 // This will be called at no greater frequency than the value of APP_MAX_FRAME_RATE
 void Update(float deltaTime)
 {
-	// Convert deltaTime from ms to seconds
+	// I like seconds instead of milliseconds
 	deltaTime = deltaTime * 1.0f / 1000.0f;
 
-	// Move camera
-	float speed = 40.0f;
-	if (App::IsKeyPressed('W'))
-	{
-		g_renderer.mainCamera.position = g_renderer.mainCamera.position + g_renderer.mainCamera.lookDirection * deltaTime * speed;
-	}
-	if (App::IsKeyPressed('S'))
-	{
-		g_renderer.mainCamera.position = g_renderer.mainCamera.position - g_renderer.mainCamera.lookDirection * deltaTime * speed;
-	}
-	if (App::IsKeyPressed('A'))
-	{
-		g_renderer.mainCamera.position = g_renderer.mainCamera.position - g_renderer.mainCamera.right * deltaTime * speed;
-	}
-	if (App::IsKeyPressed('D'))
-	{
-		g_renderer.mainCamera.position = g_renderer.mainCamera.position + g_renderer.mainCamera.right * deltaTime * speed;
-	}
-	if (App::IsKeyPressed(VK_SPACE))
-	{
-		g_renderer.mainCamera.position.y += speed * deltaTime;
-	}
-	if (App::IsKeyPressed(VK_SHIFT))
-	{
-		g_renderer.mainCamera.position.y -= speed * deltaTime;
-	}
-	if (App::IsKeyPressed(VK_LEFT))
-	{
-		g_renderer.mainCamera.yaw -= 1.5f * deltaTime;
-	}
-	if (App::IsKeyPressed(VK_RIGHT))
-	{
-		g_renderer.mainCamera.yaw += 1.5f * deltaTime;
-	}
 
-	for (int i = 0; i < g_ecs.GetTransforms().Size();i++)
-	{
-		EntityDescriptor targetEntity = g_ecs.GetTransforms().MirrorToEntityDescriptor(i);
-		g_ecs.GetTransforms().Get(targetEntity.id).rotation.y += deltaTime;
-	}
-
+	playerCamera.UpdatePosition(deltaTime);
+	playerCamera.UpdatePitchAndYaw();
 	AnimateParticles(g_ecs);
 }
 
