@@ -6,6 +6,7 @@ void ECS::DeleteEntity(EntityDescriptor entityToDelete)
 {
     _meshes.Delete(entityToDelete);
     _particles.Delete(entityToDelete);
+    _physicsBodies.Delete(entityToDelete);
     _textures.Delete(entityToDelete);
     _transforms.Delete(entityToDelete);
     _sphereColliders.Delete(entityToDelete);
@@ -25,6 +26,11 @@ ComponentPool<MeshComponent>& ECS::GetMeshes()
 ComponentPool<ParticleComponent>& ECS::GetParticles()
 {
     return _particles;
+}
+
+ComponentPool<PhysicsBodyComponent>& ECS::GetPhysicsBodies()
+{
+    return _physicsBodies;
 }
 
 ComponentPool<SphereColliderComponent>& ECS::GetSphereColliders()
