@@ -186,6 +186,7 @@
     <ClInclude Include="glut\include\GL\freeglut_ext.h" />
     <ClInclude Include="glut\include\GL\freeglut_std.h" />
     <ClInclude Include="glut\include\GL\glut.h" />
+    <ClInclude Include="Source\Components\PhysicsBodyComponent.h" />
     <ClInclude Include="Source\Components\SphereColliderComponent.h" />
     <ClInclude Include="Source\Components\Components.h" />
     <ClInclude Include="Source\Components\MeshComponent.h" />
@@ -222,6 +223,7 @@
     <ClCompile Include="App\SimpleController.cpp" />
     <ClCompile Include="App\SimpleSound.cpp" />
     <ClCompile Include="App\SimpleSprite.cpp" />
+    <ClCompile Include="Source\Components\PhysicsBodyComponent.cpp" />
     <ClCompile Include="Source\Components\SphereColliderComponent.cpp" />
     <ClCompile Include="Source\Components\MeshComponent.cpp" />
     <ClCompile Include="Source\Components\ParticleComponent.cpp" />

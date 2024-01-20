@@ -92,6 +92,11 @@ void Init()
 
 		ComponentPool<SphereColliderComponent>& spheres = g_ecs.GetSphereColliders();
 		spheres.Add(newEntityDescriptor, 1.0f);
+
+		g_ecs.GetPhysicsBodies().Add(newEntityDescriptor);
+		g_ecs.GetPhysicsBodies().Get(newEntityDescriptor.id).SetMass(1.0f);
+		g_ecs.GetPhysicsBodies().Get(newEntityDescriptor.id).SetGravity(9.0f);
+		g_ecs.GetPhysicsBodies().Get(newEntityDescriptor.id).SetDamping(.99f);
 	}
 }
 
@@ -105,11 +110,22 @@ void Update(float deltaTime)
 
 	MovePlayer(g_ecs, player, mainCamera.forward, mainCamera.right, 40.0f, deltaTime);
 	AnimateParticles(g_ecs);
-	// Physics update
+
+	ComponentPool<PhysicsBodyComponent>& bodies = g_ecs.GetPhysicsBodies();
+	ComponentPool<TransformComponent>& transforms = g_ecs.GetTransforms();
+	for (int i = 0; i < bodies.Size(); i++)
+	{
+		EntityDescriptor target = bodies.MirrorToEntityDescriptor(i);
+		bodies.Get(target.id).Integrate(deltaTime, transforms.Get(target.id).position);
+	}
+	
+	
 	DetectCollisions(g_ecs, contactQueue);
 	ResolveCollisions(g_ecs, contactQueue);
 	mainCamera.UpdatePosition(g_ecs.GetTransforms().Get(player.id).position);
 	mainCamera.UpdatePitchAndYaw(deltaTime);
+
+	std::this_thread::sleep_for(std::chrono::milliseconds(10));
 }
 
 

@@ -4,14 +4,16 @@
 struct Vector4
 {
 public:
-    float x = 0.0f;
-    float y = 0.0f;
-    float z = 0.0f;
-    float w = 1.0f;
+    float x;
+    float y;
+    float z;
+    float w;
 
-    Vector4 operator+(const Vector4&i);
-    Vector4 operator-(const Vector4&i);
-    Vector4 operator*(const float &i); // Scalar multiplication
+    Vector4 operator+(const Vector4& i);
+    void operator+=(const Vector4& i);
+    Vector4 operator-(const Vector4& i);
+    Vector4 operator*(const float& i); // Scalar multiplication
+    void operator*=(const float& i);
     float operator*(const Vector4& i); // Dot product
     Vector4 operator^(const Vector4& i);  // Cross product
 

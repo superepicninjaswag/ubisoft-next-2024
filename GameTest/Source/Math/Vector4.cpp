@@ -36,6 +36,13 @@ Vector4 Vector4::operator+(const Vector4 &i)
     return o;
 }
 
+void Vector4::operator+=(const Vector4& i)
+{
+    x += i.x;
+    y += i.y;
+    z += i.z;
+}
+
 Vector4 Vector4::operator-(const Vector4 &i)
 {
     Vector4 o;
@@ -48,6 +55,13 @@ Vector4 Vector4::operator-(const Vector4 &i)
 float Vector4::operator*(const Vector4 &i)
 {
     return x*i.x + y*i.y + z*i.z;
+}
+
+void Vector4::operator*=(const float& i)
+{
+    x *= i;
+    y *= i;
+    z *= i;
 }
 
 Vector4 Vector4::operator*(const float &i)

@@ -43,6 +43,7 @@
     <ClCompile Include="Source\Physics\DetectCollisions.cpp" />
     <ClCompile Include="Source\Physics\Contact.cpp" />
     <ClCompile Include="Source\Physics\ResolveCollisions.cpp" />
+    <ClCompile Include="Source\Components\PhysicsBodyComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Include\stdafx.h" />
@@ -101,6 +102,7 @@
     <ClInclude Include="Source\Physics\Physics.h" />
     <ClInclude Include="Source\Physics\Contact.h" />
     <ClInclude Include="Source\Physics\ResolveCollisions.h" />
+    <ClInclude Include="Source\Components\PhysicsBodyComponent.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="NextAPI">
