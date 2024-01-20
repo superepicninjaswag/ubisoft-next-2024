@@ -1,4 +1,5 @@
 #pragma once
 
-#include "Collision.h"
+#include "Contact.h"
 #include "DetectCollisions.h"
+#include "ResolveCollisions.h"

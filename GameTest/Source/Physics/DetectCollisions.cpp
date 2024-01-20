@@ -2,7 +2,7 @@
 
 #include "DetectCollisions.h"
 
-void DetectCollisions(ECS& ecs, std::vector<Collision>& collisionQueue)
+void DetectCollisions(ECS& ecs, std::vector<Contact>& contactQueue)
 {
 	ComponentPool<SphereColliderComponent>& spheres = ecs.GetSphereColliders();
 	ComponentPool<TransformComponent>& transforms = ecs.GetTransforms();
@@ -28,7 +28,7 @@ void DetectCollisions(ECS& ecs, std::vector<Collision>& collisionQueue)
 
 				if (dist2 <= radiusSum * radiusSum)
 				{
-					collisionQueue.emplace_back(colliderA, colliderB);
+					contactQueue.emplace_back(colliderA, colliderB);
 				}
 			}
 		}

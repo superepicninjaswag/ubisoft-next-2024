@@ -41,7 +41,8 @@
     <ClCompile Include="Source\Components\SphereColliderComponent.cpp" />
     <ClCompile Include="Source\Systems\MovePlayer.cpp" />
     <ClCompile Include="Source\Physics\DetectCollisions.cpp" />
-    <ClCompile Include="Source\Physics\Collision.cpp" />
+    <ClCompile Include="Source\Physics\Contact.cpp" />
+    <ClCompile Include="Source\Physics\ResolveCollisions.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Include\stdafx.h" />
@@ -98,7 +99,8 @@
     <ClInclude Include="Source\Systems\MovePlayer.h" />
     <ClInclude Include="Source\Physics\DetectCollisions.h" />
     <ClInclude Include="Source\Physics\Physics.h" />
-    <ClInclude Include="Source\Physics\Collision.h" />
+    <ClInclude Include="Source\Physics\Contact.h" />
+    <ClInclude Include="Source\Physics\ResolveCollisions.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="NextAPI">

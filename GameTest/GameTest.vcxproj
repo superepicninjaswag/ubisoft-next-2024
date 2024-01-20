@@ -196,9 +196,10 @@
     <ClInclude Include="Source\ECS\EntityDescriptor.h" />
     <ClInclude Include="Source\ECS\IDManager.h" />
     <ClInclude Include="Source\ECS\ComponentPool.h" />
-    <ClInclude Include="Source\Physics\Collision.h" />
+    <ClInclude Include="Source\Physics\Contact.h" />
     <ClInclude Include="Source\Physics\DetectCollisions.h" />
     <ClInclude Include="Source\Physics\Physics.h" />
+    <ClInclude Include="Source\Physics\ResolveCollisions.h" />
     <ClInclude Include="Source\Rendering\Camera.h" />
     <ClInclude Include="Source\Rendering\Colour.h" />
     <ClInclude Include="Source\Rendering\Drawing.h" />
@@ -230,8 +231,9 @@
     <ClCompile Include="Source\ECS\EntityDescriptor.cpp" />
     <ClCompile Include="Source\ECS\IDManager.cpp" />
     <ClCompile Include="Source\Game.cpp" />
-    <ClCompile Include="Source\Physics\Collision.cpp" />
+    <ClCompile Include="Source\Physics\Contact.cpp" />
     <ClCompile Include="Source\Physics\DetectCollisions.cpp" />
+    <ClCompile Include="Source\Physics\ResolveCollisions.cpp" />
     <ClCompile Include="Source\Rendering\Camera.cpp" />
     <ClCompile Include="Source\Rendering\Colour.cpp" />
     <ClCompile Include="Source\Rendering\Drawing.cpp" />

@@ -2,10 +2,10 @@
 
 #include "../ECS/EntityDescriptor.h"
 
-struct Collision
+struct Contact
 {
 	EntityDescriptor m_entityA;
 	EntityDescriptor m_entityB;
 
-	Collision(const EntityDescriptor entityA, const EntityDescriptor entityB);
+	Contact(const EntityDescriptor entityA, const EntityDescriptor entityB);
 };

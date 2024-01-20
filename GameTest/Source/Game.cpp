@@ -15,7 +15,7 @@ ECS g_ecs;
 MeshLibrary g_MeshLibrary;
 Camera mainCamera;
 Renderer g_renderer(g_ecs, g_MeshLibrary, mainCamera);
-std::vector<Collision> collisionQueue;
+std::vector<Contact> contactQueue;
 EntityDescriptor player = g_ecs.GetIDs().CreateId();
 
 
@@ -69,6 +69,9 @@ void Init()
 		}
 	}
 
+	// Create walls
+
+
 	// Create ball
 	EntityDescriptor newEntityDescriptor = g_ecs.GetIDs().CreateId();
 	if (newEntityDescriptor.isValid())
@@ -103,8 +106,8 @@ void Update(float deltaTime)
 	MovePlayer(g_ecs, player, mainCamera.forward, mainCamera.right, 40.0f, deltaTime);
 	AnimateParticles(g_ecs);
 	// Physics update
-	DetectCollisions(g_ecs, collisionQueue);
-	// Collision resolution
+	DetectCollisions(g_ecs, contactQueue);
+	ResolveCollisions(g_ecs, contactQueue);
 	mainCamera.UpdatePosition(g_ecs.GetTransforms().Get(player.id).position);
 	mainCamera.UpdatePitchAndYaw(deltaTime);
 }
