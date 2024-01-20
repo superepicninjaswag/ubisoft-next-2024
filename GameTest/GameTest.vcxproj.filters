@@ -38,6 +38,8 @@
     <ClCompile Include="Source\Components\ParticleComponent.cpp" />
     <ClCompile Include="Source\Systems\AnimateParticles.cpp" />
     <ClCompile Include="Source\Rendering\Camera.cpp" />
+    <ClCompile Include="Source\Components\SphereColliderComponent.cpp" />
+    <ClCompile Include="Source\Systems\MovePlayer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Include\stdafx.h" />
@@ -90,6 +92,8 @@
     <ClInclude Include="Source\Components\ParticleComponent.h" />
     <ClInclude Include="Source\Systems\AnimateParticles.h" />
     <ClInclude Include="Source\Rendering\Camera.h" />
+    <ClInclude Include="Source\Components\SphereColliderComponent.h" />
+    <ClInclude Include="Source\Systems\MovePlayer.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="NextAPI">

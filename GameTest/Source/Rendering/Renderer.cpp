@@ -6,7 +6,6 @@ Renderer::Renderer(ECS& ecsReference, MeshLibrary& meshLibraryReference, Camera&
 
 void Renderer::Init()
 {
-    mainCamera.position.y = 14.0f;
     SetCameraSpaceToClipSpaceTransform();
     renderQueue.reserve(DEFAULT_BUFFER_SIZE);
 
@@ -107,7 +106,7 @@ void Renderer::ParallelProcessMesh(int threadId)
                 Vector4 line2 = faceTransformed.points[2] - faceTransformed.points[0];
                 Vector4 surfaceNormal = line1^line2;
                 surfaceNormal.Normalize();
-                Vector4 cameraToFaceRay = faceTransformed.points[0] - mainCamera.position;
+                Vector4 cameraToFaceRay = faceTransformed.points[0] - mainCamera.m_position;
                 bool facingAwayFromCamera = (cameraToFaceRay * surfaceNormal) >= 0.0f;
 
                 if (!facingAwayFromCamera)
@@ -207,7 +206,7 @@ void Renderer::SetCameraMatrices()
     worldSpaceToCameraSpaceTransform(2, 0) = mainCamera.forward.x;  worldSpaceToCameraSpaceTransform(2, 1) = mainCamera.forward.y;  worldSpaceToCameraSpaceTransform(2, 2) = mainCamera.forward.z;
     worldSpaceToCameraSpaceTransform(3, 0) = 0.0f;       worldSpaceToCameraSpaceTransform(3, 1) = 0.0f;       worldSpaceToCameraSpaceTransform(3, 2) = 0.0f;       worldSpaceToCameraSpaceTransform(3, 3) = 1.0f;
 
-    worldSpaceToCameraSpaceTransform(0, 3) = -(mainCamera.right.x   * mainCamera.position.x  +  mainCamera.right.y   * mainCamera.position.y  +  mainCamera.right.z   * mainCamera.position.z);
-    worldSpaceToCameraSpaceTransform(1, 3) = -(mainCamera.up.x      * mainCamera.position.x  +  mainCamera.up.y      * mainCamera.position.y  +  mainCamera.up.z      * mainCamera.position.z);
-    worldSpaceToCameraSpaceTransform(2, 3) = -(mainCamera.forward.x * mainCamera.position.x  +  mainCamera.forward.y * mainCamera.position.y  +  mainCamera.forward.z * mainCamera.position.z);
+    worldSpaceToCameraSpaceTransform(0, 3) = -(mainCamera.right.x   * mainCamera.m_position.x  +  mainCamera.right.y   * mainCamera.m_position.y  +  mainCamera.right.z   * mainCamera.m_position.z);
+    worldSpaceToCameraSpaceTransform(1, 3) = -(mainCamera.up.x      * mainCamera.m_position.x  +  mainCamera.up.y      * mainCamera.m_position.y  +  mainCamera.up.z      * mainCamera.m_position.z);
+    worldSpaceToCameraSpaceTransform(2, 3) = -(mainCamera.forward.x * mainCamera.m_position.x  +  mainCamera.forward.y * mainCamera.m_position.y  +  mainCamera.forward.z * mainCamera.m_position.z);
 }

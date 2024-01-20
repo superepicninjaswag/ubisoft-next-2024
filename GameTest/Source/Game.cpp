@@ -12,8 +12,9 @@
 
 ECS g_ecs;
 MeshLibrary g_MeshLibrary;
-Camera playerCamera;
-Renderer g_renderer(g_ecs, g_MeshLibrary, playerCamera);
+Camera mainCamera;
+Renderer g_renderer(g_ecs, g_MeshLibrary, mainCamera);
+EntityDescriptor player = g_ecs.GetIDs().CreateId();
 
 
 // Called before first update. Do any initial setup here.
@@ -26,7 +27,11 @@ void Init()
 	//*/
 
 	g_renderer.Init();
-	playerCamera.position.y = 16.0f;
+
+	// Create Player
+	ComponentPool<TransformComponent>& transforms = g_ecs.GetTransforms();
+	transforms.Add(player);
+	transforms.Get(player.id).position.y = 16.0f;
 
 	// Create Ground
 	const int ENVIRONMENT_LENGTH = 90;
@@ -44,7 +49,7 @@ void Init()
 			if (newEntityDescriptor.isValid())
 			{
 				ComponentPool<MeshComponent>& meshes = g_ecs.GetMeshes();
-				meshes.Add(newEntityDescriptor, MeshCode::PLANE);
+				meshes.Add(newEntityDescriptor, MeshLibrary::PLANE);
 
 				ComponentPool<TextureComponent>& textures = g_ecs.GetTextures();
 				textures.Add(newEntityDescriptor, white, brown);
@@ -58,6 +63,28 @@ void Init()
 			}
 		}
 	}
+
+	// Create ball
+	EntityDescriptor newEntityDescriptor = g_ecs.GetIDs().CreateId();
+	if (newEntityDescriptor.isValid())
+	{
+		Colour white(1.0f, 1.0f, 1.0f);
+		Colour purple(0.3f, 0.0f, .5f);
+
+		ComponentPool<MeshComponent>& meshes = g_ecs.GetMeshes();
+		meshes.Add(newEntityDescriptor, MeshLibrary::ICOSPHERE);
+
+		ComponentPool<TextureComponent>& textures = g_ecs.GetTextures();
+		textures.Add(newEntityDescriptor, white, purple);
+
+		ComponentPool<TransformComponent>& transforms = g_ecs.GetTransforms();
+		transforms.Add(newEntityDescriptor);
+		transforms.Get(newEntityDescriptor.id).position.z = 15.0f;
+		transforms.Get(newEntityDescriptor.id).position.y = 15.0f;
+
+		ComponentPool<SphereColliderComponent>& spheres = g_ecs.GetSphereColliders();
+		spheres.Add(newEntityDescriptor, 1.0f);
+	}
 }
 
 
@@ -68,9 +95,9 @@ void Update(float deltaTime)
 	// I like seconds instead of milliseconds
 	deltaTime = deltaTime * 1.0f / 1000.0f;
 
-
-	playerCamera.UpdatePosition(deltaTime);
-	playerCamera.UpdatePitchAndYaw(deltaTime);
+	MovePlayer(g_ecs, player, mainCamera.forward, mainCamera.right, 40.0f, deltaTime);
+	mainCamera.UpdatePosition(g_ecs.GetTransforms().Get(player.id).position);
+	mainCamera.UpdatePitchAndYaw(deltaTime);
 	AnimateParticles(g_ecs);
 }
 

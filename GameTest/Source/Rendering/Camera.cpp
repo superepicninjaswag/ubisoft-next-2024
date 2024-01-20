@@ -10,50 +10,27 @@ Camera::Camera()
 void Camera::UpdateCameraFrame()
 {
     Matrix4 yawRotation;
-    yawRotation.rotationY(yaw);
+    yawRotation.rotationY(m_yaw);
     Matrix4 pitchRotation;
-    pitchRotation.rotationX(pitch);
+    pitchRotation.rotationX(m_pitch);
 
     Vector4 target = Vector4(0.0f, 0.0f, 1.0f);
-    lookDirection = yawRotation * (pitchRotation * target);
-    target = position + lookDirection;
+    m_lookDirection = yawRotation * (pitchRotation * target);
+    target = m_position + m_lookDirection;
 
-    forward = target - position;
+    forward = target - m_position;
     forward.Normalize();
 
-    right = worldUp ^ forward;
+    right = m_worldUp ^ forward;
     right.Normalize();
 
     up = forward ^ right;
     up.Normalize();
 }
 
-void Camera::UpdatePosition(float deltaTime)
+void Camera::UpdatePosition(Vector4 position)
 {
-    Vector4 forwardFlattened = lookDirection;
-    forwardFlattened.y = 0.0f;
-    forwardFlattened.Normalize();
-
-    Vector4 rightFlattened = right;
-    rightFlattened.y = 0.0f;
-    rightFlattened.Normalize();
-
-    if (App::IsKeyPressed('W'))
-    {
-        position = position + forwardFlattened * deltaTime * SPEED;
-    }
-    if (App::IsKeyPressed('S'))
-    {
-        position = position - forwardFlattened * deltaTime * SPEED;
-    }
-    if (App::IsKeyPressed('A'))
-    {
-        position = position - rightFlattened * deltaTime * SPEED;
-    }
-    if (App::IsKeyPressed('D'))
-    {
-        position = position + rightFlattened * deltaTime * SPEED;
-    }
+    m_position = position;
 }
 
 void Camera::UpdatePitchAndYaw(float deltaTime)
@@ -62,22 +39,22 @@ void Camera::UpdatePitchAndYaw(float deltaTime)
     App::GetMousePos(currentMouseX, currentMouseY);
     if (currentMouseX < borderWidth)
     {
-        yaw -= RADIANS_PER_SECOND;
+        m_yaw -= RADIANS_PER_SECOND;
     }
     else if (currentMouseX > APP_VIRTUAL_WIDTH - borderWidth)
     {
-        yaw += RADIANS_PER_SECOND;
+        m_yaw += RADIANS_PER_SECOND;
     }
     if (currentMouseY < borderWidth)
     {
-        pitch += RADIANS_PER_SECOND;
+        m_pitch += RADIANS_PER_SECOND;
     }
     else if (currentMouseY > APP_VIRTUAL_HEIGHT - borderWidth)
     {
-        pitch -= RADIANS_PER_SECOND;
+        m_pitch -= RADIANS_PER_SECOND;
     }
 
     // Looking directly up or down mangles the camera frame. This prevents that
-    pitch = min(pitch, MAX_PITCH);
-    pitch = max(-MAX_PITCH, pitch);
+    m_pitch = min(m_pitch, MAX_PITCH);
+    m_pitch = max(-MAX_PITCH, m_pitch);
 }
