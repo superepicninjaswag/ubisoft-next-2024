@@ -8,12 +8,14 @@
 #include "Rendering/MeshLibrary.h"
 
 #include "Systems/Systems.h"
+#include "Physics/Physics.h"
 
 
 ECS g_ecs;
 MeshLibrary g_MeshLibrary;
 Camera mainCamera;
 Renderer g_renderer(g_ecs, g_MeshLibrary, mainCamera);
+std::vector<Collision> collisionQueue;
 EntityDescriptor player = g_ecs.GetIDs().CreateId();
 
 
@@ -32,6 +34,8 @@ void Init()
 	ComponentPool<TransformComponent>& transforms = g_ecs.GetTransforms();
 	transforms.Add(player);
 	transforms.Get(player.id).position.y = 16.0f;
+	ComponentPool<SphereColliderComponent>& spheres = g_ecs.GetSphereColliders();
+	spheres.Add(player, 1.0f);
 
 	// Create Ground
 	const int ENVIRONMENT_LENGTH = 90;
@@ -58,6 +62,7 @@ void Init()
 				transforms.Add(newEntityDescriptor);
 				transforms.Get(newEntityDescriptor.id).position.x = GAP * (j - (ENVIRONMENT_WIDTH / 2.0f) + 0.5f);
 				transforms.Get(newEntityDescriptor.id).position.z = GAP * (i - (ENVIRONMENT_LENGTH / 2.0f) + 0.5f);
+				// By scaling we don't need as many entities/tiles
 				transforms.Get(newEntityDescriptor.id).scale.x = GROUND_PLANE_SCALE;
 				transforms.Get(newEntityDescriptor.id).scale.z = GROUND_PLANE_SCALE;
 			}
@@ -96,9 +101,12 @@ void Update(float deltaTime)
 	deltaTime = deltaTime * 1.0f / 1000.0f;
 
 	MovePlayer(g_ecs, player, mainCamera.forward, mainCamera.right, 40.0f, deltaTime);
+	AnimateParticles(g_ecs);
+	// Physics update
+	DetectCollisions(g_ecs, collisionQueue);
+	// Collision resolution
 	mainCamera.UpdatePosition(g_ecs.GetTransforms().Get(player.id).position);
 	mainCamera.UpdatePitchAndYaw(deltaTime);
-	AnimateParticles(g_ecs);
 }
 
 
