@@ -5,12 +5,13 @@
 
 #include "./ECS/ECS.h"
 #include "./Rendering/Renderer.h"
-#include "Rendering/MeshLibrary.h"
+#include "./Rendering/MeshLibrary.h"
 
-#include "Systems/Systems.h"
-#include "Physics/Physics.h"
+#include "./Systems/Systems.h"
+#include "./Physics/Physics.h"
 
-#include "Scenery/Scenery.h"
+#include "./GameObjects/GameObjects.h"
+#include "./Scenery/Scenery.h"
 
 
 // Engine related
@@ -24,15 +25,21 @@ Ground g_ground(5.0f, 30, 90);
 
 // Player
 EntityDescriptor g_player = g_ecs.GetIDs().CreateId();
+Gun g_gun(1, g_renderer.GetFOV(), g_renderer.GetAspectRatio());
 
 // Called before first update. Do any initial setup here.
 void Init()
 {
-	/*	If I needed a console for debugging with print lines
+	//*	If I needed a console for debugging with print lines
 	AllocConsole();
 	freopen("CONOUT$", "w", stdout);
 	freopen("CONOUT$", "w", stderr);
 	//*/
+
+	std::cout << g_gun.m_verticalFOV << "\n";
+	std::cout << g_gun.m_horizontalFOV << "\n";
+	std::cout << g_gun.m_yawPerPixel << "\n";
+	std::cout << g_gun.m_pitchPerPixel << "\n";
 
 	g_renderer.Init();
 

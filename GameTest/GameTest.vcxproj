@@ -199,6 +199,8 @@
     <ClInclude Include="Source\ECS\EntityDescriptor.h" />
     <ClInclude Include="Source\ECS\IDManager.h" />
     <ClInclude Include="Source\ECS\ComponentPool.h" />
+    <ClInclude Include="Source\GameObjects\GameObjects.h" />
+    <ClInclude Include="Source\GameObjects\Gun.h" />
     <ClInclude Include="Source\Physics\Contact.h" />
     <ClInclude Include="Source\Physics\ResolveBulletGroundCollisions.h" />
     <ClInclude Include="Source\Physics\Physics.h" />
@@ -241,6 +243,7 @@
     <ClCompile Include="Source\ECS\EntityDescriptor.cpp" />
     <ClCompile Include="Source\ECS\IDManager.cpp" />
     <ClCompile Include="Source\Game.cpp" />
+    <ClCompile Include="Source\GameObjects\Gun.cpp" />
     <ClCompile Include="Source\Physics\Contact.cpp" />
     <ClCompile Include="Source\Physics\ResolveBulletGroundCollisions.cpp" />
     <ClCompile Include="Source\Physics\ResolveCollisions.cpp" />

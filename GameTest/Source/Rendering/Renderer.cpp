@@ -210,3 +210,13 @@ void Renderer::SetCameraMatrices()
     worldSpaceToCameraSpaceTransform(1, 3) = -(camera.up.x      * camera.m_position.x  +  camera.up.y      * camera.m_position.y  +  camera.up.z      * camera.m_position.z);
     worldSpaceToCameraSpaceTransform(2, 3) = -(camera.forward.x * camera.m_position.x  +  camera.forward.y * camera.m_position.y  +  camera.forward.z * camera.m_position.z);
 }
+
+float Renderer::GetFOV()
+{
+    return fovDeg;
+}
+
+float Renderer::GetAspectRatio()
+{
+    return aspectRatio;
+}

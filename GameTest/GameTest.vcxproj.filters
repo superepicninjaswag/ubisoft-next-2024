@@ -49,6 +49,7 @@
     <ClCompile Include="Source\Components\ProjectileComponent.cpp" />
     <ClCompile Include="Source\Components\LifetimeComponent.cpp" />
     <ClCompile Include="Source\Systems\UpdateLifetimes.cpp" />
+    <ClCompile Include="Source\GameObjects\Gun.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Include\stdafx.h" />
@@ -114,6 +115,8 @@
     <ClInclude Include="Source\Components\ProjectileComponent.h" />
     <ClInclude Include="Source\Components\LifetimeComponent.h" />
     <ClInclude Include="Source\Systems\UpdateLifetimes.h" />
+    <ClInclude Include="Source\GameObjects\Gun.h" />
+    <ClInclude Include="Source\GameObjects\GameObjects.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="NextAPI">

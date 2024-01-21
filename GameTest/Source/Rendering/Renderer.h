@@ -52,4 +52,7 @@ public:
 
     void SetCameraSpaceToClipSpaceTransform();  // Projection Matrix
     void SetCameraMatrices();
+
+    float GetFOV();
+    float GetAspectRatio();
 };
