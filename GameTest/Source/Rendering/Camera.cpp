@@ -35,7 +35,7 @@ void Camera::UpdatePosition(Vector4 position)
 
 void Camera::UpdatePitchAndYaw(float deltaTime)
 {
-    float borderWidth = 100.0f;
+    float borderWidth = 75.0f;
     App::GetMousePos(currentMouseX, currentMouseY);
     if (currentMouseX < borderWidth)
     {

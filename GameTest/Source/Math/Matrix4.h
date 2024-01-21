@@ -14,6 +14,7 @@ public:
     void rotationX(const float r);
     void rotationY(const float r);
     void rotationZ(const float r);
+    void rotationAxisAngle(const Vector4 axis, const float theta);
     void translation(const float x, const float y, const float z);
 
     float& operator()(const int row, const int col);

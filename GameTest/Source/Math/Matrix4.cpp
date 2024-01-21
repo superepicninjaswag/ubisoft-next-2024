@@ -25,32 +25,61 @@ void Matrix4::scale(const float x, const float y, const float z)
 
 void Matrix4::rotationX(const float r)
 {
-    (*this)(0, 0) = 1.0f;
-    (*this)(1, 1) = cosf(r);
-    (*this)(1, 2) = -sinf(r);
-    (*this)(2, 1) = sinf(r);
-    (*this)(2, 2) = cosf(r);
-    (*this)(3, 3) = 1.0f;
+    a[0][0] = 1.0f;
+    a[1][1] = cosf(r);
+    a[1][2] = -sinf(r);
+    a[2][1] = sinf(r);
+    a[2][2] = cosf(r);
+    a[3][3] = 1.0f;
 }
 
 void Matrix4::rotationY(const float r)
 {
-    (*this)(0, 0) = cosf(r);
-    (*this)(0, 2) = sinf(r);
-    (*this)(1, 1) = 1.0f;
-    (*this)(2, 0) = -sinf(r);
-    (*this)(2, 2) = cosf(r);
-    (*this)(3, 3) = 1.0f;
+    a[0][0] = cosf(r);
+    a[0][2] = sinf(r);
+    a[1][1] = 1.0f;
+    a[2][0] = -sinf(r);
+    a[2][2] = cosf(r);
+    a[3][3] = 1.0f;
 }
 
 void Matrix4::rotationZ(const float r)
 {
-    (*this)(0, 0) = cosf(r);
-    (*this)(0, 1) = -sinf(r);
-    (*this)(1, 0) = sinf(r);
-    (*this)(1, 1) = cosf(r);
-    (*this)(2, 2) = 1.0f;
-    (*this)(3, 3) = 1.0f;
+    a[0][0] = cosf(r);
+    a[0][1] = -sinf(r);
+    a[1][0] = sinf(r);
+    a[1][1] = cosf(r);
+    a[2][2] = 1.0f;
+    a[3][3] = 1.0f;
+}
+
+void Matrix4::rotationAxisAngle(const Vector4 axis, const float angle)
+{
+    // Chapter 9.2.3 of Game Physics Engine Development: How to Build a Robust Commercial-Grade Physics Engine for your Game
+    // by Ian Millington
+    float c = cosf(angle);
+    float s = sinf(angle);
+    float t = 1.0f - cosf(angle);
+
+    a[0][0] = t * axis.x * axis.x + c;
+    a[0][1] = t * axis.x * axis.y + s * axis.z;
+    a[0][2] = t * axis.x * axis.z - s * axis.y;
+    a[0][3] = 0.0f;
+
+    a[1][0] = t * axis.x * axis.y - s * axis.z;
+    a[1][1] = t * axis.y * axis.y + c;
+    a[1][2] = t * axis.y * axis.z + s * axis.x;
+    a[1][3] = 0.0f;
+
+    a[2][0] = t * axis.x * axis.z + s * axis.y;
+    a[2][1] = t * axis.y * axis.z - s * axis.x;
+    a[2][2] = t * axis.z * axis.z + c;
+    a[2][3] = 0.0f;
+
+    a[3][0] = 0.0f;
+    a[3][1] = 0.0f;
+    a[3][2] = 0.0f;
+    a[3][3] = 1.0f;
 }
 
 void Matrix4::translation(const float x, const float y, const float z)
