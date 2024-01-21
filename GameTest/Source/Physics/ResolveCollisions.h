@@ -4,4 +4,4 @@
 #include "../Components/Components.h"
 #include "Contact.h"
 
-void ResolveCollisions(ECS& ecs, std::vector<Contact>& contactQueue);
+void ResolveCollisions(ECS& ecs);

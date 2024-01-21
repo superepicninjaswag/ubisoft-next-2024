@@ -18,6 +18,11 @@ IDManager &ECS::GetIDs()
     return m_ids;
 }
 
+ComponentPool<LifetimeComponent>& ECS::GetLifetimes()
+{
+    return m_lifetimes;
+}
+
 ComponentPool<MeshComponent>& ECS::GetMeshes()
 {
     return m_meshes;
@@ -31,6 +36,11 @@ ComponentPool<ParticleComponent>& ECS::GetParticles()
 ComponentPool<PhysicsBodyComponent>& ECS::GetPhysicsBodies()
 {
     return m_physicsBodies;
+}
+
+ComponentPool<ProjectileComponent>& ECS::GetProjectiles()
+{
+    return m_projectiles;
 }
 
 ComponentPool<SphereColliderComponent>& ECS::GetSphereColliders()

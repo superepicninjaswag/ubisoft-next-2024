@@ -10,7 +10,7 @@ class Renderer
 private:
     ECS &ecs;
     MeshLibrary &meshLib;
-    Camera &mainCamera;
+    Camera &camera;
 
     const float SCREEN_WIDTH = APP_VIRTUAL_WIDTH;
     const float SCREEN_HEIGHT = APP_VIRTUAL_HEIGHT;

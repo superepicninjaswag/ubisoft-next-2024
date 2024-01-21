@@ -2,24 +2,17 @@
 
 #include "ResolveCollisions.h"
 
-void ResolveCollisions(ECS& ecs, std::vector<Contact>& contactQueue)
+void ResolveCollisions(ECS& ecs)
 {
 	ComponentPool<SphereColliderComponent>& spheres = ecs.GetSphereColliders();
 	ComponentPool<TransformComponent>& transforms = ecs.GetTransforms();
 
-	for (int i = 0; i < contactQueue.size(); i++)
+	for (int i = 0; i < spheres.Size(); i++)
 	{
-		EntityDescriptor colliderA = contactQueue[i].m_entityA;
-		EntityDescriptor colliderB = contactQueue[i].m_entityB;
-
-		SphereColliderComponent sphereA = spheres.Get(colliderA.id);
-		SphereColliderComponent sphereB = spheres.Get(colliderB.id);
-
-		TransformComponent transformA = transforms.Get(colliderA.id);
-		TransformComponent transformB = transforms.Get(colliderB.id);
+		EntityDescriptor collider = spheres.MirrorToEntityDescriptor(i);
+		SphereColliderComponent sphere = spheres.Get(collider.id);
+		TransformComponent transform = transforms.Get(collider.id);
 
 		// Resolve Collision
 	}
-
-	contactQueue.clear();
 }

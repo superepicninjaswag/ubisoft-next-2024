@@ -10,15 +10,21 @@
 #include "Systems/Systems.h"
 #include "Physics/Physics.h"
 
+#include "Scenery/Scenery.h"
 
+
+// Engine related
 ECS g_ecs;
 MeshLibrary g_MeshLibrary;
-Camera mainCamera;
-Renderer g_renderer(g_ecs, g_MeshLibrary, mainCamera);
-std::vector<Contact> contactQueue;
-EntityDescriptor player = g_ecs.GetIDs().CreateId();
-float maxX, maxZ;
+Camera g_camera;
+Renderer g_renderer(g_ecs, g_MeshLibrary, g_camera);
+std::vector<Contact> g_contactQueue;
 
+// Scenery
+Ground g_ground(5, 30, 90);
+
+// Player
+EntityDescriptor g_player = g_ecs.GetIDs().CreateId();
 
 // Called before first update. Do any initial setup here.
 void Init()
@@ -31,48 +37,16 @@ void Init()
 
 	g_renderer.Init();
 
-	// Create Player
+	// Setup player entity
 	ComponentPool<TransformComponent>& transforms = g_ecs.GetTransforms();
-	transforms.Add(player);
-	transforms.Get(player.id).position.y = 16.0f;
+	transforms.Add(g_player);
+	transforms.Get(g_player.id).position.y = 16.0f;
 	ComponentPool<SphereColliderComponent>& spheres = g_ecs.GetSphereColliders();
-	spheres.Add(player, 1.0f);
+	spheres.Add(g_player, 1.0f);
 
-	// Create Ground
-	const int ENVIRONMENT_LENGTH = 90;
-	const int ENVIRONMENT_WIDTH = 30;
-	const int GROUND_PLANE_SCALE = 5;
-	const float GAP = 2 * GROUND_PLANE_SCALE;
-	for (int i = 0; i < ENVIRONMENT_LENGTH; i++)
-	{
-		for (int j = 0; j < ENVIRONMENT_WIDTH; j++)
-		{
-			Colour brown(0.54509803921f, 0.27058823529f, 0.07450980392f);
-			Colour white(1.0f, 1.0f, 1.0f);
-			Colour blue(0.3f, 0.0f, .5f);
-			EntityDescriptor newEntityDescriptor = g_ecs.GetIDs().CreateId();
-			if (newEntityDescriptor.isValid())
-			{
-				ComponentPool<MeshComponent>& meshes = g_ecs.GetMeshes();
-				meshes.Add(newEntityDescriptor, MeshLibrary::PLANE);
-
-				ComponentPool<TextureComponent>& textures = g_ecs.GetTextures();
-				textures.Add(newEntityDescriptor, white, brown);
-
-				ComponentPool<TransformComponent>& transforms = g_ecs.GetTransforms();
-				transforms.Add(newEntityDescriptor);
-				transforms.Get(newEntityDescriptor.id).position.x = GAP * (j - (ENVIRONMENT_WIDTH / 2.0f) + 0.5f);
-				transforms.Get(newEntityDescriptor.id).position.z = GAP * (i - (ENVIRONMENT_LENGTH / 2.0f) + 0.5f);
-				// By scaling we don't need as many entities/tiles
-				transforms.Get(newEntityDescriptor.id).scale.x = GROUND_PLANE_SCALE;
-				transforms.Get(newEntityDescriptor.id).scale.z = GROUND_PLANE_SCALE;
-			}
-		}
-	}
-	maxX = (ENVIRONMENT_WIDTH * GAP) / 2.0f;
-	maxZ = (ENVIRONMENT_LENGTH * GAP) / 2.0f;
-
-	// Create walls
+	// Setup scenery
+	g_ground.GenerateTiles(g_ecs);
+	// TODO: create walls
 
 
 	// Create ball
@@ -101,6 +75,9 @@ void Init()
 		g_ecs.GetPhysicsBodies().Get(newEntityDescriptor.id).SetGravity(10.0f);
 		g_ecs.GetPhysicsBodies().Get(newEntityDescriptor.id).SetDamping(.99f);
 		g_ecs.GetPhysicsBodies().Get(newEntityDescriptor.id).AddForce(Vector4(300.0, 0.0f, 0.0));
+
+		ComponentPool<ProjectileComponent>& projectiles = g_ecs.GetProjectiles();
+		projectiles.Add(newEntityDescriptor, 1);
 	}
 }
 
@@ -109,27 +86,18 @@ void Init()
 // This will be called at no greater frequency than the value of APP_MAX_FRAME_RATE
 void Update(float deltaTime)
 {
-	// I like seconds instead of milliseconds
-	deltaTime = deltaTime * 1.0f / 1000.0f;
+	deltaTime = deltaTime / 1000.0f; // I like seconds instead of milliseconds
 
-	MovePlayer(g_ecs, player, mainCamera.forward, mainCamera.right, 40.0f, deltaTime, maxX, maxZ);
+	MovePlayer(g_ecs, g_player, g_camera.forward, g_camera.right, 40.0f, deltaTime, g_ground);
+	
 	AnimateParticles(g_ecs);
-
-	ComponentPool<PhysicsBodyComponent>& bodies = g_ecs.GetPhysicsBodies();
-	ComponentPool<TransformComponent>& transforms = g_ecs.GetTransforms();
-	for (int i = 0; i < bodies.Size(); i++)
-	{
-		EntityDescriptor target = bodies.MirrorToEntityDescriptor(i);
-		bodies.Get(target.id).Integrate(deltaTime, transforms.Get(target.id).position);
-	}
+	UpdatePhysicsBodies(g_ecs, deltaTime);
 	
-	
-	DetectCollisions(g_ecs, contactQueue);
-	ResolveCollisions(g_ecs, contactQueue);
-	mainCamera.UpdatePosition(g_ecs.GetTransforms().Get(player.id).position);
-	mainCamera.UpdatePitchAndYaw(deltaTime);
+	ResolveBulletGroundCollisions(g_ecs, g_ground);
+	ResolveCollisions(g_ecs);
 
-	std::this_thread::sleep_for(std::chrono::milliseconds(10));
+	g_camera.UpdatePosition(g_ecs.GetTransforms().Get(g_player.id).position);
+	g_camera.UpdatePitchAndYaw(deltaTime);
 }
 
 
