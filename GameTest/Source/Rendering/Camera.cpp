@@ -35,21 +35,20 @@ void Camera::UpdatePosition(Vector4 position)
 
 void Camera::UpdatePitchAndYaw(float deltaTime)
 {
-    float borderWidth = 75.0f;
     App::GetMousePos(currentMouseX, currentMouseY);
-    if (currentMouseX < borderWidth)
+    if (currentMouseX < BORDER_WIDTH)
     {
         m_yaw -= RADIANS_PER_SECOND;
     }
-    else if (currentMouseX > APP_VIRTUAL_WIDTH - borderWidth)
+    else if (currentMouseX > APP_VIRTUAL_WIDTH - BORDER_WIDTH)
     {
         m_yaw += RADIANS_PER_SECOND;
     }
-    if (currentMouseY < borderWidth)
+    if (currentMouseY < BORDER_WIDTH)
     {
         m_pitch += RADIANS_PER_SECOND;
     }
-    else if (currentMouseY > APP_VIRTUAL_HEIGHT - borderWidth)
+    else if (currentMouseY > APP_VIRTUAL_HEIGHT - BORDER_WIDTH)
     {
         m_pitch -= RADIANS_PER_SECOND;
     }

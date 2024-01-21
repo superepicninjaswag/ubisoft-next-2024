@@ -68,10 +68,6 @@ void Gun::SetLaunchDirection(Camera& camera)
 	m_launchDirection = yawRotation * (pitchRotation * m_launchDirection);
 
 	m_launchDirection.Normalize();
-
-	std::cout << camera.forward.x << " | ";
-	std::cout << camera.forward.y << " | ";
-	std::cout << camera.forward.z << "\n";
 }
 
 void Gun::UpdateReloadTimer(float deltaTime)
