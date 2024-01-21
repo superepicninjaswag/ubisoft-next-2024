@@ -30,9 +30,7 @@ void Gun::FireGun(ECS& ecs, EntityDescriptor player)
 
 			ComponentPool<TransformComponent>& transforms = ecs.GetTransforms();
 			transforms.Add(newEntityDescriptor);
-			transforms.Get(newEntityDescriptor.id).position.x = transforms.Get(player.id).position.x;
-			transforms.Get(newEntityDescriptor.id).position.y = transforms.Get(player.id).position.y;
-			transforms.Get(newEntityDescriptor.id).position.z = transforms.Get(player.id).position.z;
+			transforms.Get(newEntityDescriptor.id).position = transforms.Get(player.id).position + m_launchDirection * 3.0f;
 
 			ComponentPool<SphereColliderComponent>& spheres = ecs.GetSphereColliders();
 			spheres.Add(newEntityDescriptor, 1.0f);
@@ -66,8 +64,6 @@ void Gun::SetLaunchDirection(Camera& camera)
 	yawRotation.rotationY(m_yawPerPixel * yawPixels);
 	Matrix4 pitchRotation;
 	pitchRotation.rotationX(-(m_pitchPerPixel * pitchPixels));
-
-	Vector4 target = Vector4(0.0f, 0.0f, 1.0f);
 
 	m_launchDirection = yawRotation * (pitchRotation * m_launchDirection);
 
