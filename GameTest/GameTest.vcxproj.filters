@@ -48,6 +48,7 @@
     <ClCompile Include="Source\Physics\UpdatePhysicsBodies.cpp" />
     <ClCompile Include="Source\Components\ProjectileComponent.cpp" />
     <ClCompile Include="Source\Components\LifetimeComponent.cpp" />
+    <ClCompile Include="Source\Systems\UpdateLifetimes.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Include\stdafx.h" />
@@ -112,6 +113,7 @@
     <ClInclude Include="Source\Physics\UpdatePhysicsBodies.h" />
     <ClInclude Include="Source\Components\ProjectileComponent.h" />
     <ClInclude Include="Source\Components\LifetimeComponent.h" />
+    <ClInclude Include="Source\Systems\UpdateLifetimes.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="NextAPI">

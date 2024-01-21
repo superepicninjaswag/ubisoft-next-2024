@@ -18,10 +18,9 @@ ECS g_ecs;
 MeshLibrary g_MeshLibrary;
 Camera g_camera;
 Renderer g_renderer(g_ecs, g_MeshLibrary, g_camera);
-std::vector<Contact> g_contactQueue;
 
 // Scenery
-Ground g_ground(5, 30, 90);
+Ground g_ground(5.0f, 30, 90);
 
 // Player
 EntityDescriptor g_player = g_ecs.GetIDs().CreateId();
@@ -48,36 +47,43 @@ void Init()
 	g_ground.GenerateTiles(g_ecs);
 	// TODO: create walls
 
-
-	// Create ball
-	EntityDescriptor newEntityDescriptor = g_ecs.GetIDs().CreateId();
-	if (newEntityDescriptor.isValid())
+	int limit = 1000;
+	for (int i = 0; i < limit; i++)
 	{
-		Colour white(1.0f, 1.0f, 1.0f);
-		Colour purple(0.3f, 0.0f, .5f);
+		// Create ball
+		EntityDescriptor newEntityDescriptor = g_ecs.GetIDs().CreateId();
+		if (newEntityDescriptor.isValid())
+		{
+			Colour white(1.0f, 1.0f, 1.0f);
+			Colour purple(0.3f, 0.0f, .5f);
 
-		ComponentPool<MeshComponent>& meshes = g_ecs.GetMeshes();
-		meshes.Add(newEntityDescriptor, MeshLibrary::ICOSPHERE);
+			ComponentPool<MeshComponent>& meshes = g_ecs.GetMeshes();
+			meshes.Add(newEntityDescriptor, MeshLibrary::ICOSPHERE);
 
-		ComponentPool<TextureComponent>& textures = g_ecs.GetTextures();
-		textures.Add(newEntityDescriptor, white, purple);
+			ComponentPool<TextureComponent>& textures = g_ecs.GetTextures();
+			textures.Add(newEntityDescriptor, white, purple);
 
-		ComponentPool<TransformComponent>& transforms = g_ecs.GetTransforms();
-		transforms.Add(newEntityDescriptor);
-		transforms.Get(newEntityDescriptor.id).position.z = 15.0f;
-		transforms.Get(newEntityDescriptor.id).position.y = 15.0f;
+			ComponentPool<TransformComponent>& transforms = g_ecs.GetTransforms();
+			transforms.Add(newEntityDescriptor);
+			transforms.Get(newEntityDescriptor.id).position.z = 15.0f;
+			transforms.Get(newEntityDescriptor.id).position.y = 15.0f;
 
-		ComponentPool<SphereColliderComponent>& spheres = g_ecs.GetSphereColliders();
-		spheres.Add(newEntityDescriptor, 1.0f);
+			ComponentPool<SphereColliderComponent>& spheres = g_ecs.GetSphereColliders();
+			spheres.Add(newEntityDescriptor, 1.0f);
 
-		g_ecs.GetPhysicsBodies().Add(newEntityDescriptor);
-		g_ecs.GetPhysicsBodies().Get(newEntityDescriptor.id).SetMass(1.0f);
-		g_ecs.GetPhysicsBodies().Get(newEntityDescriptor.id).SetGravity(10.0f);
-		g_ecs.GetPhysicsBodies().Get(newEntityDescriptor.id).SetDamping(.99f);
-		g_ecs.GetPhysicsBodies().Get(newEntityDescriptor.id).AddForce(Vector4(300.0, 0.0f, 0.0));
+			g_ecs.GetPhysicsBodies().Add(newEntityDescriptor);
+			g_ecs.GetPhysicsBodies().Get(newEntityDescriptor.id).SetMass(1.0f);
+			g_ecs.GetPhysicsBodies().Get(newEntityDescriptor.id).SetGravity(10.0f);
+			g_ecs.GetPhysicsBodies().Get(newEntityDescriptor.id).SetDamping(.99f);
+			Vector4 newForce(i - (limit / 2.0f), fabsf((i - limit / 2.0f)), 0.0f);
+			g_ecs.GetPhysicsBodies().Get(newEntityDescriptor.id).AddForce(newForce);
 
-		ComponentPool<ProjectileComponent>& projectiles = g_ecs.GetProjectiles();
-		projectiles.Add(newEntityDescriptor, 1);
+			ComponentPool<ProjectileComponent>& projectiles = g_ecs.GetProjectiles();
+			projectiles.Add(newEntityDescriptor, 1);
+
+			ComponentPool<LifetimeComponent>& lifetimes = g_ecs.GetLifetimes();
+			lifetimes.Add(newEntityDescriptor, 100);
+		}
 	}
 }
 
@@ -89,6 +95,7 @@ void Update(float deltaTime)
 	deltaTime = deltaTime / 1000.0f; // I like seconds instead of milliseconds
 
 	MovePlayer(g_ecs, g_player, g_camera.forward, g_camera.right, 40.0f, deltaTime, g_ground);
+	UpdateLifetimes(g_ecs);
 	
 	AnimateParticles(g_ecs);
 	UpdatePhysicsBodies(g_ecs, deltaTime);

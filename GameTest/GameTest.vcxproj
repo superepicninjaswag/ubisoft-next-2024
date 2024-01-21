@@ -212,6 +212,7 @@
     <ClInclude Include="Source\Rendering\MeshLibrary.h" />
     <ClInclude Include="Source\Scenery\Scenery.h" />
     <ClInclude Include="Source\Systems\AnimateParticles.h" />
+    <ClInclude Include="Source\Systems\UpdateLifetimes.h" />
     <ClInclude Include="Source\Systems\MovePlayer.h" />
     <ClInclude Include="Source\Systems\Systems.h" />
     <ClInclude Include="Source\Math\Matrix4.h" />
@@ -253,6 +254,7 @@
     <ClCompile Include="Source\Math\Matrix4.cpp" />
     <ClCompile Include="Source\Math\Vector4.cpp" />
     <ClCompile Include="Source\Systems\AnimateParticles.cpp" />
+    <ClCompile Include="Source\Systems\UpdateLifetimes.cpp" />
     <ClCompile Include="Source\Systems\MovePlayer.cpp" />
     <ClCompile Include="Source\Scenery\Ground.cpp" />
     <ClCompile Include="stb_image\stb_image.cpp" />

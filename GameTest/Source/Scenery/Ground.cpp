@@ -2,7 +2,7 @@
 
 #include "Ground.h"
 
-Ground::Ground(int scale, int width, int length) : m_scale(scale), m_width(width), m_length(length) {}
+Ground::Ground(float scale, int width, int length) : m_scale(scale), m_width(width), m_length(length) {}
 
 void Ground::GenerateTiles(ECS& ecs)
 {

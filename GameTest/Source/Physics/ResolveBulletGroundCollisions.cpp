@@ -17,7 +17,11 @@ void ResolveBulletGroundCollisions(ECS& ecs, Ground& ground)
 			SphereColliderComponent sphere = spheres.Get(collider.id);
 			TransformComponent transform = transforms.Get(collider.id);
 
-			if (transform.position.y - sphere.m_radius < 0.0f)
+			if (transform.position.y - sphere.m_radius < 0.0f &&
+				transform.position.x < ground.GetMaxX() &&
+				transform.position.x > -ground.GetMaxX() &&
+				transform.position.z < ground.GetMaxZ() &&
+				transform.position.z > -ground.GetMaxZ())
 			{
 				needToBeDeleted.push_back(collider);
 			}
