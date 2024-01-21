@@ -20,7 +20,7 @@ void Gun::FireGun(ECS& ecs, EntityDescriptor player)
 		if (newEntityDescriptor.isValid())
 		{
 			ComponentPool<MeshComponent>& meshes = ecs.GetMeshes();
-			meshes.Add(newEntityDescriptor, MeshLibrary::UVSPHERE);
+			meshes.Add(newEntityDescriptor, MeshLibrary::CONE);
 
 			ComponentPool<TextureComponent>& textures = ecs.GetTextures();
 			textures.Add(newEntityDescriptor, m_colour1, m_colour2);
@@ -83,7 +83,7 @@ void Gun::SetSupergunPowers()
 	if (m_superGunTimeLeft > 0.0f)
 	{
 		m_damage = 2;
-		m_reloadTime = 60.0f / 900.0f;
+		m_reloadTime = 60.0f / 600.0f;
 		m_force = 5000.0f;
 		m_colour1 = Colour(1.0f, 0.75f, 0.75f);
 		m_colour2 = Colour(1.0f, 0.1f, 0.6f);
@@ -91,7 +91,7 @@ void Gun::SetSupergunPowers()
 	else
 	{
 		m_damage = 1;
-		m_reloadTime = 60.0f / 600.0f;
+		m_reloadTime = 60.0f / 200.0f;
 		m_force = 3000.0f;
 		m_colour1 = Colour(1.0f, 0.1f, 0.6f);
 		m_colour2 = Colour(1.0f, 0.75f, 0.75f);

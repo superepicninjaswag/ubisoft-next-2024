@@ -6,5 +6,6 @@
 #include "PhysicsBodyComponent.h"
 #include "ProjectileComponent.h"
 #include "SphereColliderComponent.h"
+#include "SinWaveAIComponent.h"
 #include "TextureComponent.h"
 #include "TransformComponent.h"

@@ -16,7 +16,7 @@ private:
     float m_pitchPerPixel;
     Vector4 m_launchDirection;
     float m_force = 3000.0f;
-    float m_roundsPerMin = 600.0f;
+    float m_roundsPerMin;
     float m_reloadTime = 60.0f / m_roundsPerMin;
     float m_timeUntilReadyToFire = 0.0f;
     const int m_projectileLifetime = 600;

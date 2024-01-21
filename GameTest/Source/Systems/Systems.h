@@ -1,5 +1,14 @@
 #pragma once
 
-#include "AnimateParticles.h"
-#include "MovePlayer.h"
-#include "UpdateLifetimes.h"
+#include "../Components/Components.h"
+#include "../ECS/ECS.h"
+#include "../ECS/EntityDescriptor.h"
+#include "../Math/Vector4.h"
+#include "../Math/Matrix4.h"
+#include "../Scenery/Ground.h"
+
+
+void AnimateParticles(ECS& ecs);
+void AnimateSinWaveAI(ECS& ecs, EntityDescriptor player);
+void MovePlayer(ECS& ecs, EntityDescriptor player, Vector4 forward, Vector4 right, float speed, float deltaTime, Ground& ground);
+void UpdateLifetimes(ECS& ecs);

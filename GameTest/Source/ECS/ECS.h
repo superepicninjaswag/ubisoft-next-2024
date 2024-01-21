@@ -14,9 +14,10 @@ private:
     ComponentPool<ParticleComponent> m_particles;
     ComponentPool<PhysicsBodyComponent> m_physicsBodies;
     ComponentPool<ProjectileComponent> m_projectiles;
+    ComponentPool<SphereColliderComponent> m_sphereColliders;
+    ComponentPool<SinWaveAIComponent> m_sinWaveAIs;
     ComponentPool<TransformComponent> m_transforms;
     ComponentPool<TextureComponent> m_textures;
-    ComponentPool<SphereColliderComponent> m_sphereColliders;
 public:
     void DeleteEntity(EntityDescriptor entityToDelete);
     IDManager &GetIDs();
@@ -26,6 +27,7 @@ public:
     ComponentPool<PhysicsBodyComponent>& GetPhysicsBodies();
     ComponentPool<ProjectileComponent>& GetProjectiles();
     ComponentPool<SphereColliderComponent>& GetSphereColliders();
+    ComponentPool<SinWaveAIComponent>& GetSinWaveAIs();
     ComponentPool<TextureComponent>& GetTextures();
     ComponentPool<TransformComponent>& GetTransforms();
 };

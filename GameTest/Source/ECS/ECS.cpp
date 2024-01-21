@@ -8,9 +8,10 @@ void ECS::DeleteEntity(EntityDescriptor entityToDelete)
     m_meshes.Delete(entityToDelete);
     m_particles.Delete(entityToDelete);
     m_physicsBodies.Delete(entityToDelete);
+    m_sphereColliders.Delete(entityToDelete);
+    m_sinWaveAIs.Delete(entityToDelete);
     m_textures.Delete(entityToDelete);
     m_transforms.Delete(entityToDelete);
-    m_sphereColliders.Delete(entityToDelete);
     m_ids.DeleteId(entityToDelete);
 }
 
@@ -47,6 +48,11 @@ ComponentPool<ProjectileComponent>& ECS::GetProjectiles()
 ComponentPool<SphereColliderComponent>& ECS::GetSphereColliders()
 {
     return m_sphereColliders;
+}
+
+ComponentPool<SinWaveAIComponent>& ECS::GetSinWaveAIs()
+{
+    return m_sinWaveAIs;
 }
 
 ComponentPool<TextureComponent>& ECS::GetTextures()

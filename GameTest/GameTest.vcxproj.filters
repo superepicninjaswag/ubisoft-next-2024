@@ -50,6 +50,8 @@
     <ClCompile Include="Source\Components\LifetimeComponent.cpp" />
     <ClCompile Include="Source\Systems\UpdateLifetimes.cpp" />
     <ClCompile Include="Source\GameObjects\Gun.cpp" />
+    <ClCompile Include="Source\Components\SinWaveAIComponent.cpp" />
+    <ClCompile Include="Source\Systems\AnimateSinwaveAI.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Include\stdafx.h" />
@@ -100,10 +102,8 @@
     <ClInclude Include="Source\Rendering\Colour.h" />
     <ClInclude Include="Source\ECS\EntityDescriptor.h" />
     <ClInclude Include="Source\Components\ParticleComponent.h" />
-    <ClInclude Include="Source\Systems\AnimateParticles.h" />
     <ClInclude Include="Source\Rendering\Camera.h" />
     <ClInclude Include="Source\Components\SphereColliderComponent.h" />
-    <ClInclude Include="Source\Systems\MovePlayer.h" />
     <ClInclude Include="Source\Physics\ResolveBulletGroundCollisions.h" />
     <ClInclude Include="Source\Physics\Physics.h" />
     <ClInclude Include="Source\Physics\Contact.h" />
@@ -114,9 +114,9 @@
     <ClInclude Include="Source\Physics\UpdatePhysicsBodies.h" />
     <ClInclude Include="Source\Components\ProjectileComponent.h" />
     <ClInclude Include="Source\Components\LifetimeComponent.h" />
-    <ClInclude Include="Source\Systems\UpdateLifetimes.h" />
     <ClInclude Include="Source\GameObjects\Gun.h" />
     <ClInclude Include="Source\GameObjects\GameObjects.h" />
+    <ClInclude Include="Source\Components\SinWaveAIComponent.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="NextAPI">
