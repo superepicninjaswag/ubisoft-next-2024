@@ -30,16 +30,11 @@ Gun g_gun(1, g_renderer.GetFOV(), g_renderer.GetAspectRatio());
 // Called before first update. Do any initial setup here.
 void Init()
 {
-	//*	If I needed a console for debugging with print lines
+	/*	If I needed a console for debugging with print lines
 	AllocConsole();
 	freopen("CONOUT$", "w", stdout);
 	freopen("CONOUT$", "w", stderr);
 	//*/
-
-	std::cout << g_gun.m_verticalFOV << "\n";
-	std::cout << g_gun.m_horizontalFOV << "\n";
-	std::cout << g_gun.m_yawPerPixel << "\n";
-	std::cout << g_gun.m_pitchPerPixel << "\n";
 
 	g_renderer.Init();
 
@@ -53,45 +48,6 @@ void Init()
 	// Setup scenery
 	g_ground.GenerateTiles(g_ecs);
 	// TODO: create walls
-
-	int limit = 1000;
-	for (int i = 0; i < limit; i++)
-	{
-		// Create ball
-		EntityDescriptor newEntityDescriptor = g_ecs.GetIDs().CreateId();
-		if (newEntityDescriptor.isValid())
-		{
-			Colour white(1.0f, 1.0f, 1.0f);
-			Colour purple(0.3f, 0.0f, .5f);
-
-			ComponentPool<MeshComponent>& meshes = g_ecs.GetMeshes();
-			meshes.Add(newEntityDescriptor, MeshLibrary::ICOSPHERE);
-
-			ComponentPool<TextureComponent>& textures = g_ecs.GetTextures();
-			textures.Add(newEntityDescriptor, white, purple);
-
-			ComponentPool<TransformComponent>& transforms = g_ecs.GetTransforms();
-			transforms.Add(newEntityDescriptor);
-			transforms.Get(newEntityDescriptor.id).position.z = 15.0f;
-			transforms.Get(newEntityDescriptor.id).position.y = 15.0f;
-
-			ComponentPool<SphereColliderComponent>& spheres = g_ecs.GetSphereColliders();
-			spheres.Add(newEntityDescriptor, 1.0f);
-
-			g_ecs.GetPhysicsBodies().Add(newEntityDescriptor);
-			g_ecs.GetPhysicsBodies().Get(newEntityDescriptor.id).SetMass(1.0f);
-			g_ecs.GetPhysicsBodies().Get(newEntityDescriptor.id).SetGravity(10.0f);
-			g_ecs.GetPhysicsBodies().Get(newEntityDescriptor.id).SetDamping(.99f);
-			Vector4 newForce(i - (limit / 2.0f), fabsf((i - limit / 2.0f)), 0.0f);
-			g_ecs.GetPhysicsBodies().Get(newEntityDescriptor.id).AddForce(newForce);
-
-			ComponentPool<ProjectileComponent>& projectiles = g_ecs.GetProjectiles();
-			projectiles.Add(newEntityDescriptor, 1);
-
-			ComponentPool<LifetimeComponent>& lifetimes = g_ecs.GetLifetimes();
-			lifetimes.Add(newEntityDescriptor, 100);
-		}
-	}
 }
 
 
@@ -100,6 +56,10 @@ void Init()
 void Update(float deltaTime)
 {
 	deltaTime = deltaTime / 1000.0f; // I like seconds instead of milliseconds
+
+	g_gun.SetLaunchDirection(g_camera);
+	g_gun.UpdateReloadTimer(deltaTime);
+	g_gun.FireGun(g_ecs, g_player);
 
 	MovePlayer(g_ecs, g_player, g_camera.forward, g_camera.right, 40.0f, deltaTime, g_ground);
 	UpdateLifetimes(g_ecs);

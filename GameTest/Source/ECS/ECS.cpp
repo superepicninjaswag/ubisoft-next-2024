@@ -4,6 +4,7 @@
 
 void ECS::DeleteEntity(EntityDescriptor entityToDelete)
 {
+    m_lifetimes.Delete(entityToDelete);
     m_meshes.Delete(entityToDelete);
     m_particles.Delete(entityToDelete);
     m_physicsBodies.Delete(entityToDelete);
