@@ -11,9 +11,11 @@ public:
 	void SetMass(float mass);
 	void SetGravity(float gravity);
 	void SetDamping(float damping);
+	void AddForce(const Vector4 force);
 
 private:
 	Vector4 m_velocity;
+	Vector4 m_acceleration;
 	Vector4 m_forceAccumulation;
 	Vector4 m_gravity;
 

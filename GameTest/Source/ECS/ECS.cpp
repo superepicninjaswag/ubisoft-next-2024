@@ -4,46 +4,46 @@
 
 void ECS::DeleteEntity(EntityDescriptor entityToDelete)
 {
-    _meshes.Delete(entityToDelete);
-    _particles.Delete(entityToDelete);
-    _physicsBodies.Delete(entityToDelete);
-    _textures.Delete(entityToDelete);
-    _transforms.Delete(entityToDelete);
-    _sphereColliders.Delete(entityToDelete);
-    _ids.DeleteId(entityToDelete);
+    m_meshes.Delete(entityToDelete);
+    m_particles.Delete(entityToDelete);
+    m_physicsBodies.Delete(entityToDelete);
+    m_textures.Delete(entityToDelete);
+    m_transforms.Delete(entityToDelete);
+    m_sphereColliders.Delete(entityToDelete);
+    m_ids.DeleteId(entityToDelete);
 }
 
 IDManager &ECS::GetIDs()
 {
-    return _ids;
+    return m_ids;
 }
 
 ComponentPool<MeshComponent>& ECS::GetMeshes()
 {
-    return _meshes;
+    return m_meshes;
 }
 
 ComponentPool<ParticleComponent>& ECS::GetParticles()
 {
-    return _particles;
+    return m_particles;
 }
 
 ComponentPool<PhysicsBodyComponent>& ECS::GetPhysicsBodies()
 {
-    return _physicsBodies;
+    return m_physicsBodies;
 }
 
 ComponentPool<SphereColliderComponent>& ECS::GetSphereColliders()
 {
-    return _sphereColliders;
+    return m_sphereColliders;
 }
 
 ComponentPool<TextureComponent>& ECS::GetTextures()
 {
-    return _textures;
+    return m_textures;
 }
 
 ComponentPool<TransformComponent>& ECS::GetTransforms()
 {
-    return _transforms;
+    return m_transforms;
 }

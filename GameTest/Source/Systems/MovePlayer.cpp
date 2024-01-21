@@ -2,7 +2,7 @@
 
 #include "MovePlayer.h"
 
-void MovePlayer(ECS &ecs, EntityDescriptor player, Vector4 forward, Vector4 right, float speed, float deltaTime)
+void MovePlayer(ECS &ecs, EntityDescriptor player, Vector4 forward, Vector4 right, float speed, float deltaTime, float maxX, float maxZ)
 {
     ComponentPool<TransformComponent>& transforms = ecs.GetTransforms();
 
@@ -30,4 +30,10 @@ void MovePlayer(ECS &ecs, EntityDescriptor player, Vector4 forward, Vector4 righ
     {
         transforms.Get(player.id).position = transforms.Get(player.id).position + right * deltaTime * speed;
     }
+
+
+    transforms.Get(player.id).position.x = min(transforms.Get(player.id).position.x, maxX);
+    transforms.Get(player.id).position.x = max(transforms.Get(player.id).position.x, -maxX);
+    transforms.Get(player.id).position.z = min(transforms.Get(player.id).position.z, maxZ);
+    transforms.Get(player.id).position.z = max(transforms.Get(player.id).position.z, -maxZ);
 }

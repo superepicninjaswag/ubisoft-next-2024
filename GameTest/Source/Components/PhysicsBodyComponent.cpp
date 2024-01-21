@@ -17,10 +17,10 @@ void PhysicsBodyComponent::Integrate(float deltaTime, Vector4& position)
 	{
 		position += m_velocity * deltaTime;
 
-		Vector4 acceleration = m_gravity;
-		// Update accel with forceAccumulation
+		Vector4 m_acceleration = m_gravity;	// We want some gravity by default
+		m_acceleration += m_forceAccumulation * m_inverseMass;
 
-		m_velocity += acceleration * deltaTime;
+		m_velocity += m_acceleration * deltaTime;
 		m_velocity *= powf(m_damping, deltaTime);
 
 		m_forceAccumulation.x = 0;
@@ -45,4 +45,9 @@ void PhysicsBodyComponent::SetGravity(float gravity)
 void PhysicsBodyComponent::SetDamping(float damping)
 {
 	m_damping = damping;
+}
+
+void PhysicsBodyComponent::AddForce(const Vector4 force)
+{
+	m_forceAccumulation += force;
 }

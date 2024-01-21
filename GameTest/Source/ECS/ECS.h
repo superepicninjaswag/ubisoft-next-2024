@@ -8,13 +8,13 @@
 class ECS
 {
 private:
-    IDManager _ids;
-    ComponentPool<MeshComponent> _meshes;
-    ComponentPool<ParticleComponent> _particles;
-    ComponentPool<PhysicsBodyComponent> _physicsBodies;
-    ComponentPool<TransformComponent> _transforms;
-    ComponentPool<TextureComponent> _textures;
-    ComponentPool<SphereColliderComponent> _sphereColliders;
+    IDManager m_ids;
+    ComponentPool<MeshComponent> m_meshes;
+    ComponentPool<ParticleComponent> m_particles;
+    ComponentPool<PhysicsBodyComponent> m_physicsBodies;
+    ComponentPool<TransformComponent> m_transforms;
+    ComponentPool<TextureComponent> m_textures;
+    ComponentPool<SphereColliderComponent> m_sphereColliders;
 public:
     void DeleteEntity(EntityDescriptor entityToDelete);
     IDManager &GetIDs();

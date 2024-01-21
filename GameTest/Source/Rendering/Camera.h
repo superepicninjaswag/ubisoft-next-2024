@@ -7,7 +7,8 @@
 class Camera
 {
 public:
-    const float MAX_PITCH = 89.0f * (acosf(-1.0) / 180.0f); // cos(pi) = -1, so inverting gives us pi :D
+    const float MAX_PITCH_DEG = 37.0f;
+    const float MAX_PITCH_RAD = MAX_PITCH_DEG * (acosf(-1.0) / 180.0f); // cos(pi) = -1, so inverting gives us pi :D
     const float RADIANS_PER_SECOND = 0.025f;
     float currentMouseX;
     float currentMouseY;

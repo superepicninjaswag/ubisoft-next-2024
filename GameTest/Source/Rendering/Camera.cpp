@@ -55,6 +55,6 @@ void Camera::UpdatePitchAndYaw(float deltaTime)
     }
 
     // Looking directly up or down mangles the camera frame. This prevents that
-    m_pitch = min(m_pitch, MAX_PITCH);
-    m_pitch = max(-MAX_PITCH, m_pitch);
+    m_pitch = min(m_pitch, MAX_PITCH_RAD);
+    m_pitch = max(-MAX_PITCH_RAD, m_pitch);
 }

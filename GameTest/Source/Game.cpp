@@ -17,6 +17,7 @@ Camera mainCamera;
 Renderer g_renderer(g_ecs, g_MeshLibrary, mainCamera);
 std::vector<Contact> contactQueue;
 EntityDescriptor player = g_ecs.GetIDs().CreateId();
+float maxX, maxZ;
 
 
 // Called before first update. Do any initial setup here.
@@ -68,6 +69,8 @@ void Init()
 			}
 		}
 	}
+	maxX = (ENVIRONMENT_WIDTH * GAP) / 2.0f;
+	maxZ = (ENVIRONMENT_LENGTH * GAP) / 2.0f;
 
 	// Create walls
 
@@ -95,8 +98,9 @@ void Init()
 
 		g_ecs.GetPhysicsBodies().Add(newEntityDescriptor);
 		g_ecs.GetPhysicsBodies().Get(newEntityDescriptor.id).SetMass(1.0f);
-		g_ecs.GetPhysicsBodies().Get(newEntityDescriptor.id).SetGravity(9.0f);
+		g_ecs.GetPhysicsBodies().Get(newEntityDescriptor.id).SetGravity(10.0f);
 		g_ecs.GetPhysicsBodies().Get(newEntityDescriptor.id).SetDamping(.99f);
+		g_ecs.GetPhysicsBodies().Get(newEntityDescriptor.id).AddForce(Vector4(300.0, 0.0f, 0.0));
 	}
 }
 
@@ -108,7 +112,7 @@ void Update(float deltaTime)
 	// I like seconds instead of milliseconds
 	deltaTime = deltaTime * 1.0f / 1000.0f;
 
-	MovePlayer(g_ecs, player, mainCamera.forward, mainCamera.right, 40.0f, deltaTime);
+	MovePlayer(g_ecs, player, mainCamera.forward, mainCamera.right, 40.0f, deltaTime, maxX, maxZ);
 	AnimateParticles(g_ecs);
 
 	ComponentPool<PhysicsBodyComponent>& bodies = g_ecs.GetPhysicsBodies();
