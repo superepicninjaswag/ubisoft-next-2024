@@ -9,22 +9,28 @@
 class Gun
 {
 private:
-    int m_damage;
+    int m_damage = 1;
     float m_verticalFOV;
     float m_horizontalFOV;
     float m_yawPerPixel;
     float m_pitchPerPixel;
     Vector4 m_launchDirection;
-    float m_force = 2000.0f;
-    float m_reloadTime = 0.1f;
+    float m_force = 3000.0f;
+    float m_roundsPerMin = 600.0f;
+    float m_reloadTime = 60.0f / m_roundsPerMin;
     float m_timeUntilReadyToFire = 0.0f;
     const int m_projectileLifetime = 600;
+    float m_superGunTimeLeft = 0.0f;
+    Colour m_colour1;
+    Colour m_colour2;
 
 public:
-    Gun(int damage, float verticalFOVDeg, float aspectRatio);
+    Gun(float verticalFOVDeg, float aspectRatio);
     void FireGun(ECS& ecs, EntityDescriptor player);
     void SetLaunchDirection(Camera& camera);
-    void UpdateReloadTimer(float deltaTime);
     void SetForce(float force);
     void SetDamage(int damage);
+    void UpdateTimers(float deltaTime);
+    void AddSupergunTime(float time);
+    void SetSupergunPowers();
 };

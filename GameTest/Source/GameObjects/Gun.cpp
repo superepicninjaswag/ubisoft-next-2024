@@ -2,7 +2,7 @@
 
 #include "Gun.h"
 
-Gun::Gun(int damage, float verticalFOVDeg, float aspectRatio) : m_damage(damage)
+Gun::Gun(float verticalFOVDeg, float aspectRatio)
 {
 	m_verticalFOV = verticalFOVDeg * (acosf(-1.0f) / 180.0f);
 	m_horizontalFOV = 2.0f * atanf(tanf(m_verticalFOV / 2.0f) * aspectRatio);
@@ -19,25 +19,22 @@ void Gun::FireGun(ECS& ecs, EntityDescriptor player)
 		EntityDescriptor newEntityDescriptor = ecs.GetIDs().CreateId();
 		if (newEntityDescriptor.isValid())
 		{
-			Colour white(1.0f, 1.0f, 1.0f);
-			Colour purple(0.3f, 0.0f, .5f);
-
 			ComponentPool<MeshComponent>& meshes = ecs.GetMeshes();
-			meshes.Add(newEntityDescriptor, MeshLibrary::ICOSPHERE);
+			meshes.Add(newEntityDescriptor, MeshLibrary::UVSPHERE);
 
 			ComponentPool<TextureComponent>& textures = ecs.GetTextures();
-			textures.Add(newEntityDescriptor, white, purple);
+			textures.Add(newEntityDescriptor, m_colour1, m_colour2);
 
 			ComponentPool<TransformComponent>& transforms = ecs.GetTransforms();
 			transforms.Add(newEntityDescriptor);
-			transforms.Get(newEntityDescriptor.id).position = transforms.Get(player.id).position + m_launchDirection * 3.0f;
+			transforms.Get(newEntityDescriptor.id).position = transforms.Get(player.id).position + m_launchDirection * 4.0f;
 
 			ComponentPool<SphereColliderComponent>& spheres = ecs.GetSphereColliders();
 			spheres.Add(newEntityDescriptor, 1.0f);
 
 			ecs.GetPhysicsBodies().Add(newEntityDescriptor);
 			ecs.GetPhysicsBodies().Get(newEntityDescriptor.id).SetMass(1.0f);
-			ecs.GetPhysicsBodies().Get(newEntityDescriptor.id).SetGravity(10.0f);
+			ecs.GetPhysicsBodies().Get(newEntityDescriptor.id).SetGravity(20.0f);
 			ecs.GetPhysicsBodies().Get(newEntityDescriptor.id).SetDamping(.99f);
 			ecs.GetPhysicsBodies().Get(newEntityDescriptor.id).AddForce(m_launchDirection * m_force);
 
@@ -70,9 +67,35 @@ void Gun::SetLaunchDirection(Camera& camera)
 	m_launchDirection.Normalize();
 }
 
-void Gun::UpdateReloadTimer(float deltaTime)
+void Gun::UpdateTimers(float deltaTime)
 {
 	m_timeUntilReadyToFire -= deltaTime;
+	m_superGunTimeLeft -= deltaTime;
+}
+
+void Gun::AddSupergunTime(float time)
+{
+	m_superGunTimeLeft += time;
+}
+
+void Gun::SetSupergunPowers()
+{
+	if (m_superGunTimeLeft > 0.0f)
+	{
+		m_damage = 2;
+		m_reloadTime = 60.0f / 900.0f;
+		m_force = 5000.0f;
+		m_colour1 = Colour(1.0f, 0.75f, 0.75f);
+		m_colour2 = Colour(1.0f, 0.1f, 0.6f);
+	}
+	else
+	{
+		m_damage = 1;
+		m_reloadTime = 60.0f / 600.0f;
+		m_force = 3000.0f;
+		m_colour1 = Colour(1.0f, 0.1f, 0.6f);
+		m_colour2 = Colour(1.0f, 0.75f, 0.75f);
+	}
 }
 
 void Gun::SetForce(float force)

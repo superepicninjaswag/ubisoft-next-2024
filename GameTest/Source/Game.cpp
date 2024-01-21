@@ -22,10 +22,13 @@ Renderer g_renderer(g_ecs, g_MeshLibrary, g_camera);
 
 // Scenery
 Ground g_ground(5.0f, 30, 90);
+// TODO: CLOUDS
 
 // Player
 EntityDescriptor g_player = g_ecs.GetIDs().CreateId();
-Gun g_gun(1, g_renderer.GetFOV(), g_renderer.GetAspectRatio());
+Gun g_gun(g_renderer.GetFOV(), g_renderer.GetAspectRatio());
+
+// AI manager?
 
 // Called before first update. Do any initial setup here.
 void Init()
@@ -41,13 +44,18 @@ void Init()
 	// Setup player entity
 	ComponentPool<TransformComponent>& transforms = g_ecs.GetTransforms();
 	transforms.Add(g_player);
+	transforms.Get(g_player.id).position.x = 0.0f;
 	transforms.Get(g_player.id).position.y = 16.0f;
+	transforms.Get(g_player.id).position.z = -880.0f;
 	ComponentPool<SphereColliderComponent>& spheres = g_ecs.GetSphereColliders();
 	spheres.Add(g_player, 1.0f);
 
 	// Setup scenery
 	g_ground.GenerateTiles(g_ecs);
 	// TODO: create walls
+
+
+	g_gun.AddSupergunTime(5.0f);
 }
 
 
@@ -57,11 +65,12 @@ void Update(float deltaTime)
 {
 	deltaTime = deltaTime / 1000.0f; // I like seconds instead of milliseconds
 
+	g_gun.SetSupergunPowers();
 	g_gun.SetLaunchDirection(g_camera);
-	g_gun.UpdateReloadTimer(deltaTime);
+	g_gun.UpdateTimers(deltaTime);
 	g_gun.FireGun(g_ecs, g_player);
 
-	MovePlayer(g_ecs, g_player, g_camera.forward, g_camera.right, 40.0f, deltaTime, g_ground);
+	MovePlayer(g_ecs, g_player, g_camera.forward, g_camera.right, 30.0f, deltaTime, g_ground);
 	UpdateLifetimes(g_ecs);
 	
 	AnimateParticles(g_ecs);
