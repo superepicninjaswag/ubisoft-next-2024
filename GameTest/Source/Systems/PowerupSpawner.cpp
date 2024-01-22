@@ -14,6 +14,7 @@ void PowerupSpawner(ECS& ecs, Ground ground)
 		float notRandomY = 16.0f;
 		float randomZ = rand() % ((int)ground.m_scale * 2 * (int)ground.m_length) - ((int)ground.m_scale * 2 * (int)ground.m_length) / 2.0f;
 		builder.SetTransform(randomX, notRandomY, randomZ);
+		builder.SetScale(5.0f);
 		builder.SetMesh(MeshLibrary::MONKEY);
 		builder.SetTexture(grey, blue);
 		builder.SetCollider();

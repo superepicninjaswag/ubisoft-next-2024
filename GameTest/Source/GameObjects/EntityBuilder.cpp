@@ -129,6 +129,14 @@ void EntityBuilder::SetTransform(float x, float y, float z)
 	}
 }
 
+void EntityBuilder::SetScale(float scale)
+{
+	if (m_ecs.GetTransforms().Has(m_entity))
+	{
+		m_ecs.GetTransforms().Get(m_entity.id).scale *= scale;
+	}
+}
+
 void EntityBuilder::SetPowerup()
 {
 	if (!m_ecs.GetPowerups().Has(m_entity))
