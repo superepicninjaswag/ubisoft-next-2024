@@ -14,7 +14,8 @@ private:
 public:
 	enum AICode
 	{
-		SINWAVE
+		SINWAVE,
+		DODGING
 	};
 
 	EntityBuilder(ECS& ecs);

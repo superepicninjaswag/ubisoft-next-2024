@@ -70,6 +70,12 @@ void EntityBuilder::SetAI(int aiCode)
 				m_ecs.GetSinWaveAIs().Add(m_entity);
 			}
 			break;
+		case AICode::DODGING:
+			if (!m_ecs.GetDodgingAIs().Has(m_entity))
+			{
+				m_ecs.GetDodgingAIs().Add(m_entity);
+			}
+			break;
 
 		default:
 			// Don't add

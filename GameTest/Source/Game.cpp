@@ -68,6 +68,7 @@ void Update(float deltaTime)
 	UpdateLifetimes(g_ecs);
 	DeleteDeadEntities(g_ecs);
 
+	AnimateDodgingAI(g_ecs, g_player, g_gun);
 	AnimateSinWaveAI(g_ecs, g_player);
 	AnimateParticles(g_ecs);
 	UpdatePhysicsBodies(g_ecs, deltaTime);

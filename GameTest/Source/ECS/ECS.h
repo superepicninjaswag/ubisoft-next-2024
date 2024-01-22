@@ -9,6 +9,7 @@ class ECS
 {
 private:
     IDManager m_ids;
+    ComponentPool<DodgingAIComponent> m_dodgingAIs;
     ComponentPool<EnemyComponent> m_enemies;
     ComponentPool<HealthComponent> m_health;
     ComponentPool<LifetimeComponent> m_lifetimes;
@@ -24,6 +25,7 @@ private:
 public:
     void DeleteEntity(EntityDescriptor entityToDelete);
     IDManager &GetIDs();
+    ComponentPool<DodgingAIComponent>& GetDodgingAIs();
     ComponentPool<EnemyComponent>& GetEnemies();
     ComponentPool<HealthComponent>& GetHealth();
     ComponentPool<LifetimeComponent>& GetLifetimes();

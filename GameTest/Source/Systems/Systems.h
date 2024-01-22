@@ -7,8 +7,10 @@
 #include "../Math/Matrix4.h"
 #include "../Scenery/Ground.h"
 #include "../GameObjects/EntityBuilder.h"
+#include "../GameObjects/Gun.h"
 
 
+void AnimateDodgingAI(ECS& ecs, EntityDescriptor player, Gun gun);
 void AnimateParticles(ECS& ecs);
 void AnimateSinWaveAI(ECS& ecs, EntityDescriptor player);
 void DeleteDeadEntities(ECS& ecs);

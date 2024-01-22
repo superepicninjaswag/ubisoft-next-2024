@@ -1,5 +1,6 @@
 #pragma once
 
+#include "DodgingAIComponent.h"
 #include "EnemyComponent.h"
 #include "HealthComponent.h"
 #include "LifetimeComponent.h"

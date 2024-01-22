@@ -25,7 +25,7 @@ void EnemySpawner(ECS& ecs, float deltaTime, Ground ground)
 		builder.SetMesh(MeshLibrary::CUBE);
 		builder.SetTexture(orange, red);
 		builder.SetCollider();
-		builder.SetAI(EntityBuilder::SINWAVE);
+		builder.SetAI(rand() % 2);
 		builder.SetEnemy();
 		builder.SetHealth(1);
 	}

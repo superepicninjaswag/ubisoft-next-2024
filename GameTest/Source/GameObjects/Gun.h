@@ -14,7 +14,6 @@ private:
     float m_horizontalFOV;
     float m_yawPerPixel;
     float m_pitchPerPixel;
-    Vector4 m_launchDirection;
     float m_force = 3000.0f;
     float m_roundsPerMin;
     float m_reloadTime = 60.0f / m_roundsPerMin;
@@ -25,6 +24,7 @@ private:
     Colour m_colour2;
 
 public:
+    Vector4 m_launchDirection;
     Gun(float verticalFOVDeg, float aspectRatio);
     void FireGun(ECS& ecs, EntityDescriptor player);
     void SetLaunchDirection(Camera& camera);

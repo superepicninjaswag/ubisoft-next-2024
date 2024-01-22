@@ -4,6 +4,7 @@
 
 void ECS::DeleteEntity(EntityDescriptor entityToDelete)
 {
+    m_dodgingAIs.Delete(entityToDelete);
     m_enemies.Delete(entityToDelete);
     m_health.Delete(entityToDelete);
     m_lifetimes.Delete(entityToDelete);
@@ -22,6 +23,11 @@ void ECS::DeleteEntity(EntityDescriptor entityToDelete)
 IDManager &ECS::GetIDs()
 {
     return m_ids;
+}
+
+ComponentPool<DodgingAIComponent>& ECS::GetDodgingAIs()
+{
+    return m_dodgingAIs;
 }
 
 ComponentPool<EnemyComponent>& ECS::GetEnemies()
