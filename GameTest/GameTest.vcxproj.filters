@@ -58,6 +58,7 @@
     <ClCompile Include="Source\Systems\EnemySpawner.cpp" />
     <ClCompile Include="Source\Components\PowerupComponent.cpp" />
     <ClCompile Include="Source\Systems\PowerupSpawner.cpp" />
+    <ClCompile Include="Source\Physics\ResolvePlayerPowerupCollisions.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Include\stdafx.h" />
@@ -126,6 +127,7 @@
     <ClInclude Include="Source\Components\HealthComponent.h" />
     <ClInclude Include="Source\GameObjects\EntityBuilder.h" />
     <ClInclude Include="Source\Components\PowerupComponent.h" />
+    <ClInclude Include="Source\Physics\ResolvePlayerPowerupCollisions.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="NextAPI">

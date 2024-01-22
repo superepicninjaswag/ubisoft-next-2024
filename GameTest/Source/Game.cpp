@@ -78,6 +78,7 @@ void Update(float deltaTime)
 	g_camera.UpdatePosition(g_ecs.GetTransforms().Get(g_player.id).position);
 	g_camera.UpdatePitchAndYaw(deltaTime);
 
+	ResolvePlayerPowerupCollisions(g_ecs, g_ground, g_gun, g_player);
 	PowerupSpawner(g_ecs, g_ground);
 	EnemySpawner(g_ecs, deltaTime, g_ground);
 }

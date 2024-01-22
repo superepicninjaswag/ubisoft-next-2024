@@ -75,6 +75,10 @@ void Gun::UpdateTimers(float deltaTime)
 
 void Gun::AddSupergunTime(float time)
 {
+	if (m_superGunTimeLeft < 0.0f)
+	{
+		m_superGunTimeLeft = 0.0f;
+	}
 	m_superGunTimeLeft += time;
 }
 

@@ -209,6 +209,7 @@
     <ClInclude Include="Source\Physics\ResolveBulletGroundCollisions.h" />
     <ClInclude Include="Source\Physics\Physics.h" />
     <ClInclude Include="Source\Physics\ResolveBulletEnemyCollisions.h" />
+    <ClInclude Include="Source\Physics\ResolvePlayerPowerupCollisions.h" />
     <ClInclude Include="Source\Physics\UpdatePhysicsBodies.h" />
     <ClInclude Include="Source\Rendering\Camera.h" />
     <ClInclude Include="Source\Rendering\Colour.h" />
@@ -252,6 +253,7 @@
     <ClCompile Include="Source\GameObjects\Gun.cpp" />
     <ClCompile Include="Source\Physics\ResolveBulletGroundCollisions.cpp" />
     <ClCompile Include="Source\Physics\ResolveBulletEnemyCollisions.cpp" />
+    <ClCompile Include="Source\Physics\ResolvePlayerPowerupCollisions.cpp" />
     <ClCompile Include="Source\Physics\UpdatePhysicsBodies.cpp" />
     <ClCompile Include="Source\Rendering\Camera.cpp" />
     <ClCompile Include="Source\Rendering\Colour.cpp" />
