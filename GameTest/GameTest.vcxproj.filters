@@ -41,8 +41,7 @@
     <ClCompile Include="Source\Components\SphereColliderComponent.cpp" />
     <ClCompile Include="Source\Systems\MovePlayer.cpp" />
     <ClCompile Include="Source\Physics\ResolveBulletGroundCollisions.cpp" />
-    <ClCompile Include="Source\Physics\Contact.cpp" />
-    <ClCompile Include="Source\Physics\ResolveCollisions.cpp" />
+    <ClCompile Include="Source\Physics\ResolveBulletEnemyCollisions.cpp" />
     <ClCompile Include="Source\Components\PhysicsBodyComponent.cpp" />
     <ClCompile Include="Source\Scenery\Ground.cpp" />
     <ClCompile Include="Source\Physics\UpdatePhysicsBodies.cpp" />
@@ -52,6 +51,9 @@
     <ClCompile Include="Source\GameObjects\Gun.cpp" />
     <ClCompile Include="Source\Components\SinWaveAIComponent.cpp" />
     <ClCompile Include="Source\Systems\AnimateSinwaveAI.cpp" />
+    <ClCompile Include="Source\Components\EnemyComponent.cpp" />
+    <ClCompile Include="Source\Components\HealthComponent.cpp" />
+    <ClCompile Include="Source\Systems\DeleteDeadEntities.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Include\stdafx.h" />
@@ -106,8 +108,7 @@
     <ClInclude Include="Source\Components\SphereColliderComponent.h" />
     <ClInclude Include="Source\Physics\ResolveBulletGroundCollisions.h" />
     <ClInclude Include="Source\Physics\Physics.h" />
-    <ClInclude Include="Source\Physics\Contact.h" />
-    <ClInclude Include="Source\Physics\ResolveCollisions.h" />
+    <ClInclude Include="Source\Physics\ResolveBulletEnemyCollisions.h" />
     <ClInclude Include="Source\Components\PhysicsBodyComponent.h" />
     <ClInclude Include="Source\Scenery\Ground.h" />
     <ClInclude Include="Source\Scenery\Scenery.h" />
@@ -117,6 +118,8 @@
     <ClInclude Include="Source\GameObjects\Gun.h" />
     <ClInclude Include="Source\GameObjects\GameObjects.h" />
     <ClInclude Include="Source\Components\SinWaveAIComponent.h" />
+    <ClInclude Include="Source\Components\EnemyComponent.h" />
+    <ClInclude Include="Source\Components\HealthComponent.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="NextAPI">

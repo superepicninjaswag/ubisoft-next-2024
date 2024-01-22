@@ -186,6 +186,8 @@
     <ClInclude Include="glut\include\GL\freeglut_ext.h" />
     <ClInclude Include="glut\include\GL\freeglut_std.h" />
     <ClInclude Include="glut\include\GL\glut.h" />
+    <ClInclude Include="Source\Components\EnemyComponent.h" />
+    <ClInclude Include="Source\Components\HealthComponent.h" />
     <ClInclude Include="Source\Components\LifetimeComponent.h" />
     <ClInclude Include="Source\Components\PhysicsBodyComponent.h" />
     <ClInclude Include="Source\Components\ProjectileComponent.h" />
@@ -202,10 +204,9 @@
     <ClInclude Include="Source\ECS\ComponentPool.h" />
     <ClInclude Include="Source\GameObjects\GameObjects.h" />
     <ClInclude Include="Source\GameObjects\Gun.h" />
-    <ClInclude Include="Source\Physics\Contact.h" />
     <ClInclude Include="Source\Physics\ResolveBulletGroundCollisions.h" />
     <ClInclude Include="Source\Physics\Physics.h" />
-    <ClInclude Include="Source\Physics\ResolveCollisions.h" />
+    <ClInclude Include="Source\Physics\ResolveBulletEnemyCollisions.h" />
     <ClInclude Include="Source\Physics\UpdatePhysicsBodies.h" />
     <ClInclude Include="Source\Rendering\Camera.h" />
     <ClInclude Include="Source\Rendering\Colour.h" />
@@ -229,6 +230,8 @@
     <ClCompile Include="App\SimpleController.cpp" />
     <ClCompile Include="App\SimpleSound.cpp" />
     <ClCompile Include="App\SimpleSprite.cpp" />
+    <ClCompile Include="Source\Components\EnemyComponent.cpp" />
+    <ClCompile Include="Source\Components\HealthComponent.cpp" />
     <ClCompile Include="Source\Components\LifetimeComponent.cpp" />
     <ClCompile Include="Source\Components\PhysicsBodyComponent.cpp" />
     <ClCompile Include="Source\Components\ProjectileComponent.cpp" />
@@ -243,9 +246,8 @@
     <ClCompile Include="Source\ECS\IDManager.cpp" />
     <ClCompile Include="Source\Game.cpp" />
     <ClCompile Include="Source\GameObjects\Gun.cpp" />
-    <ClCompile Include="Source\Physics\Contact.cpp" />
     <ClCompile Include="Source\Physics\ResolveBulletGroundCollisions.cpp" />
-    <ClCompile Include="Source\Physics\ResolveCollisions.cpp" />
+    <ClCompile Include="Source\Physics\ResolveBulletEnemyCollisions.cpp" />
     <ClCompile Include="Source\Physics\UpdatePhysicsBodies.cpp" />
     <ClCompile Include="Source\Rendering\Camera.cpp" />
     <ClCompile Include="Source\Rendering\Colour.cpp" />
@@ -257,6 +259,7 @@
     <ClCompile Include="Source\Math\Vector4.cpp" />
     <ClCompile Include="Source\Systems\AnimateParticles.cpp" />
     <ClCompile Include="Source\Systems\AnimateSinwaveAI.cpp" />
+    <ClCompile Include="Source\Systems\DeleteDeadEntities.cpp" />
     <ClCompile Include="Source\Systems\UpdateLifetimes.cpp" />
     <ClCompile Include="Source\Systems\MovePlayer.cpp" />
     <ClCompile Include="Source\Scenery\Ground.cpp" />

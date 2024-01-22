@@ -4,10 +4,13 @@
 
 void ECS::DeleteEntity(EntityDescriptor entityToDelete)
 {
+    m_enemies.Delete(entityToDelete);
+    m_health.Delete(entityToDelete);
     m_lifetimes.Delete(entityToDelete);
     m_meshes.Delete(entityToDelete);
     m_particles.Delete(entityToDelete);
     m_physicsBodies.Delete(entityToDelete);
+    m_projectiles.Delete(entityToDelete);
     m_sphereColliders.Delete(entityToDelete);
     m_sinWaveAIs.Delete(entityToDelete);
     m_textures.Delete(entityToDelete);
@@ -18,6 +21,16 @@ void ECS::DeleteEntity(EntityDescriptor entityToDelete)
 IDManager &ECS::GetIDs()
 {
     return m_ids;
+}
+
+ComponentPool<EnemyComponent>& ECS::GetEnemies()
+{
+    return m_enemies;
+}
+
+ComponentPool<HealthComponent>& ECS::GetHealth()
+{
+    return m_health;
 }
 
 ComponentPool<LifetimeComponent>& ECS::GetLifetimes()

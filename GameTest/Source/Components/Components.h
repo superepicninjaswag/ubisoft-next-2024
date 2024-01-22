@@ -1,5 +1,7 @@
 #pragma once
 
+#include "EnemyComponent.h"
+#include "HealthComponent.h"
 #include "LifetimeComponent.h"
 #include "MeshComponent.h"
 #include "ParticleComponent.h"

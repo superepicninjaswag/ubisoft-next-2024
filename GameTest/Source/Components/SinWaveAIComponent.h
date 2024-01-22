@@ -4,7 +4,7 @@
 
 struct SinWaveAIComponent
 {
-    float SPEED = 0.3f;
+    float SPEED = 0.1f;
     float theta = -acos(-1.0f);
 
     SinWaveAIComponent();

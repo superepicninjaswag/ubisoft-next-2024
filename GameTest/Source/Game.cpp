@@ -54,7 +54,7 @@ void Init()
 	g_ground.GenerateTiles(g_ecs);
 
 
-	//
+	// Enemy spawner
 	int limit = 1;
 	for (int i = 0; i < limit; i++)
 	{
@@ -71,13 +71,16 @@ void Init()
 			transforms.Add(newEntityDescriptor);
 			transforms.Get(newEntityDescriptor.id).position.x = i - limit/2.0f;
 			transforms.Get(newEntityDescriptor.id).position.y = 25.0f;
-			transforms.Get(newEntityDescriptor.id).position.z = -400.0f;
+			transforms.Get(newEntityDescriptor.id).position.z = -300.0f;
 
 			ComponentPool<SphereColliderComponent>& spheres = g_ecs.GetSphereColliders();
 			spheres.Add(newEntityDescriptor, 1.0f);
 
 			ComponentPool<SinWaveAIComponent>& SinWaveAIs = g_ecs.GetSinWaveAIs();
 			SinWaveAIs.Add(newEntityDescriptor);
+
+			g_ecs.GetEnemies().Add(newEntityDescriptor);
+			g_ecs.GetHealth().Add(newEntityDescriptor);
 		}
 	}
 }
@@ -96,13 +99,14 @@ void Update(float deltaTime)
 
 	MovePlayer(g_ecs, g_player, g_camera.forward, g_camera.right, 30.0f, deltaTime, g_ground);
 	UpdateLifetimes(g_ecs);
-	
+	DeleteDeadEntities(g_ecs);
+
 	AnimateSinWaveAI(g_ecs, g_player);
 	AnimateParticles(g_ecs);
 	UpdatePhysicsBodies(g_ecs, deltaTime);
 	
 	ResolveBulletGroundCollisions(g_ecs, g_ground);
-	ResolveCollisions(g_ecs);
+	ResolveBulletEnemyCollisions(g_ecs);
 
 	g_camera.UpdatePosition(g_ecs.GetTransforms().Get(g_player.id).position);
 	g_camera.UpdatePitchAndYaw(deltaTime);

@@ -20,7 +20,7 @@ void Gun::FireGun(ECS& ecs, EntityDescriptor player)
 		if (newEntityDescriptor.isValid())
 		{
 			ComponentPool<MeshComponent>& meshes = ecs.GetMeshes();
-			meshes.Add(newEntityDescriptor, MeshLibrary::CONE);
+			meshes.Add(newEntityDescriptor, MeshLibrary::ICOSPHERE);
 
 			ComponentPool<TextureComponent>& textures = ecs.GetTextures();
 			textures.Add(newEntityDescriptor, m_colour1, m_colour2);

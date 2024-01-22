@@ -1,6 +1,5 @@
 #pragma once
 
-#include "Contact.h"
 #include "ResolveBulletGroundCollisions.h"
-#include "ResolveCollisions.h"
+#include "ResolveBulletEnemyCollisions.h"
 #include "UpdatePhysicsBodies.h"
