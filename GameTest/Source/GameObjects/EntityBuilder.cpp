@@ -128,3 +128,11 @@ void EntityBuilder::SetTransform(float x, float y, float z)
 		m_ecs.GetTransforms().Add(m_entity, x, y, z);
 	}
 }
+
+void EntityBuilder::SetPowerup()
+{
+	if (!m_ecs.GetPowerups().Has(m_entity))
+	{
+		m_ecs.GetPowerups().Add(m_entity);
+	}
+}

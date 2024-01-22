@@ -29,4 +29,5 @@ public:
 	void SetCollider();
 	void SetTexture(Colour outline, Colour fill);
 	void SetTransform(float x, float y, float z);
+	void SetPowerup();
 };

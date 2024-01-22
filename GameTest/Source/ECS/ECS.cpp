@@ -10,6 +10,7 @@ void ECS::DeleteEntity(EntityDescriptor entityToDelete)
     m_meshes.Delete(entityToDelete);
     m_particles.Delete(entityToDelete);
     m_physicsBodies.Delete(entityToDelete);
+    m_powerups.Delete(entityToDelete);
     m_projectiles.Delete(entityToDelete);
     m_sphereColliders.Delete(entityToDelete);
     m_sinWaveAIs.Delete(entityToDelete);
@@ -51,6 +52,11 @@ ComponentPool<ParticleComponent>& ECS::GetParticles()
 ComponentPool<PhysicsBodyComponent>& ECS::GetPhysicsBodies()
 {
     return m_physicsBodies;
+}
+
+ComponentPool<PowerupComponent>& ECS::GetPowerups()
+{
+    return m_powerups;
 }
 
 ComponentPool<ProjectileComponent>& ECS::GetProjectiles()

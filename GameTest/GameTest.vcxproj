@@ -190,6 +190,7 @@
     <ClInclude Include="Source\Components\HealthComponent.h" />
     <ClInclude Include="Source\Components\LifetimeComponent.h" />
     <ClInclude Include="Source\Components\PhysicsBodyComponent.h" />
+    <ClInclude Include="Source\Components\PowerupComponent.h" />
     <ClInclude Include="Source\Components\ProjectileComponent.h" />
     <ClInclude Include="Source\Components\SphereColliderComponent.h" />
     <ClInclude Include="Source\Components\Components.h" />
@@ -235,6 +236,7 @@
     <ClCompile Include="Source\Components\HealthComponent.cpp" />
     <ClCompile Include="Source\Components\LifetimeComponent.cpp" />
     <ClCompile Include="Source\Components\PhysicsBodyComponent.cpp" />
+    <ClCompile Include="Source\Components\PowerupComponent.cpp" />
     <ClCompile Include="Source\Components\ProjectileComponent.cpp" />
     <ClCompile Include="Source\Components\SphereColliderComponent.cpp" />
     <ClCompile Include="Source\Components\MeshComponent.cpp" />
@@ -263,6 +265,7 @@
     <ClCompile Include="Source\Systems\AnimateSinwaveAI.cpp" />
     <ClCompile Include="Source\Systems\DeleteDeadEntities.cpp" />
     <ClCompile Include="Source\Systems\EnemySpawner.cpp" />
+    <ClCompile Include="Source\Systems\PowerupSpawner.cpp" />
     <ClCompile Include="Source\Systems\UpdateLifetimes.cpp" />
     <ClCompile Include="Source\Systems\MovePlayer.cpp" />
     <ClCompile Include="Source\Scenery\Ground.cpp" />

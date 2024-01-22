@@ -56,6 +56,8 @@
     <ClCompile Include="Source\Systems\DeleteDeadEntities.cpp" />
     <ClCompile Include="Source\GameObjects\EntityBuilder.cpp" />
     <ClCompile Include="Source\Systems\EnemySpawner.cpp" />
+    <ClCompile Include="Source\Components\PowerupComponent.cpp" />
+    <ClCompile Include="Source\Systems\PowerupSpawner.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Include\stdafx.h" />
@@ -123,6 +125,7 @@
     <ClInclude Include="Source\Components\EnemyComponent.h" />
     <ClInclude Include="Source\Components\HealthComponent.h" />
     <ClInclude Include="Source\GameObjects\EntityBuilder.h" />
+    <ClInclude Include="Source\Components\PowerupComponent.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="NextAPI">

@@ -15,6 +15,7 @@ private:
     ComponentPool<MeshComponent> m_meshes;
     ComponentPool<ParticleComponent> m_particles;
     ComponentPool<PhysicsBodyComponent> m_physicsBodies;
+    ComponentPool<PowerupComponent> m_powerups;
     ComponentPool<ProjectileComponent> m_projectiles;
     ComponentPool<SphereColliderComponent> m_sphereColliders;
     ComponentPool<SinWaveAIComponent> m_sinWaveAIs;
@@ -29,6 +30,7 @@ public:
     ComponentPool<MeshComponent>& GetMeshes();
     ComponentPool<ParticleComponent>& GetParticles();
     ComponentPool<PhysicsBodyComponent>& GetPhysicsBodies();
+    ComponentPool<PowerupComponent>& GetPowerups();
     ComponentPool<ProjectileComponent>& GetProjectiles();
     ComponentPool<SphereColliderComponent>& GetSphereColliders();
     ComponentPool<SinWaveAIComponent>& GetSinWaveAIs();

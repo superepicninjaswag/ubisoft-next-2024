@@ -4,8 +4,7 @@
 
 void EnemySpawner(ECS& ecs, float deltaTime, Ground ground)
 {
-	const float minSpawn = 0.5;
-	static float spawnTimer = 4.0f;
+	static float spawnTimer = 0.0f;
 
 	if (spawnTimer > 0.0f)
 	{

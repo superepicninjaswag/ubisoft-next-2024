@@ -6,6 +6,7 @@
 #include "MeshComponent.h"
 #include "ParticleComponent.h"
 #include "PhysicsBodyComponent.h"
+#include "PowerupComponent.h"
 #include "ProjectileComponent.h"
 #include "SphereColliderComponent.h"
 #include "SinWaveAIComponent.h"

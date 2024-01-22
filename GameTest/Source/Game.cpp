@@ -40,6 +40,7 @@ void Init()
 	//*/
 
 	g_renderer.Init();
+	g_ground.GenerateTiles(g_ecs);
 
 	// Setup player entity
 	ComponentPool<TransformComponent>& transforms = g_ecs.GetTransforms();
@@ -49,9 +50,6 @@ void Init()
 	transforms.Get(g_player.id).position.z = -450.0f;
 	ComponentPool<SphereColliderComponent>& spheres = g_ecs.GetSphereColliders();
 	spheres.Add(g_player, 1.0f);
-
-	// Setup scenery
-	g_ground.GenerateTiles(g_ecs);
 }
 
 
@@ -66,7 +64,7 @@ void Update(float deltaTime)
 	g_gun.UpdateTimers(deltaTime);
 	g_gun.FireGun(g_ecs, g_player);
 
-	MovePlayer(g_ecs, g_player, g_camera.forward, g_camera.right, 30.0f, deltaTime, g_ground);
+	MovePlayer(g_ecs, g_player, g_camera.forward, g_camera.right, 50.0f, deltaTime, g_ground);
 	UpdateLifetimes(g_ecs);
 	DeleteDeadEntities(g_ecs);
 
@@ -80,6 +78,7 @@ void Update(float deltaTime)
 	g_camera.UpdatePosition(g_ecs.GetTransforms().Get(g_player.id).position);
 	g_camera.UpdatePitchAndYaw(deltaTime);
 
+	PowerupSpawner(g_ecs, g_ground);
 	EnemySpawner(g_ecs, deltaTime, g_ground);
 }
 
