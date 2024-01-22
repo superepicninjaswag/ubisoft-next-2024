@@ -32,5 +32,5 @@ public:
     void SetDamage(int damage);
     void UpdateTimers(float deltaTime);
     void AddSupergunTime(float time);
-    void SetSupergunPowers();
+    void SetGunParameters();
 };

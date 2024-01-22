@@ -202,6 +202,7 @@
     <ClInclude Include="Source\ECS\EntityDescriptor.h" />
     <ClInclude Include="Source\ECS\IDManager.h" />
     <ClInclude Include="Source\ECS\ComponentPool.h" />
+    <ClInclude Include="Source\GameObjects\EntityBuilder.h" />
     <ClInclude Include="Source\GameObjects\GameObjects.h" />
     <ClInclude Include="Source\GameObjects\Gun.h" />
     <ClInclude Include="Source\Physics\ResolveBulletGroundCollisions.h" />
@@ -245,6 +246,7 @@
     <ClCompile Include="Source\ECS\EntityDescriptor.cpp" />
     <ClCompile Include="Source\ECS\IDManager.cpp" />
     <ClCompile Include="Source\Game.cpp" />
+    <ClCompile Include="Source\GameObjects\EntityBuilder.cpp" />
     <ClCompile Include="Source\GameObjects\Gun.cpp" />
     <ClCompile Include="Source\Physics\ResolveBulletGroundCollisions.cpp" />
     <ClCompile Include="Source\Physics\ResolveBulletEnemyCollisions.cpp" />
@@ -260,6 +262,7 @@
     <ClCompile Include="Source\Systems\AnimateParticles.cpp" />
     <ClCompile Include="Source\Systems\AnimateSinwaveAI.cpp" />
     <ClCompile Include="Source\Systems\DeleteDeadEntities.cpp" />
+    <ClCompile Include="Source\Systems\EnemySpawner.cpp" />
     <ClCompile Include="Source\Systems\UpdateLifetimes.cpp" />
     <ClCompile Include="Source\Systems\MovePlayer.cpp" />
     <ClCompile Include="Source\Scenery\Ground.cpp" />

@@ -52,37 +52,6 @@ void Init()
 
 	// Setup scenery
 	g_ground.GenerateTiles(g_ecs);
-
-
-	// Enemy spawner
-	int limit = 1;
-	for (int i = 0; i < limit; i++)
-	{
-		EntityDescriptor newEntityDescriptor = g_ecs.GetIDs().CreateId();
-		if (newEntityDescriptor.isValid())
-		{
-			ComponentPool<MeshComponent>& meshes = g_ecs.GetMeshes();
-			meshes.Add(newEntityDescriptor, MeshLibrary::CUBE);
-
-			ComponentPool<TextureComponent>& textures = g_ecs.GetTextures();
-			textures.Add(newEntityDescriptor, Colour(1.0f, 0.0f, 0.0f));
-
-			ComponentPool<TransformComponent>& transforms = g_ecs.GetTransforms();
-			transforms.Add(newEntityDescriptor);
-			transforms.Get(newEntityDescriptor.id).position.x = i - limit/2.0f;
-			transforms.Get(newEntityDescriptor.id).position.y = 25.0f;
-			transforms.Get(newEntityDescriptor.id).position.z = -300.0f;
-
-			ComponentPool<SphereColliderComponent>& spheres = g_ecs.GetSphereColliders();
-			spheres.Add(newEntityDescriptor, 1.0f);
-
-			ComponentPool<SinWaveAIComponent>& SinWaveAIs = g_ecs.GetSinWaveAIs();
-			SinWaveAIs.Add(newEntityDescriptor);
-
-			g_ecs.GetEnemies().Add(newEntityDescriptor);
-			g_ecs.GetHealth().Add(newEntityDescriptor);
-		}
-	}
 }
 
 
@@ -92,7 +61,7 @@ void Update(float deltaTime)
 {
 	deltaTime = deltaTime / 1000.0f; // I like seconds instead of milliseconds
 
-	g_gun.SetSupergunPowers();
+	g_gun.SetGunParameters();
 	g_gun.SetLaunchDirection(g_camera);
 	g_gun.UpdateTimers(deltaTime);
 	g_gun.FireGun(g_ecs, g_player);
@@ -110,6 +79,8 @@ void Update(float deltaTime)
 
 	g_camera.UpdatePosition(g_ecs.GetTransforms().Get(g_player.id).position);
 	g_camera.UpdatePitchAndYaw(deltaTime);
+
+	EnemySpawner(g_ecs, deltaTime, g_ground);
 }
 
 

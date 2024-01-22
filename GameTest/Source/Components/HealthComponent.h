@@ -3,7 +3,7 @@
 
 struct HealthComponent
 {
-	int m_health = 1;
+	int m_health = 2;
 
 	HealthComponent();
 	HealthComponent(int health);

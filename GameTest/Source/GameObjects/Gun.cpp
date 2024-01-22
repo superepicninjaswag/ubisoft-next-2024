@@ -78,13 +78,13 @@ void Gun::AddSupergunTime(float time)
 	m_superGunTimeLeft += time;
 }
 
-void Gun::SetSupergunPowers()
+void Gun::SetGunParameters()
 {
 	if (m_superGunTimeLeft > 0.0f)
 	{
 		m_damage = 2;
 		m_reloadTime = 60.0f / 600.0f;
-		m_force = 5000.0f;
+		m_force = 6000.0f;
 		m_colour1 = Colour(1.0f, 0.75f, 0.75f);
 		m_colour2 = Colour(1.0f, 0.1f, 0.6f);
 	}
@@ -92,7 +92,7 @@ void Gun::SetSupergunPowers()
 	{
 		m_damage = 1;
 		m_reloadTime = 60.0f / 200.0f;
-		m_force = 3000.0f;
+		m_force = 4000.0f;
 		m_colour1 = Colour(1.0f, 0.1f, 0.6f);
 		m_colour2 = Colour(1.0f, 0.75f, 0.75f);
 	}

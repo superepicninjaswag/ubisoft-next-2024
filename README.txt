@@ -12,7 +12,7 @@ Simple 3D physics and collision
 
 LEARNING RESOURCES:
 
-"www.google.com", helpful website for finding solutions to arbitrary problems ;)
+"google.com", helpful website for finding solutions to arbitrary problems ;)
 
 "Code-It-Yourself! 3D Graphics Engine", YouTube series by javidx9 (David Barr)
 
@@ -29,3 +29,5 @@ LEARNING RESOURCES:
 "Game Physics Engine Development: How to Build a Robust Commercial-Grade Physics Engine for your Game", book by Ian Millington
 
 "Game Programming Patterns", book by Bob Nystrom
+
+"refactoring.guru/design-patterns", website for learning design patterns
