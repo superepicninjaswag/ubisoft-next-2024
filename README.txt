@@ -31,3 +31,5 @@ LEARNING RESOURCES:
 "Game Programming Patterns", book by Bob Nystrom
 
 "refactoring.guru/design-patterns", website for learning design patterns
+
+"AI for Games", book by Ian Millington
